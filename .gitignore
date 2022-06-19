@@ -17,7 +17,7 @@
 mono_crash.*
 
 # Build results
-bin/
+bin/*
 x64/
 x86/
 [Aa][Rr][Mm]/
