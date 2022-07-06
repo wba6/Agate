@@ -1,11 +1,11 @@
 #pragma once
 #include <string>
-
+#include "Core.h"
 
 namespace Agate
 {
 
-    class Logger {
+    class API Logger {
     public:
         static void printMSG(std::string msg);
         static void printWarn(std::string msg);

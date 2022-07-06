@@ -88,6 +88,7 @@
     <ClInclude Include="src\Agate.h" />
     <ClInclude Include="src\Agate\Core.h" />
     <ClInclude Include="src\Agate\test.h" />
+    <ClInclude Include="src\Events\MouseEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Events\Event.cpp" />
