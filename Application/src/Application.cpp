@@ -4,11 +4,8 @@
 #include <memory>
 
 
-namespace Agate
-{
-    __declspec(dllimport) void helloWorld();
-}// namespace Agate
 class app : public Agate::EntryPoint {
+
 };
 
 int main()
