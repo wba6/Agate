@@ -1,7 +1,6 @@
 #pragma once
 #include "Event.h"
 
-
 namespace Agate
 {
     class API MouseClick : public Event {
@@ -21,9 +20,16 @@ namespace Agate
             PRINTMSG("Recvied Mouse Click");
             Event::EventFinised = true;
         }
-        bool Handled() override 
+        bool Handled() override
         {
             return Event::EventFinised;
         }
+        void SetCallBackFunc(std::function<bool()> func) override
+        {
+            EventFn = func;
+        }
+
+    private:
+        std::function<bool()> EventFn;
     };
-}
+}// namespace Agate

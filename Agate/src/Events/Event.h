@@ -1,17 +1,24 @@
 #pragma once
 
-#include "../Agate/Logger.h"
 #include "../Agate/Core.h"
+#include "../Agate/Logger.h"
+
+#include <functional>
+
 namespace Agate
 {
 
     enum class EventTypes {
-        MouseClick, MouseRelease,MouseMoved,
-        KeyPressed, KeyReleased
+        MouseClick,
+        MouseRelease,
+        MouseMoved,
+        KeyPressed,
+        KeyReleased
     };
 
     class API Event {
-        friend class EventClassifier;
+        friend class EventNotifier;
+
     public:
         Event()
             : EventFinised(false) {}
@@ -19,15 +26,19 @@ namespace Agate
         virtual void PrintEventName() = 0;
         virtual void Recived() = 0;
         virtual bool Handled() = 0;
+        virtual void SetCallBackFunc(std::function<bool()> func) = 0;
+
     protected:
         bool EventFinised;
     };
 
-    class API EventClassifier {
+    class API EventNotifier {
     public:
-        EventClassifier(Event &ev)
-            : event(ev) {
-            if (!(event.Handled())) {
+        EventNotifier(Event &ev)
+            : event(ev)
+        {
+            if (!(event.Handled()))
+            {
                 event.Recived();
             }
         }
@@ -36,5 +47,5 @@ namespace Agate
         Event &event;
     };
 
-  
-}
+
+}// namespace Agate
