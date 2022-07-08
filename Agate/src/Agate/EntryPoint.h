@@ -1,4 +1,5 @@
 #pragma once
+#include "../Events/Event.h"
 #include "Core.h"
 
 
@@ -10,7 +11,7 @@ namespace Agate
         virtual ~EntryPoint();
 
         void Run();
-        bool eventTest();
+        void eventTest();
     };
 
 }// namespace Agate
