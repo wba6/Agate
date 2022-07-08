@@ -14,9 +14,7 @@ Agate::EntryPoint::~EntryPoint()
 void Agate::EntryPoint::Run()
 {
     auto click = MouseClick();
-    using EventFn = std::function<void()>;
-    EventFn func = std::bind(&EntryPoint::eventTest, this);
-    click.SetCallBackFunc(func);
+    click.SetCallBackFunc(std::bind(&EntryPoint::eventTest, this, std::placeholders::_1));
     auto search = EventNotifier(click);
 
     while (1)
@@ -25,7 +23,7 @@ void Agate::EntryPoint::Run()
     };
 }
 
-void Agate::EntryPoint::eventTest()
+void Agate::EntryPoint::eventTest(Event &e)
 {
     PRINTWARN("EVENTTEST");
 }

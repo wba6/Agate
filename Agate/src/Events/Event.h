@@ -26,7 +26,7 @@ namespace Agate
         virtual void PrintEventName() = 0;
         virtual void Recived() = 0;
         virtual bool Handled() = 0;
-        virtual void SetCallBackFunc(std::function<void()> func) = 0;
+        virtual void SetCallBackFunc(std::function<void(Event &)> func) = 0;
 
     protected:
         bool EventFinised;

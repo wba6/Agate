@@ -11,7 +11,7 @@ namespace Agate
         virtual ~EntryPoint();
 
         void Run();
-        void eventTest();
+        void eventTest(Event &e);
     };
 
 }// namespace Agate

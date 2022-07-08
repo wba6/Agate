@@ -4,7 +4,7 @@
 namespace Agate
 {
     class API MouseClick : public Event {
-        using EventFn = std::function<void()>;
+        using EventFn = std::function<void(Event &)>;
 
     public:
         MouseClick() {}
@@ -20,14 +20,14 @@ namespace Agate
         void Recived() override
         {
             PRINTMSG("Recvied Mouse Click");
-            callback();
+            callback(*this);
             EventFinised = true;
         }
         bool Handled() override
         {
             return Event::EventFinised;
         }
-        void SetCallBackFunc(std::function<void()> func) override
+        void SetCallBackFunc(EventFn func) override
         {
             callback = func;
         }
