@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Agate/Core.h"
-#include "../Agate/Logger.h"
+#include "../Core.h"
+#include "../Logger.h"
 
 #include <functional>
 
@@ -34,17 +34,15 @@ namespace Agate
 
     class API EventNotifier {
     public:
-        EventNotifier(Event &ev)
-            : event(ev)
+        EventNotifier() = default;
+
+        void NotifyEvent(Event &ev)
         {
-            if (!(event.Handled()))
+            if (!(ev.Handled()))
             {
-                event.Recived();
+                ev.Recived();
             }
         }
-
-    private:
-        Event &event;
     };
 
 

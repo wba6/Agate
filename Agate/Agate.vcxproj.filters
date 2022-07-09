@@ -27,13 +27,13 @@
     <ClInclude Include="src\Agate\EntryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\Event.h">
+    <ClInclude Include="src\Agate\Events\Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Agate\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\MouseEvent.h">
+    <ClInclude Include="src\Agate\Events\MouseEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClCompile Include="src\Agate\EntryPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Events\Event.cpp">
+    <ClCompile Include="src\Agate\Events\Event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Agate\Logger.cpp">

@@ -82,16 +82,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Events\Event.h" />
+    <ClInclude Include="src\Agate\Events\Event.h" />
     <ClInclude Include="src\Agate\Logger.h" />
     <ClInclude Include="src\Agate\EntryPoint.h" />
     <ClInclude Include="src\Agate.h" />
     <ClInclude Include="src\Agate\Core.h" />
     <ClInclude Include="src\Agate\test.h" />
-    <ClInclude Include="src\Events\MouseEvent.h" />
+    <ClInclude Include="src\Agate\Events\MouseEvent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Events\Event.cpp" />
+    <ClCompile Include="src\Agate\Events\Event.cpp" />
     <ClCompile Include="src\Agate\Logger.cpp" />
     <ClCompile Include="src\Agate\EntryPoint.cpp" />
     <ClCompile Include="src\Agate\test.cpp" />
