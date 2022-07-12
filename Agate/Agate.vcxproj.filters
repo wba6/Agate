@@ -44,9 +44,6 @@
     <ClCompile Include="src\Agate\EntryPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Agate\Events\Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Agate\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

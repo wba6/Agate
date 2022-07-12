@@ -13,14 +13,9 @@ Agate::EntryPoint::~EntryPoint()
 
 void Agate::EntryPoint::Run()
 {
-    auto click = MouseClick(50,50);
-    click.SetCallBackFunc(std::bind(&EntryPoint::eventTest, this, std::placeholders::_1));
-    auto search = EventNotifier();
-    search.NotifyEvent(click);
+    auto click = MouseClick(50, 50);
+    eventTest(click);
 
-    auto clickTwo = MouseClick(60, 20);
-    search.NotifyEvent(clickTwo);
-    
     while (1)
     {
         //PRINTWARN("Bacon");
@@ -29,6 +24,19 @@ void Agate::EntryPoint::Run()
 
 void Agate::EntryPoint::eventTest(Event &e)
 {
+    EventNotifier notifier(e);
+
+    notifier.NotifyEvent<MouseClick>(std::bind(&EntryPoint::OnMouseClick, this, std::placeholders::_1));
+
     PRINTMSG("Event Type is:");
     e.PrintEventName();
+    e.Handled();
+}
+
+bool Agate::EntryPoint::OnMouseClick(MouseClick &e)
+{
+    PRINTMSG("Event Type is:");
+    e.PrintEventName();
+
+    return true;
 }

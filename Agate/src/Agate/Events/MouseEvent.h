@@ -5,9 +5,8 @@ namespace Agate
 {
     class API MouseClick : public Event {
     public:
-        using EventFn = std::function<void(Event &)>;
-        MouseClick(int xpos,int ypos) 
-        : xPos(xpos), yPos(ypos)
+        MouseClick(int xpos, int ypos)
+            : m_xPos(xpos), m_yPos(ypos)
         {}
 
         EventTypes GetEventType() override
@@ -16,36 +15,31 @@ namespace Agate
         }
         void PrintEventName() override
         {
-            std::string eventString = "MouseClick at: " + std::to_string(xPos) + " " + std::to_string(yPos);
+            std::string eventString = "MouseClick at: " + std::to_string(m_xPos) + " " + std::to_string(m_yPos);
             PRINTMSG(eventString);
-        }
-        void Recived() override
-        {
-            PRINTMSG("Recvied Mouse Click");
-
-            if (s_callback != nullptr) 
-                s_callback(*this);
-            
-            EventFinised = true;
         }
         bool Handled() override
         {
-            return this->Event::EventFinised;
+            return this->EventFinised;
         }
-        void SetCallBackFunc(EventFn func) override
+
+        const int &GetxPos() const
         {
-            s_callback = func;
+            return m_xPos;
         }
-        const int& GetxPos() const{
-            return xPos;
-        }
-        const int& GetyPos() const
+        const int &GetyPos() const
         {
-            return yPos;
+            return m_yPos;
+        }
+
+        static EventTypes s_GetEventType()
+        {
+            return EventTypes::MouseClick;
         }
 
     private:
-        int xPos, yPos;
-        static EventFn s_callback;
+        int m_xPos, m_yPos;
     };
+
+
 }// namespace Agate

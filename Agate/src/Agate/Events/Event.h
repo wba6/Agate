@@ -24,25 +24,34 @@ namespace Agate
             : EventFinised(false) {}
         virtual EventTypes GetEventType() = 0;
         virtual void PrintEventName() = 0;
-        virtual void Recived() = 0;
         virtual bool Handled() = 0;
-        virtual void SetCallBackFunc(std::function<void(Event &)> func) = 0;
 
     protected:
         bool EventFinised;
     };
 
-    class API EventNotifier {
-    public:
-        EventNotifier() = default;
+    class EventNotifier {
+        template<typename T>
+        using EventFn = std::function<bool(T &)>;
 
-        void NotifyEvent(Event &ev)
+    public:
+        EventNotifier(Event &e)
+            : m_Event(e){};
+
+        template<typename T>
+
+        bool NotifyEvent(EventFn<T> ev)
         {
-            if (!(ev.Handled()))
+            if (m_Event.GetEventType() == T::s_GetEventType())
             {
-                ev.Recived();
+                m_Event.EventFinised = ev(*(T *) &m_Event);
+                return true;
             }
+            return false;
         }
+
+    private:
+        Event &m_Event;
     };
 
 

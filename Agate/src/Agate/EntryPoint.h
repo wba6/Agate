@@ -1,7 +1,7 @@
 #pragma once
-#include "Events/Event.h"
 #include "Core.h"
-
+#include "Events/Event.h"
+#include "Events/MouseEvent.h"
 
 namespace Agate
 {
@@ -12,6 +12,7 @@ namespace Agate
 
         void Run();
         void eventTest(Event &e);
+        bool OnMouseClick(MouseClick &e);
     };
 
 }// namespace Agate

@@ -91,7 +91,6 @@
     <ClInclude Include="src\Agate\Events\MouseEvent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Agate\Events\Event.cpp" />
     <ClCompile Include="src\Agate\Logger.cpp" />
     <ClCompile Include="src\Agate\EntryPoint.cpp" />
     <ClCompile Include="src\Agate\test.cpp" />
