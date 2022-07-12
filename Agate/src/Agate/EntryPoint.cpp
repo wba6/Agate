@@ -13,7 +13,7 @@ Agate::EntryPoint::~EntryPoint()
 
 void Agate::EntryPoint::Run()
 {
-    auto click = MouseClick(50, 50);
+    auto click = MouseButtonPressed(1);
     eventTest(click);
 
     while (1)
@@ -26,17 +26,19 @@ void Agate::EntryPoint::eventTest(Event &e)
 {
     EventNotifier notifier(e);
 
-    notifier.NotifyEvent<MouseClick>(std::bind(&EntryPoint::OnMouseClick, this, std::placeholders::_1));
+    notifier.NotifyEvent<MouseButtonPressed>(std::bind(&EntryPoint::OnMouseClick, this, std::placeholders::_1));
 
     PRINTMSG("Event Type is:");
     e.PrintEventName();
-    e.Handled();
 }
 
-bool Agate::EntryPoint::OnMouseClick(MouseClick &e)
+
+//temporary for testing----------------------------------------------
+bool Agate::EntryPoint::OnMouseClick(MouseButtonPressed &e)
 {
     PRINTMSG("Event Type is:");
     e.PrintEventName();
 
     return true;
 }
+//temporary for testing----------------------------------------------

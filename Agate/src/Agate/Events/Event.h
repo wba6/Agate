@@ -9,8 +9,8 @@ namespace Agate
 {
 
     enum class EventTypes {
-        MouseClick,
-        MouseRelease,
+        MouseButtonPressed,
+        MouseButtonReleased,
         MouseMoved,
         KeyPressed,
         KeyReleased

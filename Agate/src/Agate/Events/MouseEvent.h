@@ -3,19 +3,19 @@
 #include <string>
 namespace Agate
 {
-    class API MouseClick : public Event {
+    class API MouseButtonPressed : public Event {
     public:
-        MouseClick(int xpos, int ypos)
-            : m_xPos(xpos), m_yPos(ypos)
+        MouseButtonPressed(int button)
+            : m_button(button)
         {}
 
         EventTypes GetEventType() override
         {
-            return EventTypes::MouseClick;
+            return EventTypes::MouseButtonPressed;
         }
         void PrintEventName() override
         {
-            std::string eventString = "MouseClick at: " + std::to_string(m_xPos) + " " + std::to_string(m_yPos);
+            std::string eventString = "MousePressed button: " + std::to_string(m_button);
             PRINTMSG(eventString);
         }
         bool Handled() override
@@ -23,23 +23,41 @@ namespace Agate
             return this->EventFinised;
         }
 
-        const int &GetxPos() const
+        static EventTypes s_GetEventType()
         {
-            return m_xPos;
+            return EventTypes::MouseButtonPressed;
         }
-        const int &GetyPos() const
+
+    private:
+        int m_button;
+    };
+
+    class API MouseButtonReleased : public Event {
+    public:
+        MouseButtonReleased(int button)
+            : m_button(button)
+        {}
+
+        EventTypes GetEventType() override
         {
-            return m_yPos;
+            return EventTypes::MouseButtonReleased;
+        }
+        void PrintEventName() override
+        {
+            std::string eventString = "MouseReleased button: " + std::to_string(m_button);
+            PRINTMSG(eventString);
+        }
+        bool Handled() override
+        {
+            return this->EventFinised;
         }
 
         static EventTypes s_GetEventType()
         {
-            return EventTypes::MouseClick;
+            return EventTypes::MouseButtonReleased;
         }
 
     private:
-        int m_xPos, m_yPos;
+        int m_button;
     };
-
-
 }// namespace Agate

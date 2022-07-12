@@ -12,7 +12,12 @@ namespace Agate
 
         void Run();
         void eventTest(Event &e);
-        bool OnMouseClick(MouseClick &e);
+
+        //temporary for testing--------------------------
+
+        bool OnMouseClick(MouseButtonPressed &e);
+
+        //-------------------------------------------------
     };
 
 }// namespace Agate
