@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Agate\window\Create_Window.h" />
     <ClInclude Include="src\Agate\Events\Event.h" />
     <ClInclude Include="src\Agate\Logger.h" />
     <ClInclude Include="src\Agate\EntryPoint.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="src\Agate\Events\MouseEvent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Agate\window\Create_Window.cpp" />
     <ClCompile Include="src\Agate\Logger.cpp" />
     <ClCompile Include="src\Agate\EntryPoint.cpp" />
     <ClCompile Include="src\Agate\test.cpp" />

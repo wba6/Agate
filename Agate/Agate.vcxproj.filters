@@ -36,6 +36,9 @@
     <ClInclude Include="src\Agate\Events\MouseEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Agate\window\Create_Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\test.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Agate\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Agate\window\Create_Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
