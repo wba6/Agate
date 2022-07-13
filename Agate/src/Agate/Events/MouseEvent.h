@@ -1,6 +1,5 @@
 #pragma once
 #include "Event.h"
-#include <string>
 namespace Agate
 {
     class API MouseButtonPressed : public Event {

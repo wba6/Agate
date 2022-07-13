@@ -1,6 +1,7 @@
 #pragma once
+#include "agpch.h"
+
 #include "Core.h"
-#include <string>
 
 namespace Agate
 {

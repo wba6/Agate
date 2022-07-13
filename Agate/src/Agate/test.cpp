@@ -1,3 +1,5 @@
+#include "agpch.h"
+
 #include "test.h"
 
 namespace Agate

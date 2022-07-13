@@ -1,8 +1,11 @@
+#include "agpch.h"
+
+
 #include "EntryPoint.h"
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
 #include "Logger.h"
-#include <functional>
+
 Agate::EntryPoint::EntryPoint()
 {
 }

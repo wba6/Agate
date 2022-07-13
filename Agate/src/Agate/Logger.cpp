@@ -1,5 +1,7 @@
+#include "agpch.h"
+
+
 #include "Logger.h"
-#include <iostream>
 
 namespace Agate
 {

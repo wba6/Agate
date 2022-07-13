@@ -1,9 +1,9 @@
 #pragma once
+#include "agpch.h"
 
 #include "../Core.h"
 #include "../Logger.h"
 
-#include <functional>
 
 namespace Agate
 {
