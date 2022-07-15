@@ -155,16 +155,19 @@
     <ClInclude Include="src\Agate.h" />
     <ClInclude Include="src\Agate\Core.h" />
     <ClInclude Include="src\Agate\EntryPoint.h" />
+    <ClInclude Include="src\Agate\Events\ApplicationEvents.h" />
     <ClInclude Include="src\Agate\Events\Event.h" />
     <ClInclude Include="src\Agate\Events\MouseEvent.h" />
     <ClInclude Include="src\Agate\Logger.h" />
     <ClInclude Include="src\Agate\test.h" />
+    <ClInclude Include="src\Agate\window\Create_Window.h" />
     <ClInclude Include="src\agpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp" />
     <ClCompile Include="src\Agate\Logger.cpp" />
     <ClCompile Include="src\Agate\test.cpp" />
+    <ClCompile Include="src\Agate\window\Create_Window.cpp" />
     <ClCompile Include="src\agpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

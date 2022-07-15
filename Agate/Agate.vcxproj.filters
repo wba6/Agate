@@ -7,6 +7,9 @@
     <Filter Include="Agate\Events">
       <UniqueIdentifier>{EB418DC0-D7A4-1C65-802A-551B6C6CE8E7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Agate\window">
+      <UniqueIdentifier>{0EB74834-FA19-D8D8-A39F-108F8FE1A35B}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Agate.h" />
@@ -28,7 +31,11 @@
     <ClInclude Include="src\Agate\test.h">
       <Filter>Agate</Filter>
     </ClInclude>
+    <ClInclude Include="src\Agate\window\Create_Window.h">
+      <Filter>Agate\window</Filter>
+    </ClInclude>
     <ClInclude Include="src\agpch.h" />
+    <ClInclude Include="src\Agate\Events\ApplicationEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp">
@@ -39,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="src\Agate\test.cpp">
       <Filter>Agate</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Agate\window\Create_Window.cpp">
+      <Filter>Agate\window</Filter>
     </ClCompile>
     <ClCompile Include="src\agpch.cpp" />
   </ItemGroup>

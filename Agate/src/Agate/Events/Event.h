@@ -13,7 +13,10 @@ namespace Agate
         MouseButtonReleased,
         MouseMoved,
         KeyPressed,
-        KeyReleased
+        KeyReleased,
+        WindowResized,
+        WindowClose
+
     };
 
     class API Event {
