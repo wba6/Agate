@@ -5,6 +5,7 @@
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
 #include "Logger.h"
+#include "Math/Vect.h"
 
 Agate::EntryPoint::EntryPoint()
 {
@@ -20,7 +21,6 @@ void Agate::EntryPoint::Run()
     eventTest(click);
     auto click_r = MouseButtonReleased(0);
     eventTest(click_r);
-
 
     while (1)
     {

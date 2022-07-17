@@ -1,4 +1,6 @@
 #pragma once
+#include "Execptions.h"
+
 namespace Agate
 {
     struct Vec3D {
@@ -11,16 +13,22 @@ namespace Agate
         {}
 
 
-        //TODO: Not memory safe fix!
         float &operator[](int i)
         {
-            return ((&x)[i]);
+            if (i < 3)
+                return ((&x)[i]);
+            else
+                throw OutOfBonds();
         }
 
         const float &operator[](int i) const
         {
-            return ((&x)[i]);
+            if (i < 3)
+                return ((&x)[i]);
+            else
+                throw OutOfBonds();
         }
     };
+
 
 }// namespace Agate
