@@ -162,6 +162,7 @@
     <ClInclude Include="src\Agate\test.h" />
     <ClInclude Include="src\Agate\window\Create_Window.h" />
     <ClInclude Include="src\agpch.h" />
+    <ClInclude Include="src\Math\Vectors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp" />

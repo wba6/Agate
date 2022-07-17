@@ -38,6 +38,7 @@
       <Filter>Agate\window</Filter>
     </ClInclude>
     <ClInclude Include="src\agpch.h" />
+    <ClInclude Include="src\Math\Vectors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp">
