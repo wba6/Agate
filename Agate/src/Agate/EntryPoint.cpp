@@ -5,7 +5,7 @@
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
 #include "Logger.h"
-#include "Math/Vect.h"
+#include "Math/Math.h"
 
 Agate::EntryPoint::EntryPoint()
 {
