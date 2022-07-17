@@ -1,0 +1,3 @@
+[submodule "Agate/vender/glfw"]
+	path = Agate/vender/glfw
+	url = https://github.com/TANK1-41/glfw
