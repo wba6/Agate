@@ -45,6 +45,22 @@ namespace Agate
 
             return *this;
         }
+
+        Vec2D &operator+=(Vec2D &vec)
+        {
+            x += vec.x;
+            y += vec.y;
+
+            return *this;
+        }
+
+        Vec2D &operator-=(Vec2D &vec)
+        {
+            x += vec.x;
+            y += vec.y;
+
+            return *this;
+        }
     };
 
     inline Vec2D operator*(const Vec2D &vec, float s)
@@ -71,5 +87,15 @@ namespace Agate
     inline Vec2D Normalize(const Vec2D &vec)
     {
         return (vec / Magnitude(vec));
+    }
+
+    inline Vec2D operator+(Vec2D &vec1, Vec2D &vec2)
+    {
+        return (Vec2D(vec1.x + vec2.x, vec1.y + vec2.y));
+    }
+
+    inline Vec2D operator-(Vec2D &vec1, Vec2D &vec2)
+    {
+        return (Vec2D(vec1.x - vec2.x, vec1.y - vec2.y));
     }
 }// namespace Agate

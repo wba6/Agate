@@ -47,6 +47,24 @@ namespace Agate
 
             return *this;
         }
+
+        Vec3D &operator+=(Vec3D &vec)
+        {
+            x += vec.x;
+            y += vec.y;
+            z += vec.z;
+
+            return *this;
+        }
+
+        Vec3D &operator-=(Vec3D &vec)
+        {
+            x += vec.x;
+            y += vec.y;
+            z += vec.z;
+
+            return *this;
+        }
     };
 
     inline Vec3D operator*(const Vec3D &vec, float s)
@@ -75,4 +93,13 @@ namespace Agate
         return (vec / Magnitude(vec));
     }
 
+    inline Vec3D operator+(Vec3D &vec1, Vec3D &vec2)
+    {
+        return (Vec3D(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z));
+    }
+
+    inline Vec3D operator-(Vec3D &vec1, Vec3D &vec2)
+    {
+        return (Vec3D(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z));
+    }
 }// namespace Agate
