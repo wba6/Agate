@@ -42,6 +42,7 @@
     <ClInclude Include="src\Agate\Math\Execptions.h" />
     <ClInclude Include="src\Agate\Math\Math.h" />
     <ClInclude Include="src\Agate\Math\Vect2D.h" />
+    <ClInclude Include="src\Agate\Math\Mat3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp">

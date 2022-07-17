@@ -159,6 +159,7 @@
     <ClInclude Include="src\Agate\Events\Event.h" />
     <ClInclude Include="src\Agate\Events\MouseEvent.h" />
     <ClInclude Include="src\Agate\Logger.h" />
+    <ClInclude Include="src\Agate\Math\Mat3D.h" />
     <ClInclude Include="src\Agate\Math\Math.h" />
     <ClInclude Include="src\Agate\Math\Vect2D.h" />
     <ClInclude Include="src\Agate\test.h" />
