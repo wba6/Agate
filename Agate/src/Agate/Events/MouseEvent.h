@@ -2,10 +2,52 @@
 #include "Event.h"
 namespace Agate
 {
-    class API MouseButtonPressed : public Event {
+    class MouseMoved : public Event {
+    public:
+        MouseMoved(int x, int y)
+            : m_newXPos(x), m_newYPos(y)
+        {}
+
+
+        EventTypes GetEventType() override
+        {
+            return EventTypes::MouseMoved;
+        }
+
+
+        void PrintEventName() override
+        {
+            std::string eventString = "MouseMoved to: " + std::to_string(m_newXPos) + ", " + std::to_string(m_newYPos);
+            PRINTMSG(eventString);
+        }
+
+
+        bool Handled() override
+        {
+            return this->EventFinised;
+        }
+
+        static EventTypes s_GetEventType()
+        {
+            return EventTypes::MouseMoved;
+        }
+
+    private:
+        int m_newXPos, m_newYPos;
+    };
+
+    class MouseButton : public Event {
+    protected:
+        MouseButton(int button)
+            : m_button(button)
+        {}
+        int m_button;
+    };
+
+    class API MouseButtonPressed : public MouseButton {
     public:
         MouseButtonPressed(int button)
-            : m_button(button)
+            : MouseButton(button)
         {}
 
         EventTypes GetEventType() override
@@ -26,15 +68,12 @@ namespace Agate
         {
             return EventTypes::MouseButtonPressed;
         }
-
-    private:
-        int m_button;
     };
 
-    class API MouseButtonReleased : public Event {
+    class API MouseButtonReleased : public MouseButton {
     public:
         MouseButtonReleased(int button)
-            : m_button(button)
+            : MouseButton(button)
         {}
 
         EventTypes GetEventType() override
@@ -55,8 +94,5 @@ namespace Agate
         {
             return EventTypes::MouseButtonReleased;
         }
-
-    private:
-        int m_button;
     };
 }// namespace Agate

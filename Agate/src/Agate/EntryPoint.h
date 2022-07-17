@@ -15,7 +15,8 @@ namespace Agate
 
         //temporary for testing--------------------------
 
-        bool OnMouseClick(MouseButtonPressed &e);
+        bool OnMousePressed(MouseButtonPressed &e);
+        bool OnMouseReleased(MouseButtonReleased &e);
 
         //-------------------------------------------------
     };

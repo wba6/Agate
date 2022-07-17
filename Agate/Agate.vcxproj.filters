@@ -19,6 +19,9 @@
     <ClInclude Include="src\Agate\EntryPoint.h">
       <Filter>Agate</Filter>
     </ClInclude>
+    <ClInclude Include="src\Agate\Events\ApplicationEvents.h">
+      <Filter>Agate\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Agate\Events\Event.h">
       <Filter>Agate\Events</Filter>
     </ClInclude>
@@ -35,7 +38,6 @@
       <Filter>Agate\window</Filter>
     </ClInclude>
     <ClInclude Include="src\agpch.h" />
-    <ClInclude Include="src\Agate\Events\ApplicationEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp">
