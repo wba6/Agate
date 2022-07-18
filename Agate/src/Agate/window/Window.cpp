@@ -2,7 +2,7 @@
 
 
 #include "Window.h"
-
+#include <GLFW/glfw3.h>
 namespace Agate
 {
 
@@ -11,5 +11,29 @@ namespace Agate
         : windowProps{WindowName, size_x, size_y}
     {
     }
+
+    void Window::InitWindow()
+    {
+    }
+    void Window::OnUpdate()
+    {
+    }
+
+    void Window::GetWidth()
+    {
+    }
+
+    void Window::GetHieght()
+    {
+    }
+
+    void Window::SetVSync()
+    {
+    }
+
+    void Window::GetVSyncState()
+    {
+    }
+
 
 }// namespace Agate

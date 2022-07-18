@@ -11,7 +11,10 @@ workspace "Agate"
 outputdir = "%{cfg.build}-%{cfg.system}-%{cfg.architecture}"
 	
 IncludeDir = {}
+IncludeDir["GLFW"] = "Agate/vender/glfw/include"
 
+
+include "Agate/vender/glfw"
 
 project "Agate"
 	location "Agate"
@@ -33,10 +36,13 @@ project "Agate"
 	includedirs
 	{
 		"%{prj.name}/src",
+		"%{prj.name}/src/Agate",
+		"%{IncludeDir.GLFW}"
 	}
 
 	links{
-		"opengl32.lib"
+		"opengl32.lib",
+		"GLFW"
 	}
 
 	filter "system:windows"
