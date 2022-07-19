@@ -7,8 +7,10 @@
 #include "Logger.h"
 #include "Math/Math.h"
 
+
 Agate::EntryPoint::EntryPoint()
 {
+    m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::eventTest), 1);
 }
 
 Agate::EntryPoint::~EntryPoint()
@@ -24,6 +26,7 @@ void Agate::EntryPoint::Run()
 
     while (1)
     {
+        m_window->OnUpdate();
         //PRINTWARN("Bacon");
     };
 }
@@ -32,8 +35,8 @@ void Agate::EntryPoint::eventTest(Event &e)
 {
     EventNotifier notifier(e);
 
-    notifier.NotifyEvent<MouseButtonPressed>(std::bind(&EntryPoint::OnMousePressed, this, std::placeholders::_1));
-    notifier.NotifyEvent<MouseButtonReleased>(std::bind(&EntryPoint::OnMouseReleased, this, std::placeholders::_1));
+    notifier.NotifyEvent<MouseButtonPressed>(BindFn(EntryPoint::OnMousePressed));
+    notifier.NotifyEvent<MouseButtonReleased>(BindFn(EntryPoint::OnMouseReleased));
 
     PRINTMSG("Event Type is:");
     e.PrintEventName();

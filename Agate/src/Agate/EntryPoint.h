@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
+#include "window/Window.h"
 
 namespace Agate
 {
@@ -19,6 +20,8 @@ namespace Agate
         bool OnMouseReleased(MouseButtonReleased &e);
 
         //-------------------------------------------------
+    private:
+        std::shared_ptr<Window> m_window;
     };
 
 }// namespace Agate

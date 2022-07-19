@@ -6,3 +6,6 @@
 #else
 #define API __declspec(dllimport)
 #endif// Core
+
+
+#define BindFn(x) std::bind(&x, this, std::placeholders::_1)
