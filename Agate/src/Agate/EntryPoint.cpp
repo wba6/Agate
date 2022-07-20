@@ -7,8 +7,12 @@
 #include "Math/Math.h"
 
 
+Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
+
 Agate::EntryPoint::EntryPoint()
 {
+    s_instance = this;
+
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::eventTest), true);
     m_running = true;
 }

@@ -20,6 +20,10 @@ namespace Agate
     private:
         std::shared_ptr<Window> m_window;
         bool m_running;
+        static EntryPoint *s_instance;
     };
+
+    //to be defined outside of lib
+    EntryPoint *CreateEntryPoint();
 
 }// namespace Agate

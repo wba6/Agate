@@ -31,9 +31,9 @@ namespace Agate
 
         Vec3D &operator*=(float s)
         {
-            x *s;
-            y *s;
-            z *s;
+            x *= s;
+            y *= s;
+            z *= s;
 
             return *this;
         }

@@ -31,8 +31,8 @@ namespace Agate
 
         Vec2D &operator*=(float s)
         {
-            x *s;
-            y *s;
+            x *= s;
+            y *= s;
 
             return *this;
         }
