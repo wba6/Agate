@@ -49,9 +49,6 @@
     <ClInclude Include="src\Agate\Math\Vect3D.h">
       <Filter>Agate\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Agate\test.h">
-      <Filter>Agate</Filter>
-    </ClInclude>
     <ClInclude Include="src\Agate\window\Window.h">
       <Filter>Agate\window</Filter>
     </ClInclude>
@@ -62,9 +59,6 @@
       <Filter>Agate</Filter>
     </ClCompile>
     <ClCompile Include="src\Agate\Logger.cpp">
-      <Filter>Agate</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Agate\test.cpp">
       <Filter>Agate</Filter>
     </ClCompile>
     <ClCompile Include="src\Agate\window\Window.cpp">

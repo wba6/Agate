@@ -3,10 +3,9 @@
 #include "Execptions.h"
 #include "Vect3D.h"
 
-
 namespace Agate
 {
-    struct Mat3D {
+    struct API Mat3D {
     private:
         float n[3][3];
 

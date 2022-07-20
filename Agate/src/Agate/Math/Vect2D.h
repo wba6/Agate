@@ -3,7 +3,7 @@
 
 namespace Agate
 {
-    struct Vec2D {
+    struct API Vec2D {
         float x, y;
 
         Vec2D() = default;

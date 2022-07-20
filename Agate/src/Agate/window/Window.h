@@ -1,6 +1,8 @@
 #pragma once
 #include "Events/Event.h"
 
+//TODO: Use a bridge and a factor to create this window so that there is only one instance so the api can be exposed to client
+
 
 typedef struct GLFWwindow;
 namespace Agate
@@ -32,6 +34,6 @@ namespace Agate
 
         GLFWwindow *m_Window;
 
-        WindowProperies windowProps;
+        WindowProperies m_windowProps;
     };
 }// namespace Agate

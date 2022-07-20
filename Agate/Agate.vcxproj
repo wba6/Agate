@@ -164,14 +164,12 @@
     <ClInclude Include="src\Agate\Math\Math.h" />
     <ClInclude Include="src\Agate\Math\Vect2D.h" />
     <ClInclude Include="src\Agate\Math\Vect3D.h" />
-    <ClInclude Include="src\Agate\test.h" />
     <ClInclude Include="src\Agate\window\Window.h" />
     <ClInclude Include="src\agpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp" />
     <ClCompile Include="src\Agate\Logger.cpp" />
-    <ClCompile Include="src\Agate\test.cpp" />
     <ClCompile Include="src\Agate\window\Window.cpp" />
     <ClCompile Include="src\agpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

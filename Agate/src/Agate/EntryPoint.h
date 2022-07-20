@@ -1,5 +1,6 @@
 #pragma once
 #include "Core.h"
+#include "Events/ApplicationEvents.h"
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
 #include "window/Window.h"
@@ -14,14 +15,11 @@ namespace Agate
         void Run();
         void eventTest(Event &e);
 
-        //temporary for testing--------------------------
+        bool OnWindowClose(WindowCloseEvent &e);
 
-        bool OnMousePressed(MouseButtonPressed &e);
-        bool OnMouseReleased(MouseButtonReleased &e);
-
-        //-------------------------------------------------
     private:
         std::shared_ptr<Window> m_window;
+        bool m_running;
     };
 
 }// namespace Agate

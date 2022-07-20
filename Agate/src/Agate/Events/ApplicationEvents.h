@@ -34,4 +34,32 @@ namespace Agate
     private:
         int m_xSize, m_ySize;
     };
+
+    class WindowCloseEvent : public Event {
+    public:
+        WindowCloseEvent()
+        {
+        }
+
+        EventTypes GetEventType() override
+        {
+            return EventTypes::WindowClose;
+        }
+
+        void PrintEventName() override
+        {
+            std::string eventString = "Window Closing";
+            PRINTMSG(eventString);
+        }
+
+        bool Handled() override
+        {
+            return this->EventFinised;
+        }
+
+        static EventTypes s_GetEventType()
+        {
+            return EventTypes::WindowClose;
+        }
+    };
 }// namespace Agate
