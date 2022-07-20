@@ -53,6 +53,9 @@
       <Filter>Agate\window</Filter>
     </ClInclude>
     <ClInclude Include="src\agpch.h" />
+    <ClInclude Include="src\Agate\Main.h">
+      <Filter>Agate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp">

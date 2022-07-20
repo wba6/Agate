@@ -152,6 +152,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Agate\Main.h" />
     <ClInclude Include="src\Agate.h" />
     <ClInclude Include="src\Agate\Core.h" />
     <ClInclude Include="src\Agate\EntryPoint.h" />
