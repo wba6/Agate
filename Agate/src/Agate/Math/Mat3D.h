@@ -72,4 +72,24 @@ namespace Agate
                 throw OutOfBonds();
         }
     };
+
+    Mat3D operator*(const Mat3D &a, const Mat3D &b)
+    {
+        return (Mat3D(a(0, 0) * b(0, 0) + a(0, 1) * b(1, 0) + a(0, 2) * b(2, 0),
+                      a(0, 0) * b(0, 1) + a(0, 1) * b(1, 1) + a(0, 2) * b(2, 1),
+                      a(0, 0) * b(0, 2) + a(0, 1) * b(1, 2) + a(0, 2) * b(2, 2),
+                      a(1, 0) * b(0, 0) + a(1, 1) * b(1, 0) + a(1, 2) * b(2, 0),
+                      a(1, 0) * b(0, 1) + a(1, 1) * b(1, 1) + a(1, 2) * b(2, 1),
+                      a(1, 0) * b(0, 2) + a(1, 1) * b(1, 2) + a(1, 2) * b(2, 2),
+                      a(2, 0) * b(0, 0) + a(2, 1) * b(1, 0) + a(2, 2) * b(2, 0),
+                      a(2, 0) * b(0, 1) + a(2, 1) * b(1, 1) + a(2, 2) * b(2, 1),
+                      a(2, 0) * b(0, 2) + a(2, 1) * b(1, 2) + a(2, 2) * b(2, 2)));
+    }
+
+    Vec3D operator*(const Mat3D &M, const Vec3D &v)
+    {
+        return (Vec3D((M(0, 0) * v.x + M(0, 1) * v.y + M(0, 2) * v.z),
+                      (M(1, 0) * v.x + M(1, 1) * v.y + M(1, 2) * v.z),
+                      (M(2, 0) * v.x + M(2, 1) * v.y + M(2, 2) * v.z)));
+    }
 }// namespace Agate
