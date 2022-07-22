@@ -98,4 +98,8 @@ namespace Agate
     {
         return (Vec2D(vec1.x - vec2.x, vec1.y - vec2.y));
     }
+    inline float Dot(const Vec2D &a, Vec2D &b)
+    {
+        return (a.x * b.x + a.y * b.y);
+    }
 }// namespace Agate
