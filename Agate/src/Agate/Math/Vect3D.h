@@ -107,4 +107,11 @@ namespace Agate
     {
         return (a.x * b.x + a.y * b.y + a.z * b.z);
     }
+
+    inline Vec3D Cross(Vec3D &a, Vec3D &b)
+    {
+        return (Vec3D(a.y * b.z - a.z * b.y,
+                      a.z * b.x - b.z * a.x,
+                      a.x * b.y - b.x * a.y));
+    }
 }// namespace Agate
