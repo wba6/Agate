@@ -152,6 +152,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Agate\Layer.h" />
     <ClInclude Include="src\Agate\Main.h" />
     <ClInclude Include="src\Agate.h" />
     <ClInclude Include="src\Agate\Core.h" />
@@ -167,9 +168,11 @@
     <ClInclude Include="src\Agate\Math\Vect3D.h" />
     <ClInclude Include="src\Agate\window\Window.h" />
     <ClInclude Include="src\agpch.h" />
+    <ClInclude Include="src\Agate\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp" />
+    <ClCompile Include="src\Agate\LayerStack.cpp" />
     <ClCompile Include="src\Agate\Logger.cpp" />
     <ClCompile Include="src\Agate\window\Window.cpp" />
     <ClCompile Include="src\agpch.cpp">

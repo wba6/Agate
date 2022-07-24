@@ -56,6 +56,8 @@
     <ClInclude Include="src\Agate\Main.h">
       <Filter>Agate</Filter>
     </ClInclude>
+    <ClInclude Include="src\Agate\LayerStack.h" />
+    <ClInclude Include="src\Agate\Layer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp">
@@ -68,5 +70,6 @@
       <Filter>Agate\window</Filter>
     </ClCompile>
     <ClCompile Include="src\agpch.cpp" />
+    <ClCompile Include="src\Agate\LayerStack.cpp" />
   </ItemGroup>
 </Project>
