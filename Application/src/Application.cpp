@@ -28,5 +28,8 @@ public:
 
 Agate::EntryPoint *Agate::CreateEntryPoint()
 {
-    return new app();
+    auto Application = new app();
+
+    Application->EmplaceLayer(new layerEx);
+    return Application;
 }

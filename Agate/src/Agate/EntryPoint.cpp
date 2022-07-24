@@ -58,3 +58,23 @@ bool Agate::EntryPoint::OnWindowClose(WindowCloseEvent &e)
     m_running = false;
     return true;
 }
+
+void Agate::EntryPoint::EmplaceLayer(Layer *layer)
+{
+    m_layerStack.AddLayer(layer);
+}
+
+void Agate::EntryPoint::RemoveLayer(Layer *layer)
+{
+    m_layerStack.RemoveLayer(layer);
+}
+
+void Agate::EntryPoint::EmplaceOverlay(Layer *overlay)
+{
+    m_layerStack.AddOverlay(overlay);
+}
+
+void Agate::EntryPoint::RemoveOverlay(Layer *overlay)
+{
+    m_layerStack.RemoveOverlay(overlay);
+}

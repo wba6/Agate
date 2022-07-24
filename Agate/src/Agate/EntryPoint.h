@@ -17,6 +17,11 @@ namespace Agate
 
         bool OnWindowClose(WindowCloseEvent &e);
 
+        void EmplaceLayer(Layer *layer);
+        void RemoveLayer(Layer *layer);
+        void EmplaceOverlay(Layer *overlay);
+        void RemoveOverlay(Layer *overlay);
+
     private:
         std::shared_ptr<Window> m_window;
         LayerStack m_layerStack;
