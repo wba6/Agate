@@ -7,6 +7,8 @@
 namespace Agate
 {
     class LayerStack {
+        friend class EntryPoint;
+
     public:
         LayerStack() = default;
         ~LayerStack();

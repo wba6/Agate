@@ -13,7 +13,7 @@ Agate::EntryPoint::EntryPoint()
 {
     s_instance = this;
 
-    m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::eventTest), true);
+    m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
     m_running = true;
 }
 
@@ -24,9 +24,9 @@ Agate::EntryPoint::~EntryPoint()
 void Agate::EntryPoint::Run()
 {
     auto click = MouseButtonPressed(0);
-    eventTest(click);
+    OnEvent(click);
     auto click_r = MouseButtonReleased(0);
-    eventTest(click_r);
+    OnEvent(click_r);
 
     while (m_running)
     {
@@ -35,7 +35,7 @@ void Agate::EntryPoint::Run()
     };
 }
 
-void Agate::EntryPoint::eventTest(Event &e)
+void Agate::EntryPoint::OnEvent(Event &e)
 {
     EventNotifier notifier(e);
 
@@ -43,6 +43,13 @@ void Agate::EntryPoint::eventTest(Event &e)
 
     PRINTMSG("Event Type is:");
     e.PrintEventName();
+
+    for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
+    {
+        m_layerStack.m_layers.at(i)->OnEvent(e);
+        if (e.Handled())
+            break;
+    }
 }
 
 

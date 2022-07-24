@@ -8,7 +8,7 @@
 namespace Agate
 {
 
-    enum class EventTypes {
+    enum class API EventTypes {
         MouseButtonPressed,
         MouseButtonReleased,
         MouseMoved,
@@ -33,7 +33,7 @@ namespace Agate
         bool EventFinised;
     };
 
-    class EventNotifier {
+    class API EventNotifier {
         template<typename T>
         using EventFn = std::function<bool(T &)>;
 

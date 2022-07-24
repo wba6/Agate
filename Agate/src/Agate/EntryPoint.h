@@ -2,7 +2,7 @@
 #include "Core.h"
 #include "Events/ApplicationEvents.h"
 #include "Events/Event.h"
-#include "Events/MouseEvent.h"
+#include "LayerStack.h"
 #include "window/Window.h"
 
 namespace Agate
@@ -13,13 +13,16 @@ namespace Agate
         virtual ~EntryPoint();
 
         void Run();
-        void eventTest(Event &e);
+        void OnEvent(Event &e);
 
         bool OnWindowClose(WindowCloseEvent &e);
 
     private:
         std::shared_ptr<Window> m_window;
+        LayerStack m_layerStack;
         bool m_running;
+
+    private:
         static EntryPoint *s_instance;
     };
 
