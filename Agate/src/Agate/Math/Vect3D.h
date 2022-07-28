@@ -59,18 +59,18 @@ namespace Agate
 
         Vec3D &operator-=(Vec3D &vec)
         {
-            x += vec.x;
-            y += vec.y;
-            z += vec.z;
+            x -= vec.x;
+            y -= vec.y;
+            z -= vec.z;
 
             return *this;
         }
     };
-
-    inline Vec3D operator*(const Vec3D &vec, float s)
+    inline Vec3D operator+(const Vec3D &a, const Vec3D &b)
     {
-        return (Vec3D(vec.x * s, vec.y * s, vec.z * s));
+        return (Vec3D(a.x + b.x, a.y + b.y, a.z + b.z));
     }
+
 
     inline Vec3D operator/(const Vec3D &vec, float s)
     {
@@ -103,15 +103,35 @@ namespace Agate
         return (Vec3D(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z));
     }
 
-    inline float Dot(const Vec3D &a, Vec3D &b)
+    inline Vec3D operator-(const Vec3D &a, const Vec3D &b)
+    {
+        return (Vec3D(a.x - b.x, a.y - b.y, a.z - b.z));
+    }
+
+    inline Vec3D operator*(const Vec3D &vec, float s)
+    {
+        return (Vec3D(vec.x * s, vec.y * s, vec.z * s));
+    }
+
+    inline float Dot(const Vec3D &a, const Vec3D &b)
     {
         return (a.x * b.x + a.y * b.y + a.z * b.z);
     }
 
-    inline Vec3D Cross(Vec3D &a, Vec3D &b)
+    inline Vec3D Cross(const Vec3D &a, const Vec3D &b)
     {
         return (Vec3D(a.y * b.z - a.z * b.y,
                       a.z * b.x - b.z * a.x,
                       a.x * b.y - b.x * a.y));
+    }
+
+    inline Vec3D Project(const Vec3D &a, const Vec3D &b)
+    {
+        return (b * Dot(a, b) / Dot(b, b));
+    }
+
+    inline Vec3D Reject(const Vec3D &a, const Vec3D &b)
+    {
+        return (a - b * (Dot(a, b) / Dot(b, b)));
     }
 }// namespace Agate
