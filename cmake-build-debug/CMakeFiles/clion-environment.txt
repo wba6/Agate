@@ -1,4 +1,4 @@
 ToolSet: 16.0 (local)@C:\Program Files (x86)\Microsoft Visual Studio\2019\Community
-Options: msvc.arch=x86_amd64
+Options: msvc.arch=x86
 
-Options:-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2021.3.2/bin/ninja/win/ninja.exe
+Options:-DCMAKE_MAKE_PROGRAM=C:/Users/Captain Awesome/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/222.3345.126/bin/ninja/win/ninja.exe
