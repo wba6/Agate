@@ -1,6 +1,0 @@
-"C:\Users\Captain Awesome\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\222.3345.126\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Users/Captain Awesome/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/222.3345.126/bin/ninja/win/ninja.exe" -G Ninja -S C:\dev\Agate -B C:\dev\Agate\cmake-build-debug
--- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
--- Including Win32 support
--- Configuring done
--- Generating done
--- Build files have been written to: C:/dev/Agate/cmake-build-debug
