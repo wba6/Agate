@@ -4,7 +4,7 @@
 //TODO: Use a bridge and a factor to create this window so that there is only one instance so the api can be exposed to client
 
 
-typedef struct GLFWwindow;
+struct GLFWwindow;
 namespace Agate
 {
     class Window {

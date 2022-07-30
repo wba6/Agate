@@ -8,7 +8,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
-add_compile_definitions(Agate_STATIC)
 
 file(GLOB libSrc
         "src/**.h"
@@ -26,9 +25,13 @@ file(GLOB libSrc
 include_directories("${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/src/Agate"
         "${PROJECT_SOURCE_DIR}/vender/glfw/include"
-        )
+        "${PROJECT_SOURCE_DIR}/vender/glad/include"
+                )
 
 
 add_subdirectory(vender/glfw)
+
+add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
+
 add_library(Agate-lib STATIC ${libSrc})
 

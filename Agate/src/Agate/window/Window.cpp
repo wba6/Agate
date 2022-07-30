@@ -3,7 +3,9 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/MouseEvent.h"
 #include "Window.h"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 namespace Agate
 {
 
@@ -39,7 +41,7 @@ namespace Agate
         glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos){
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
-            MouseMoved event(xpos,ypos);
+            MouseMoved event((int)xpos,(int)ypos);
             data.callback(event);
         });
     }
