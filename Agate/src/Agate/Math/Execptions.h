@@ -4,8 +4,9 @@
 class OutOfBonds : public std::exception {
 
 public:
-    char const *what() const override
+    virtual const char *what() const noexcept  override
     {
         return "Out of bonds exception";
     }
+     ~OutOfBonds()  noexcept{};
 };

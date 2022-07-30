@@ -1,6 +1,6 @@
 #pragma once
 #include "Execptions.h"
-
+#include <cmath>
 namespace Agate
 {
     struct API Vec2D {
