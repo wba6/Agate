@@ -35,6 +35,13 @@ namespace Agate
             WindowCloseEvent event;
             data.callback(event);
         });
+
+        glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos){
+            WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
+
+            MouseMoved event(xpos,ypos);
+            data.callback(event);
+        });
     }
 
     void Window::GlfwError(int error_code, const char *description)

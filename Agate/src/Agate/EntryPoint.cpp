@@ -42,7 +42,6 @@ void Agate::EntryPoint::OnEvent(Event &e)
     notifier.NotifyEvent<WindowCloseEvent>(BindFn(EntryPoint::OnWindowClose));
 
     PRINTMSG("Event Type is:");
-    PRINTMSG("Event Type is:");
     e.PrintEventName();
 
     for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)

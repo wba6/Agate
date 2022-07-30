@@ -28,9 +28,6 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/vender/glfw/include"
         )
 
-set(dir ${PROJECT_SOURCE_DIR}/bin/-windows-x86_64/Agate)
-
-set(LIBRARY_OUTPUT_PATH  ${dir} CACHE PATH "Build directory" FORCE)
 
 add_subdirectory(vender/glfw)
 add_library(Agate-lib STATIC ${libSrc})

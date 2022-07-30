@@ -17,9 +17,6 @@ include_directories("../Agate/src")
 
 add_compile_definitions(Agate_STATIC)
 
-set(dir ${PROJECT_SOURCE_DIR}/bin/-windows-x86_64/Application)
-
-set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 
 add_executable(Application ${appSrc})
 
