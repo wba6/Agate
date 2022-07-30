@@ -79,8 +79,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>agpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>Agate_DLL;AG_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Agate;vender\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>Agate_DLL;GLFW_INCLUDE_NONE;AG_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;src\Agate;vender\glfw\include;vender\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -102,8 +102,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>agpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>Agate_DLL;AG_Release;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Agate;vender\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>Agate_DLL;GLFW_INCLUDE_NONE;AG_Release;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;src\Agate;vender\glfw\include;vender\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -129,8 +129,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>agpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>Agate_DLL;AG_Dist;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Agate;vender\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>Agate_DLL;GLFW_INCLUDE_NONE;AG_Dist;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;src\Agate;vender\glfw\include;vender\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -152,15 +152,16 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Agate\Layer.h" />
-    <ClInclude Include="src\Agate\Main.h" />
     <ClInclude Include="src\Agate.h" />
     <ClInclude Include="src\Agate\Core.h" />
     <ClInclude Include="src\Agate\EntryPoint.h" />
     <ClInclude Include="src\Agate\Events\ApplicationEvents.h" />
     <ClInclude Include="src\Agate\Events\Event.h" />
     <ClInclude Include="src\Agate\Events\MouseEvent.h" />
+    <ClInclude Include="src\Agate\Layer.h" />
+    <ClInclude Include="src\Agate\LayerStack.h" />
     <ClInclude Include="src\Agate\Logger.h" />
+    <ClInclude Include="src\Agate\Main.h" />
     <ClInclude Include="src\Agate\Math\Execptions.h" />
     <ClInclude Include="src\Agate\Math\Mat3D.h" />
     <ClInclude Include="src\Agate\Math\Math.h" />
@@ -168,7 +169,6 @@
     <ClInclude Include="src\Agate\Math\Vect3D.h" />
     <ClInclude Include="src\Agate\window\Window.h" />
     <ClInclude Include="src\agpch.h" />
-    <ClInclude Include="src\Agate\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Agate\EntryPoint.cpp" />

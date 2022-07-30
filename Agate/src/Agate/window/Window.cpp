@@ -3,8 +3,8 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/MouseEvent.h"
 #include "Window.h"
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Agate
 {
@@ -28,7 +28,7 @@ namespace Agate
         glfwSetWindowUserPointer(m_Window, &m_windowProps);
 
 
-        //SetVSync(true);//need glad --------------------------------------------------------------------------------------------------------
+        //SetVSync(true);//need glad to define this function or maybe not--------------------------------------------------------------------------------------------------------
 
         glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window) {
             //need this bc lambda can't access non-static class members
@@ -38,10 +38,10 @@ namespace Agate
             data.callback(event);
         });
 
-        glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos){
+        glfwSetCursorPosCallback(m_Window, [](GLFWwindow *window, double xpos, double ypos) {
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
-            MouseMoved event((int)xpos,(int)ypos);
+            MouseMoved event((int) xpos, (int) ypos);
             data.callback(event);
         });
     }
@@ -65,12 +65,23 @@ namespace Agate
     {
     }
 
-    void Window::SetVSync()
+    void Window::SetVSync(bool enable)
     {
+        if (enable)
+        {
+            glfwSwapInterval(1);
+            m_windowProps.VSyncState = true;
+        }
+        else
+        {
+            glfwSwapInterval(0);
+            m_windowProps.VSyncState = false;
+        }
     }
 
-    void Window::GetVSyncState()
+    bool Window::GetVSyncState()
     {
+        return m_windowProps.VSyncState;
     }
 
 

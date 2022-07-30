@@ -12,7 +12,7 @@ outputdir = "%{cfg.build}-%{cfg.system}-%{cfg.architecture}"
 	
 IncludeDir = {}
 IncludeDir["GLFW"] = "Agate/vender/glfw/include"
-
+IncludeDir["glad"] = "Agate/vender/glad/include"
 
 include "Agate/vender/glfw"
 
@@ -37,7 +37,8 @@ project "Agate"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/src/Agate",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.glad}"
 	}
 
 	links{
@@ -53,6 +54,7 @@ project "Agate"
 		defines
 		{
 			"Agate_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands

@@ -18,8 +18,8 @@ namespace Agate
 
         void GetWidth();
         void GetHieght();
-        void SetVSync();
-        void GetVSyncState();
+        void SetVSync(bool enable);
+        bool GetVSyncState();
 
     private:
         void InitWindow();
