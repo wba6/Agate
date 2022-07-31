@@ -20,6 +20,7 @@ namespace Agate
         void GetHieght();
         void SetVSync(bool enable);
         bool GetVSyncState();
+        GLFWwindow *GetWindow();
 
     private:
         void InitWindow();

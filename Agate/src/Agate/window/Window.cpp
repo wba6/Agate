@@ -25,6 +25,12 @@ namespace Agate
         m_Window = glfwCreateWindow(m_windowProps.width, m_windowProps.height, m_windowProps.name.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_Window);
 
+        if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+        {
+            PRINTCRIT("GLAD failed to init");
+            throw -1;
+        }
+
         glfwSetWindowUserPointer(m_Window, &m_windowProps);
 
 
@@ -82,6 +88,10 @@ namespace Agate
     bool Window::GetVSyncState()
     {
         return m_windowProps.VSyncState;
+    }
+    GLFWwindow *Window::GetWindow()
+    {
+        return m_Window;
     }
 
 

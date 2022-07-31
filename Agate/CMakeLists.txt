@@ -20,6 +20,7 @@ file(GLOB libSrc
         "src/Agate/Events/*.h"
         "src/Agate/window/*.cpp"
         "src/Agate/window/*.h"
+        "vender/glad/src/*.c"
         )
 
 include_directories("${PROJECT_SOURCE_DIR}/src"

@@ -5,8 +5,7 @@
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
 #include "Math/Math.h"
-
-
+#include <glad/glad.h>
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 Agate::EntryPoint::EntryPoint()
@@ -30,8 +29,10 @@ void Agate::EntryPoint::Run()
 
     while (m_running)
     {
-        m_window->OnUpdate();
+        glClearColor(1, 0, 1, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
         //PRINTWARN("Bacon");
+        m_window->OnUpdate();
     };
 }
 
