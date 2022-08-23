@@ -1,6 +1,7 @@
 #include "agpch.h"
 
 #include "Events/ApplicationEvents.h"
+#include "Events/KeyEvents.h"
 #include "Events/MouseEvent.h"
 #include "Window.h"
 #include <GLFW/glfw3.h>
@@ -56,6 +57,21 @@ namespace Agate
 
             MouseButtonPressed event((int) button);
             data.callback(event);
+        });
+
+        glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
+
+            if (action == GLFW_PRESS)
+            {
+                KeyPressed event(key);
+                data.callback(event);
+            }
+            else
+            {
+                KeyReleased event(key);
+                data.callback(event);
+            }
         });
     }
 
