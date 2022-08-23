@@ -50,6 +50,13 @@ namespace Agate
             MouseMoved event((int) xpos, (int) ypos);
             data.callback(event);
         });
+
+        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow *window, int button, int action, int mods) {
+            WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
+
+            MouseButtonPressed event((int) button);
+            data.callback(event);
+        });
     }
 
     void Window::GlfwError(int error_code, const char *description)
