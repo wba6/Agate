@@ -22,16 +22,15 @@ Agate::EntryPoint::~EntryPoint()
 
 void Agate::EntryPoint::Run()
 {
-    auto click = MouseButtonPressed(0);
-    OnEvent(click);
-    auto click_r = MouseButtonReleased(0);
-    OnEvent(click_r);
+//    auto click = MouseButtonPressed(0);
+//    OnEvent(click);
+//    auto click_r = MouseButtonReleased(0);
+//    OnEvent(click_r);
 
     while (m_running)
     {
         glClearColor(1, 0, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT);
-        //PRINTWARN("Bacon");
         m_window->OnUpdate();
     };
 }
