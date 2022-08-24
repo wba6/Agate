@@ -4,6 +4,9 @@
   <component name="CidrRootsConfiguration">
     <sourceRoots>
       <file path="$PROJECT_DIR$/Agate/src" />
+      <file path="$PROJECT_DIR$/Agate/vender" />
+      <file path="$PROJECT_DIR$/Application/src" />
+      <file path="$PROJECT_DIR$/vender" />
     </sourceRoots>
     <excludeRoots>
       <file path="$PROJECT_DIR$/.vs" />

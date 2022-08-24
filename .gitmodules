@@ -1,6 +1,6 @@
 [submodule "Agate/vender/glfw"]
 	path = Agate/vender/glfw
 	url = https://github.com/TANK1-41/glfw
-[submodule "agate/vender/spdlog"]
-	path = agate/vender/spdlog
+[submodule "Agate/vender/spdlog"]
+	path = Agate/vender/spdlog
 	url = https://github.com/TANK1-41/spdlog
