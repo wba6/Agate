@@ -5,7 +5,6 @@
 #include <string>
 class app : public Agate::EntryPoint {
 
-public:
 };
 
 class layerEx : public Agate::Layer {
@@ -13,7 +12,7 @@ class layerEx : public Agate::Layer {
 public:
     void Attach() override
     {
-        PRINTCRIT("ATTACHED")
+        PRINTMSG("ATTACHED")
     }
 
     void Detach() override

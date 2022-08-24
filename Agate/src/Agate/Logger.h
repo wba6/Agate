@@ -1,17 +1,20 @@
 #pragma once
-#include "agpch.h"
 
 #include "Core.h"
+#include "spdlog/logger.h"
 
 namespace Agate
 {
 
     class API Logger {
     public:
+        static void initLogger();
         static void printMSG(std::string msg);
         static void printWarn(std::string msg);
         static void printError(std::string msg);
         static void printCrit(std::string msg);
+    private:
+        static std::shared_ptr<spdlog::logger> s_Logger;
     };
 }// namespace Agate
 
