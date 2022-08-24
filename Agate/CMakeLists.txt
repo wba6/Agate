@@ -27,10 +27,12 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/src/Agate"
         "${PROJECT_SOURCE_DIR}/vender/glfw/include"
         "${PROJECT_SOURCE_DIR}/vender/glad/include"
+        "${PROJECT_SOURCE_DIR}/vender/spdlog/include"
                 )
 
 
 add_subdirectory(vender/glfw)
+add_subdirectory(vender/spdlog)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
