@@ -5,7 +5,7 @@
 
 #include "imguiLayer.h"
 
-#include "imgui.h"
+
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
@@ -14,7 +14,7 @@
 
 void Agate::imguiLayer::Attach()
 {
-    PRINTMSG("Attached im");
+    PRINTMSG("Attached imgui");
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -53,11 +53,11 @@ void Agate::imguiLayer::OnEvent(Agate::Event &e)
 }
 void Agate::imguiLayer::onRender()
 {
-
+    Begin();
     static bool show_demo_window = true;
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
-
+    End();
 
 }
 Agate::imguiLayer::imguiLayer(void *GlfwWindow)
@@ -72,7 +72,18 @@ void Agate::imguiLayer::Begin()
 }
 void Agate::imguiLayer::End()
 {
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     ImGui::Render();
-    //TODO: finish adding information here
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    // Update and Render additional Platform Windows
+    // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+    //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+    ImGuiIO &io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+    }
+
 }

@@ -12,7 +12,7 @@ class layerEx : public Agate::Layer {
 public:
     void Attach() override
     {
-        PRINTMSG("ATTACHED")
+        PRINTMSG("Attached example layer")
     }
 
     void Detach() override
