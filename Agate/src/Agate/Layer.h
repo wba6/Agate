@@ -8,7 +8,7 @@ namespace Agate
         virtual void Attach() {}
         virtual void Detach() {}
         virtual void OnEvent(Event &e) {}
-
+        virtual void onRender() {};
     private:
         bool m_Enabled = true;
     };

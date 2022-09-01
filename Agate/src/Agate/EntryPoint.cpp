@@ -4,6 +4,7 @@
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
 #include "Math/Math.h"
+#include "imgui-layer/imguiLayer.h"
 #include <glad/glad.h>
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
@@ -13,6 +14,8 @@ Agate::EntryPoint::EntryPoint()
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
     m_running = true;
+
+    m_layerStack.AddOverlay(new imguiLayer(m_window->GetWindow()));
 }
 
 Agate::EntryPoint::~EntryPoint()
@@ -30,7 +33,13 @@ void Agate::EntryPoint::Run()
     {
         glClearColor(1, 0, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
+        {
+            m_layerStack.m_layers.at(i)->onRender();
+        }
         m_window->OnUpdate();
+
     };
 }
 

@@ -8,11 +8,16 @@ namespace Agate
 {
     class imguiLayer : public Layer {
     public:
-        virtual void Attach() {}
-        virtual void Detach() {}
-        virtual void OnEvent(Event &e) {}
+        imguiLayer(void *GlfwWindow);
+        virtual void Attach() override;
+        virtual void Detach() override;
+        virtual void OnEvent(Event &e) override;
+        virtual void onRender() override;
+        void Begin();
+        void End();
 
     private:
+        void* m_glfwWindow;
         bool m_Enabled = true;
     };
 }// namespace Agate

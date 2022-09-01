@@ -20,6 +20,8 @@ file(GLOB libSrc
         "src/Agate/window/*.cpp"
         "src/Agate/window/*.h"
         "vender/glad/src/*.c"
+        "src/Agate/imgui-layer/*.cpp"
+        "src/Agate/imgui-layer/*.h"
         )
 
 include_directories("${PROJECT_SOURCE_DIR}/src"
@@ -27,6 +29,7 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/vender/glfw/include"
         "${PROJECT_SOURCE_DIR}/vender/glad/include"
         "${PROJECT_SOURCE_DIR}/vender/spdlog/include"
+        "${PROJECT_SOURCE_DIR}/vender/imgui/"
                 )
 
 
@@ -36,7 +39,7 @@ add_subdirectory(vender/imgui)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
-add_library(Agate-lib STATIC ${libSrc} src/Agate/imgui-layer/imguiLayer.h src/Agate/imgui-layer/imguiLayer.cpp)
+add_library(Agate-lib STATIC ${libSrc} src/Agate/imgui-layer/build.cpp)
 
 #target_precompile_headers(Agate-lib PRIVATE src/agpch.h src/agpch.cpp)
 
