@@ -32,6 +32,7 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
 
 add_subdirectory(vender/glfw)
 add_subdirectory(vender/spdlog)
+add_subdirectory(vender/imgui)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 

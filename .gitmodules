@@ -4,7 +4,3 @@
 [submodule "Agate/vender/spdlog"]
 	path = Agate/vender/spdlog
 	url = https://github.com/TANK1-41/spdlog
-[submodule "Agate/vender/imgui"]
-	path = Agate/vender/imgui
-	url = https://github.com/TANK1-41/imgui.git
-	branch = docking
