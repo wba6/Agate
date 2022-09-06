@@ -39,7 +39,7 @@ add_subdirectory(vender/imgui)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
-add_library(Agate-lib STATIC ${libSrc} src/Agate/imgui-layer/build.cpp)
+add_library(Agate-lib STATIC ${libSrc} src/Agate/imgui-layer/build.cpp src/Agate/renderContext/Context.cpp src/Agate/renderContext/Context.h)
 
 #target_precompile_headers(Agate-lib PRIVATE src/agpch.h src/agpch.cpp)
 
