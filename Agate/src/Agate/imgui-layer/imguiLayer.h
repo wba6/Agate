@@ -13,8 +13,8 @@ namespace Agate
         virtual void Detach() override;
         virtual void OnEvent(Event &e) override;
         virtual void onRender() override;
-        void Begin();
-        void End();
+        static void Begin();
+        static void End();
 
     private:
         void* m_glfwWindow;

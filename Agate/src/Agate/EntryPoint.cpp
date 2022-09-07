@@ -34,10 +34,13 @@ void Agate::EntryPoint::Run()
         glClearColor(1, 0, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        imguiLayer::Begin();
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
         {
             m_layerStack.m_layers.at(i)->onRender();
         }
+        imguiLayer::End();
+
         m_window->OnUpdate();
 
     };

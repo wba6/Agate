@@ -5,12 +5,11 @@
 
 #include "imguiLayer.h"
 
-
+#include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
 #include <GLFW/glfw3.h>
-#include "glad/glad.h"
 
 void Agate::imguiLayer::Attach()
 {
@@ -53,11 +52,10 @@ void Agate::imguiLayer::OnEvent(Agate::Event &e)
 }
 void Agate::imguiLayer::onRender()
 {
-    Begin();
+
     static bool show_demo_window = true;
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
-    End();
 
 }
 Agate::imguiLayer::imguiLayer(void *GlfwWindow)

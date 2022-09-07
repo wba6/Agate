@@ -1,6 +1,5 @@
 
 #include "Agate.h"
-
 #include <iostream>
 #include <string>
 class app : public Agate::EntryPoint {
@@ -18,7 +17,11 @@ public:
     void Detach() override
     {
     }
-
+    void onRender()override {
+            ImGui::Begin("window 2");
+            ImGui::Text("Hello world");
+            ImGui::End();
+    };
     void OnEvent(Agate::Event &e) override
     {
         //PRINTCRIT("REVEVED EVENT IN ONEVENT")
