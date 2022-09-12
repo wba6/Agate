@@ -17,11 +17,13 @@ file(GLOB libSrc
         "src/Agate/Math/*.h"
         "src/Agate/Events/*.cpp"
         "src/Agate/Events/*.h"
-        "src/Agate/window/*.cpp"
-        "src/Agate/window/*.h"
+        "src/Agate/Window/*.cpp"
+        "src/Agate/Window/*.h"
         "vender/glad/src/*.c"
-        "src/Agate/imgui-layer/*.cpp"
-        "src/Agate/imgui-layer/*.h"
+        "src/Agate/ImGui-layer/*.cpp"
+        "src/Agate/ImGui-layer/*.h"
+        "src/Agate/Rendering/*.cpp"
+        "src/Agate/Rendering/*.h"
         )
 
 include_directories("${PROJECT_SOURCE_DIR}/src"
@@ -39,7 +41,7 @@ add_subdirectory(vender/imgui)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
-add_library(Agate-lib STATIC ${libSrc} src/Agate/imgui-layer/build.cpp src/Agate/renderContext/Context.cpp src/Agate/renderContext/Context.h)
+add_library(Agate-lib STATIC ${libSrc} src/Agate/imgui-layer/build.cpp src/Agate/renderContext/Context.cpp src/Agate/renderContext/Context.h src/Agate/Rendering/Shader.cpp src/Agate/Rendering/Shader.h)
 
 target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"
