@@ -8,3 +8,6 @@
 	path = Agate/vender/imgui
 	url = https://github.com/TANK1-41/imgui
 	branch = docking
+[submodule "Agate/vender/glm"]
+	path = Agate/vender/glm
+	url = https://github.com/TANK1-41/glm

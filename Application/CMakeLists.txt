@@ -20,6 +20,6 @@ add_compile_definitions(Agate_STATIC)
 
 add_executable(Application ${appSrc})
 
-target_link_libraries(Application PRIVATE Agate-lib glfw spdlog imgui)
+target_link_libraries(Application PRIVATE Agate-lib glfw spdlog imgui glm)
 
 

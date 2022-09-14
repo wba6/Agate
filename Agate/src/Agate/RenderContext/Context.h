@@ -14,7 +14,7 @@ namespace Agate
         virtual void EndContext() = 0;
     };
 
-    class OpenGL: Context{
+    class OpenGL: public Context{
     public:
         void CreateContext() override;
         void EndContext() override;

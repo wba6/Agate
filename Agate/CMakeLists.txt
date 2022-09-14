@@ -24,6 +24,8 @@ file(GLOB libSrc
         "src/Agate/ImGui-layer/*.h"
         "src/Agate/Rendering/*.cpp"
         "src/Agate/Rendering/*.h"
+        "src/Agate/RenderContext/*.h"
+        "src/Agate/RenderContext/*.cpp"
         )
 
 include_directories("${PROJECT_SOURCE_DIR}/src"
@@ -32,16 +34,20 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/vender/glad/include"
         "${PROJECT_SOURCE_DIR}/vender/spdlog/include"
         "${PROJECT_SOURCE_DIR}/vender/imgui/"
+        "${PROJECT_SOURCE_DIR}/vender/glm/glm"
+        "${PROJECT_SOURCE_DIR}/vender/glm/"
                 )
 
 
-add_subdirectory(vender/glfw)
-add_subdirectory(vender/spdlog)
-add_subdirectory(vender/imgui)
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glfw)
+add_subdirectory(${PROJECT_SOURCE_DIR}/vender/spdlog)
+add_subdirectory(${PROJECT_SOURCE_DIR}/vender/imgui)
+add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glm)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
-add_library(Agate-lib STATIC ${libSrc} src/Agate/imgui-layer/build.cpp src/Agate/renderContext/Context.cpp src/Agate/renderContext/Context.h src/Agate/Rendering/Shader.cpp src/Agate/Rendering/Shader.h)
+add_library(Agate-lib STATIC ${libSrc} )
 
 target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"
