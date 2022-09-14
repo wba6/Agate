@@ -572,7 +572,7 @@ Docking+Viewports Branch:
 Decorated log: https://github.com/ocornut/imgui/releases/tag/v1.84.2
 
 - Disabled: Fixed nested BeginDisabled()/EndDisabled() calls. (#211, #4452, #4453, #4462) [@Legulysse]
-- Backends: OpenGL3: OpenGL: Fixed ES 3.0 shader ("#version 300 es") to use normal precision
+- Backends: OpenGL3: OpenGL: Fixed ES 3.0 Shader ("#version 300 es") to use normal precision
   floats. Avoid wobbly rendering at HD resolutions. (#4463) [@nicolasnoble]
 
 
@@ -688,7 +688,7 @@ Other Changes:
   initialize the same loader as the backend. [@rokups]
   Removed support for gl3w, glew, glad, glad2, glbinding2, glbinding3 (all now unnecessary).
 - Backends: OpenGL3: Handle GL_CLIP_ORIGIN on <4.5 contexts if "GL_ARB_clip_control" extension is detected. (#4170, #3998)
-- Backends: OpenGL3: Destroy vertex/fragment shader objects right after they are linked into main shader. (#4244) [@Crowbarous]
+- Backends: OpenGL3: Destroy vertex/fragment Shader objects right after they are linked into main Shader. (#4244) [@Crowbarous]
 - Backends: OpenGL3: Use OES_vertex_array extension on Emscripten + backup/restore current state. (#4266, #4267) [@harry75369]
 - Backends: GLFW: Installing and exposed ImGui_ImplGlfw_MonitorCallback() for forward compatibility with docking branch.
 - Backends: OSX: Added a fix for shortcuts using CTRL key instead of CMD key. (#4253) [@rokups]
@@ -1241,7 +1241,7 @@ Docking+Viewports Branch:
 - Docking: Fix handling of WindowMenuButtonPosition == ImGuiDir_None in Docking Nodes. (#3499)
 - Viewports: Fixed a rare edge-case if the window targeted by CTRL+Tab stops being rendered.
 - Viewports, Backends: DX12: Make secondary viewport format match main viewport one (#3462) {@BeastLe9enD]
-- Viewports: Backends: Vulkan: Removed unused shader code. Fix leaks. Avoid unnecessary pipeline creation for main
+- Viewports: Backends: Vulkan: Removed unused Shader code. Fix leaks. Avoid unnecessary pipeline creation for main
   viewport. (#3459) + Add ImGui_ImplVulkanH_CreateWindowSwapChain in ImGui_ImplVulkanH_CreateOrResizeWindow().
 - Viewports: Backends: DirectX9: Recover from D3DERR_DEVICELOST on secondary viewports. (#3424)
 - Viewports, Backends: Win32: Fix toggling of ImGuiViewportFlags_TopMost (#3477) [@Kodokuna]
@@ -2872,7 +2872,7 @@ Other Changes:
 - Examples: All examples now setup the io.BackendFlags to signify they can honor mouse cursors, gamepad, etc.
 - Examples: DirectX10: Fixed erroneous call to io.Fonts->ClearInputData() + ClearTexData() that was left in DX10 example but removed in 1.47 (Nov 2015) in every other backends. (#1733)
 - Examples: DirectX12: Added DirectX 12 example. (#301) [@jdm3]
-- Examples: OpenGL3+GLFW,SDL: Changed GLSL shader version from 330 to 150. (#1466, #1504)
+- Examples: OpenGL3+GLFW,SDL: Changed GLSL Shader version from 330 to 150. (#1466, #1504)
 - Examples: OpenGL3+GLFW,SDL: Added a way to override the GLSL version string in the Init function. (#1466, #1504).
 - Examples: OpenGL3+GLFW,SDL: Creating VAO in the render function so it can be more easily used by multiple shared OpenGL contexts. (#1217)
 - Examples: OpenGL3+GLFW: Using 3.2 context instead of 3.3. (#1466)
@@ -3496,7 +3496,7 @@ Changes:
 - Examples; OpenGL3: Fixed gl3w.c for Linux when compiled with a C++ compiler. (#411)
 - Examples: DirectX: Removed assumption about Unicode build in example main.cpp. (#399)
 - Examples: DirectX10: Added DirectX10 example. (#424)
-- Examples: DirectX11: Downgraded requirement from shader model 5.0 to 4.0. (#420)
+- Examples: DirectX11: Downgraded requirement from Shader model 5.0 to 4.0. (#420)
 - Examples: DirectX11: Removed Debug flag from graphics context. (#415)
 - Examples: Added SDL+OpenGL3 example. (#356)
 

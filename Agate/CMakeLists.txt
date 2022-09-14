@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 #set the project name and version
-project(Agate VERSION 1.0)
+project(Agate-lib VERSION 1.0)
 
 #specify the c++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -53,3 +53,6 @@ target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"
         )
 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/src/Agate/Rendering/Shaders ${buildDirExecutable}/Shaders
+        )

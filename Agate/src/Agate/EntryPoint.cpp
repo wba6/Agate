@@ -8,6 +8,8 @@
 
 //TODO: TEMPORARY include
 #include <glad/glad.h>
+#include "Rendering/Shader.h"
+
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 Agate::EntryPoint::EntryPoint()
@@ -42,6 +44,10 @@ void Agate::EntryPoint::Run()
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
+
+        Agate::Shader shader("Shaders/Basic.vs.shader","Shaders/Basic.fg.shader");
+        shader.bind();
+
 
     while (m_running)
     {

@@ -3,7 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Agate/vender/glfw" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Agate/vender/imgui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Agate/vender/glm" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Agate/vender/spdlog" vcs="Git" />
   </component>
 </project>
