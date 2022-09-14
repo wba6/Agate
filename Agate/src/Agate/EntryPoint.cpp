@@ -8,6 +8,7 @@
 
 //TODO: TEMPORARY include
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "Rendering/Shader.h"
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
@@ -45,7 +46,7 @@ void Agate::EntryPoint::Run()
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
-        Agate::Shader shader("Shaders/Basic.vs.shader","Shaders/Basic.fg.shader");
+        Shader shader("Shaders/Basic.vs.shader","Shaders/Basic.fg.shader");
         shader.bind();
 
 
@@ -54,7 +55,7 @@ void Agate::EntryPoint::Run()
         glClearColor(1, 0, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-
+        shader.SetUniform4f("Ucolors", cos(glfwGetTime()), 0.2f,0.2f,1.0f);
         glDrawArrays(GL_TRIANGLES,0,3);
         imguiLayer::Begin();
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
