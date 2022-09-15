@@ -5,11 +5,10 @@
 #include "Events/MouseEvent.h"
 #include "Math/Math.h"
 #include "imgui-layer/imguiLayer.h"
-
 //TODO: TEMPORARY include
-#include <glad/glad.h>
+#include "Agate/Rendering/temp_test_layer.h"
 #include <GLFW/glfw3.h>
-#include "Rendering/Shader.h"
+#include <glad/glad.h>
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
@@ -21,6 +20,7 @@ Agate::EntryPoint::EntryPoint()
     m_running = true;
 
     m_layerStack.AddOverlay(new imguiLayer(m_window->GetWindow()));
+    m_layerStack.AddOverlay(new TemplayerEx);
 }
 
 Agate::EntryPoint::~EntryPoint()
@@ -30,33 +30,11 @@ Agate::EntryPoint::~EntryPoint()
 void Agate::EntryPoint::Run()
 {
 
-        float vertices[] = {
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.0f,  0.5f, 0.0f
-        };
-
-        unsigned int vbo, vao;
-        glGenBuffers(1,&vbo);
-        glGenVertexArrays(1, &vao);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBindVertexArray(vao);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-
-        Shader shader("Shaders/Basic.vs.shader","Shaders/Basic.fg.shader");
-        shader.bind();
-
-
     while (m_running)
     {
-        glClearColor(1, 0, 1, 1);
+        glClearColor(1, 1, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        shader.SetUniform4f("Ucolors", cos(glfwGetTime()), 0.2f,0.2f,1.0f);
-        glDrawArrays(GL_TRIANGLES,0,3);
         imguiLayer::Begin();
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
         {

@@ -24,7 +24,6 @@ public:
     };
     void OnEvent(Agate::Event &e) override
     {
-        //PRINTCRIT("REVEVED EVENT IN ONEVENT")
     }
 };
 
