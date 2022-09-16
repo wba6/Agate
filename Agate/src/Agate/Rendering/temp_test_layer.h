@@ -6,6 +6,7 @@
 //TODO:TEMP INCLUDE
 #include "../Layer.h"
 #include "Agate/Rendering/OpenGl/Shader.h"
+#include "Agate/Rendering/OpenGl/VertexArray.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <glm.hpp>
@@ -25,14 +26,13 @@ namespace Agate
             PRINTMSG("Attached example layer")
             unsigned int vbo, vao;
             glGenBuffers(1, &vbo);
-            glGenVertexArrays(1, &vao);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBindVertexArray(vao);
+
             glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
-            glEnableVertexAttribArray(0);
-
+            VertexLayOut vaData{0,3,false,3*sizeof(float),0};
+            VAO = new VertexArray(vaData);
+            VAO->Bind();
             shader.bind();
         }
 
@@ -49,6 +49,11 @@ namespace Agate
         void OnEvent(Agate::Event &e) override
         {
         }
+        virtual ~TemplayerEx()
+        {
+            delete VAO;
+        }
+        VertexArray* VAO;
         glm::mat4 rotationMat4{1.0f};
         Agate::Shader shader = Agate::Shader("Shaders/Basic.vs.shader", "Shaders/Basic.fg.shader");
         float vertices[9] = {
