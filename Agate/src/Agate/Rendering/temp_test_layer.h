@@ -4,13 +4,13 @@
 
 #pragma once
 //TODO:TEMP INCLUDE
-#include "Agate/Rendering/Shader.h"
-#include <GLFW/glfw3.h>
 #include "../Layer.h"
+#include "Agate/Rendering/OpenGl/Shader.h"
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
-#include <glad/glad.h>
 namespace Agate
 {
 
@@ -34,7 +34,6 @@ namespace Agate
             glEnableVertexAttribArray(0);
 
             shader.bind();
-            rotationMat4 = glm::mat4(1.0f);
         }
 
         void Detach() override
@@ -50,7 +49,7 @@ namespace Agate
         void OnEvent(Agate::Event &e) override
         {
         }
-        glm::mat4 rotationMat4;
+        glm::mat4 rotationMat4{1.0f};
         Agate::Shader shader = Agate::Shader("Shaders/Basic.vs.shader", "Shaders/Basic.fg.shader");
         float vertices[9] = {
                 -0.5f, -0.5f, 0.0f,

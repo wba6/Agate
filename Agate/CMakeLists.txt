@@ -7,25 +7,17 @@ project(Agate-lib VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Source files
+file(GLOB_RECURSE libSrc
+        ${PROJECT_SOURCE_DIR}/src/*.c
+        ${PROJECT_SOURCE_DIR}/vender/glad/src/*.c
+        ${PROJECT_SOURCE_DIR}/src/*.cpp
+        )
 
-file(GLOB libSrc
-        "src/**.h"
-        "src/**.cpp"
-        "src/Agate/*.h"
-        "src/Agate/*.cpp"
-        "src/Agate/Math/*.cpp"
-        "src/Agate/Math/*.h"
-        "src/Agate/Events/*.cpp"
-        "src/Agate/Events/*.h"
-        "src/Agate/Window/*.cpp"
-        "src/Agate/Window/*.h"
-        "vender/glad/src/*.c"
-        "src/Agate/ImGui-layer/*.cpp"
-        "src/Agate/ImGui-layer/*.h"
-        "src/Agate/Rendering/*.cpp"
-        "src/Agate/Rendering/*.h"
-        "src/Agate/RenderContext/*.h"
-        "src/Agate/RenderContext/*.cpp"
+# Add source header files
+file(GLOB_RECURSE libHead
+        ${PROJECT_SOURCE_DIR}/src/*.h
+        ${PROJECT_SOURCE_DIR}/src/*.hpp
         )
 
 include_directories("${PROJECT_SOURCE_DIR}/src"
@@ -47,7 +39,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glm)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
-add_library(Agate-lib STATIC ${libSrc})
+add_library(Agate-lib STATIC ${libSrc} ${libHead} ${GladLibSrc})
 
 target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"
