@@ -7,6 +7,7 @@
 #include "../Layer.h"
 #include "Agate/Rendering/OpenGl/Shader.h"
 #include "Agate/Rendering/OpenGl/VertexArray.h"
+#include "Agate/Rendering/OpenGl/VertexBuffer.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <glm.hpp>
@@ -24,13 +25,11 @@ namespace Agate
         void Attach() override
         {
             PRINTMSG("Attached example layer")
-            unsigned int vbo, vao;
-            glGenBuffers(1, &vbo);
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            unsigned int vbo;
+            VBO = new VertexBuffer(vertices, sizeof(vertices), DrawTypes::STATIC_DRAW);
+            VBO->Bind();
 
-            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-            VertexLayOut vaData{0,3,false,3*sizeof(float),0};
+            VertexLayOut vaData{0, 3, false, 3 * sizeof(float), 0};
             VAO = new VertexArray(vaData);
             VAO->Bind();
             shader.bind();
@@ -52,8 +51,10 @@ namespace Agate
         virtual ~TemplayerEx()
         {
             delete VAO;
+            delete VBO;
         }
-        VertexArray* VAO;
+        VertexArray *VAO;
+        VertexBuffer *VBO;
         glm::mat4 rotationMat4{1.0f};
         Agate::Shader shader = Agate::Shader("Shaders/Basic.vs.shader", "Shaders/Basic.fg.shader");
         float vertices[9] = {

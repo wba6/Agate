@@ -13,8 +13,7 @@ VertexArray::VertexArray(VertexLayOut vertexLayOut)
                           GL_FLOAT, GL_FALSE, vertexLayOut.stride, (void *) vertexLayOut.offset);
 
     glEnableVertexAttribArray(vertexLayOut.layoutNum);
-
-
+    UnBind();
 }
 void VertexArray::Bind()
 {
