@@ -25,8 +25,7 @@ namespace Agate
         void Attach() override
         {
             PRINTMSG("Attached example layer")
-            unsigned int vbo;
-            VBO = new VertexBuffer(vertices, sizeof(vertices), DrawTypes::STATIC_DRAW);
+            VBO = new VertexBuffer(vertices, sizeof(vertices), STATIC_DRAW);
             VBO->Bind();
 
             VertexLayOut vaData{0, 3, false, 3 * sizeof(float), 0};

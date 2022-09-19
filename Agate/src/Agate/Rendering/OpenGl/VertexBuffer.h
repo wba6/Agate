@@ -6,21 +6,19 @@
 #define AGATE_VERTEXBUFFER_H
 
 
-struct DrawTypes {
-    static int8_t STREAM_DRAW;
-    static int8_t STREAM_READ;
-    static int8_t STREAM_COPY;
-    static int8_t STATIC_DRAW;
-    static int8_t STATIC_READ;
-    static int8_t STATIC_COPY;
-    static int8_t DYNAMIC_DRAW;
-    static int8_t DYNAMIC_READ;
-    static int8_t DYNAMIC_COPY;
-};
+#define STREAM_DRAW 0x88E0
+#define STREAM_READ 0x88E1
+#define STREAM_COPY 0x88E2
+#define STATIC_DRAW 0x88E4
+#define STATIC_READ 0x88E5
+#define STATIC_COPY 0x88E6
+#define DYNAMIC_DRAW 0x88E8
+#define DYNAMIC_READ 0x88E9
+#define DYNAMIC_COPY 0x88EA
 
 class VertexBuffer {
 public:
-    VertexBuffer(float *data, size_t dataSize, int8_t drawtype);
+    VertexBuffer(float *data, size_t dataSize, int32_t drawtype);
     void Bind();
     void UnBind();
 
