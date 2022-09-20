@@ -20,7 +20,6 @@ Agate::EntryPoint::EntryPoint()
     m_running = true;
 
     m_layerStack.AddOverlay(new imguiLayer(m_window->GetWindow()));
-    m_layerStack.AddOverlay(new TemplayerEx);
 }
 
 Agate::EntryPoint::~EntryPoint()

@@ -4,7 +4,7 @@
 
 #ifndef AGATE_SHADER_H
 #define AGATE_SHADER_H
-#include "glm.hpp"
+#include <glm/glm.hpp>
 
 namespace Agate
 {

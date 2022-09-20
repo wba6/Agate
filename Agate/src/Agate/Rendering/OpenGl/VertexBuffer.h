@@ -15,16 +15,19 @@
 #define DYNAMIC_DRAW 0x88E8
 #define DYNAMIC_READ 0x88E9
 #define DYNAMIC_COPY 0x88EA
+namespace Agate
+{
 
-class VertexBuffer {
-public:
-    VertexBuffer(float *data, size_t dataSize, int32_t drawtype);
-    void Bind();
-    void UnBind();
+    class VertexBuffer {
+    public:
+        VertexBuffer(float *data, size_t dataSize, int32_t drawtype);
+        void Bind();
+        void UnBind();
 
-private:
-    unsigned int m_vbo;
-};
+    private:
+        unsigned int m_vbo;
+    };
+}// namespace Agate
 
 
 #endif//AGATE_VERTEXBUFFER_H
