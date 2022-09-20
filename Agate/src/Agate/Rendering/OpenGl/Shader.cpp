@@ -3,6 +3,7 @@
 //
 #include "agpch.h"
 
+#include "Logger.h"
 #include "Shader.h"
 #include <glad/glad.h>
 #include <gtc/type_ptr.hpp>
@@ -82,7 +83,7 @@ namespace Agate
             glGetShaderInfoLog(id, 512, NULL, infoLog);
             std::cout << "ERROR::SHADER::COMPILATION_FAILED\n"
                       << infoLog << std::endl;
-            throw "m_Shader failed to compile";
+            PRINTCRIT("m_Shader failed to compile");
         }
     }
     void Shader::bind()
@@ -103,7 +104,7 @@ namespace Agate
 
         int loc = glGetUniformLocation(m_shaderProgramID, uniform);
         if (loc == -1)
-            throw "m_Shader not found";
+            PRINTCRIT("m_Shader not found");
         return loc;
     }
     void Shader::SetUniform4f(const char *uniform, float x, float y, float z, float w)

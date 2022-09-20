@@ -49,7 +49,7 @@ public:
     }
     void onRender() override
     {
-        //rotationMat4 = glm::rotate(rotationMat4, (float) 1.0, glm::vec3(1.0f, 1.0f, 1.0f));
+        rotationMat4 = glm::rotate(rotationMat4, (float) 1.0, glm::vec3(1.0f, 1.0f, 1.0f));
         shader.SetUniform4f("Ucolors", 1.0, 0.2f, 0.2f, 1.0f);
         shader.SetUniformMat4("rotation", rotationMat4);
         Agate::Render rend;
