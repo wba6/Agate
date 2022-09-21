@@ -4,6 +4,7 @@
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
 #include "Math/Math.h"
+#include "RenderContext/CurrentContext.h"
 #include "imgui-layer/imguiLayer.h"
 //TODO: TEMPORARY include
 #include "Agate/Rendering/temp_test_layer.h"
@@ -20,6 +21,7 @@ Agate::EntryPoint::EntryPoint()
     m_running = true;
 
     m_layerStack.AddOverlay(new imguiLayer(m_window->GetWindow()));
+    CurrentContext::OpenGL = true;
 }
 
 Agate::EntryPoint::~EntryPoint()
