@@ -7,13 +7,13 @@
 
 namespace Agate
 {
-    VertexBuffer::VertexBuffer(float *data, size_t dataSize, int32_t drawtype)
+    VertexBuffer::VertexBuffer(const std::vector<float>& vertices, int32_t drawtype)
     {
         glGenBuffers(1, &m_vbo);
         Bind();
 
 
-        glBufferData(GL_ARRAY_BUFFER, dataSize, data, drawtype);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof (float), &vertices[0], drawtype);
         UnBind();
     }
     void VertexBuffer::Bind()

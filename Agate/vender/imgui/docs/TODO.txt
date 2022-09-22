@@ -123,7 +123,7 @@ It's mostly a bunch of personal notes, probably incomplete. Feel free to query i
  - layout: vertical alignment of mixed height items (e.g. buttons) within a same line (#1284)
  - layout: null layout mode were items are not rendered but user can query GetItemRectMin()/Max/Size.
  - layout: (R&D) local multi-pass layout mode.
- - layout: (R&D) bind authored layout data (created by an off-line tool), items fetch their pos/size at submission, self-optimize data structures to stable linear access.
+ - layout: (R&D) Bind authored layout data (created by an off-line tool), items fetch their pos/size at submission, self-optimize data structures to stable linear access.
 
  - group: BeginGroup() needs a border option. (~#1496)
  - group: IsHovered() after EndGroup() covers whole aabb rather than the intersection of individual items. Is that desirable?

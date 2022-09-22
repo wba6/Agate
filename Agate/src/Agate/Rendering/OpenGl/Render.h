@@ -5,11 +5,16 @@
 #pragma once
 #include "Shader.h"
 #include "VertexArray.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <vector>
+
 namespace Agate
 {
     class Render {
     public:
         Render() = default;
-        void RenderTriangles(int indices);
+        void RenderTriagle(const std::vector<float>& vertices, VertexLayOut layout, glm::vec4 color, int rotation);
     };
 }// namespace Agate

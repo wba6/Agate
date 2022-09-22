@@ -47,10 +47,10 @@ struct RenderResources
     WGPUTextureView     FontTextureView;        // Texture view for font texture
     WGPUSampler         Sampler;                // Sampler for the font texture
     WGPUBuffer          Uniforms;               // Shader uniforms
-    WGPUBindGroup       CommonBindGroup;        // Resources bind-group to bind the common resources to pipeline
-    ImGuiStorage        ImageBindGroups;        // Resources bind-group to bind the font/image resources to pipeline (this is a key->value map)
+    WGPUBindGroup       CommonBindGroup;        // Resources bind-group to Bind the common resources to pipeline
+    ImGuiStorage        ImageBindGroups;        // Resources bind-group to Bind the font/image resources to pipeline (this is a key->value map)
     WGPUBindGroup       ImageBindGroup;         // Default font-resource of Dear ImGui
-    WGPUBindGroupLayout ImageBindGroupLayout;   // Cache layout used for the image bind group. Avoids allocating unnecessary JS objects when working with WebASM
+    WGPUBindGroupLayout ImageBindGroupLayout;   // Cache layout used for the image Bind group. Avoids allocating unnecessary JS objects when working with WebASM
 };
 static RenderResources  g_resources;
 
@@ -618,7 +618,7 @@ bool ImGui_ImplWGPU_CreateDeviceObjects()
     ImGui_ImplWGPU_CreateFontsTexture();
     ImGui_ImplWGPU_CreateUniformBuffer();
 
-    // Create resource bind group
+    // Create resource Bind group
     WGPUBindGroupLayout bg_layouts[2];
     bg_layouts[0] = wgpuRenderPipelineGetBindGroupLayout(g_pipelineState, 0);
     bg_layouts[1] = wgpuRenderPipelineGetBindGroupLayout(g_pipelineState, 1);

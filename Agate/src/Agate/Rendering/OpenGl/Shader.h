@@ -16,8 +16,8 @@ namespace Agate
         virtual ~Shader();
 
 
-        void bind();
-        void unBind();
+        void Bind();
+        void UnBind();
 
         void SetUniform4f(const char *uniform, float x, float y, float z, float w);
         void SetUniform3f(const char *uniform, float x, float y, float z);

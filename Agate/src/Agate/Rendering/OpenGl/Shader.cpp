@@ -86,11 +86,11 @@ namespace Agate
             PRINTCRIT("m_Shader failed to compile");
         }
     }
-    void Shader::bind()
+    void Shader::Bind()
     {
         glUseProgram(m_shaderProgramID);
     }
-    void Shader::unBind()
+    void Shader::UnBind()
     {
         glUseProgram(0);
     }

@@ -3265,7 +3265,7 @@ GLFWAPI void glfwSetCursor(GLFWwindow* window, GLFWcursor* cursor);
  *  [window focus callback](@ref glfwSetWindowFocusCallback) has been called.
  *
  *  The scancode of a key is specific to that platform or sometimes even to that
- *  machine.  Scancodes are intended to allow users to bind keys that don't have
+ *  machine.  Scancodes are intended to allow users to Bind keys that don't have
  *  a GLFW key token.  Such keys have `key` set to `GLFW_KEY_UNKNOWN`, their
  *  state is not saved and so it cannot be queried with @ref glfwGetKey.
  *
