@@ -88,3 +88,7 @@ void Agate::EntryPoint::RemoveOverlay(Layer *overlay)
 {
     m_layerStack.RemoveOverlay(overlay);
 }
+Agate::EntryPoint *&Agate::EntryPoint::GetInstance()
+{
+    return s_instance;
+}
