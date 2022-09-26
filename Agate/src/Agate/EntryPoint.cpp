@@ -33,7 +33,7 @@ void Agate::EntryPoint::Run()
 
     while (m_running)
     {
-        glClearColor(1, 1, 1, 1);
+        glClearColor(0.2, 0.2, 0.2, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
         imguiLayer::Begin();
@@ -44,7 +44,6 @@ void Agate::EntryPoint::Run()
         imguiLayer::End();
 
         m_window->OnUpdate();
-
     };
 }
 

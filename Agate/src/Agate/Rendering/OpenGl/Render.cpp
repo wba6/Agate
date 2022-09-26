@@ -7,21 +7,21 @@
 #include <glad/glad.h>
 #include "VertexBuffer.h"
 
-void Agate::Render::RenderTriagle(const std::vector<float>& vertices, Agate::VertexLayOut layout, glm::vec4 color, int rotation)
+void Agate::Render::RenderTriagle(Triangle &tri)
 {
     Shader shader = Shader("Shaders/Basic.vs.shader", "Shaders/Basic.fg.shader");
-    int indices = static_cast<int>(vertices.size()) / layout.vertexSize;
+    int indices = static_cast<int>(tri.vertices.size()) / tri.layout.vertexSize;
 
-    VertexBuffer VBO {vertices, STATIC_DRAW};
+    VertexBuffer VBO{tri.vertices, STATIC_DRAW};
     VBO.Bind();
 
-    VertexArray VAO (layout);
+    VertexArray VAO(tri.layout);
     VAO.Bind();
 
     shader.Bind();
-    shader.SetUniform4f("Ucolors", color.x, color.y, color.z, color.w);
+    shader.SetUniform4f("Ucolors", tri.color.x, tri.color.y, tri.color.z, tri.color.w);
     glm::mat4 rotationMat4{1.0f};
-    rotationMat4 = glm::rotate(rotationMat4, (float) rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+    rotationMat4 = glm::rotate(rotationMat4, (float) tri.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
     shader.SetUniformMat4("rotation", rotationMat4);
 
     glDrawArrays(GL_TRIANGLES, 0, indices);

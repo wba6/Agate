@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "Agate/GameObjects/Triangle.h"
 #include "Shader.h"
 #include "VertexArray.h"
 #include <glm/glm.hpp>
@@ -15,6 +16,6 @@ namespace Agate
     class Render {
     public:
         Render() = default;
-        void RenderTriagle(const std::vector<float>& vertices, VertexLayOut layout, glm::vec4 color, int rotation);
+        void RenderTriagle(Triangle &tri);
     };
 }// namespace Agate
