@@ -18,8 +18,12 @@ namespace Agate
     class Triangle : public Layer {
     public:
         Triangle(int xpos, int ypos);
+        Triangle();
         void OnEvent(Event &e) override;
         void OnRender() override;
+
+        void setXPos(int xPos);
+        void setYPos(int yPos);
 
         int x, y;
         float rotation;

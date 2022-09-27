@@ -51,8 +51,9 @@ public:
     {
     }
     Agate::Render rend;
-    Agate::Triangle tri{0, 0};
+    Agate::Triangle tri{};
 };
+
 Agate::EntryPoint *Agate::CreateEntryPoint()
 {
     auto Application = new app();
