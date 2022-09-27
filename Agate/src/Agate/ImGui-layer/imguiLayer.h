@@ -12,7 +12,7 @@ namespace Agate
         virtual void Attach() override;
         virtual void Detach() override;
         virtual void OnEvent(Event &e) override;
-        virtual void onRender() override;
+        virtual void OnRender() override;
         static void Begin();
         static void End();
 

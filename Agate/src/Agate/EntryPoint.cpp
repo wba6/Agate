@@ -39,7 +39,7 @@ void Agate::EntryPoint::Run()
         imguiLayer::Begin();
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
         {
-            m_layerStack.m_layers.at(i)->onRender();
+            m_layerStack.m_layers.at(i)->OnRender();
         }
         imguiLayer::End();
 

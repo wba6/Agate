@@ -7,6 +7,7 @@
 #include "Agate/Layer.h"
 #include "Agate/Rendering/OpenGl/VertexArray.h"
 #include "Agate/Rendering/OpenGl/VertexBuffer.h"
+#include "Agate/Rendering/OpenGl/Shader.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,7 +19,7 @@ namespace Agate
     public:
         Triangle(int xpos, int ypos);
         void OnEvent(Event &e) override;
-        void onRender() override;
+        void OnRender() override;
 
         int x, y;
         float rotation;
@@ -29,7 +30,12 @@ namespace Agate
                 -0.5f, -0.5f, 0.0f,
                 0.5f, -0.5f, 0.0f,
                 0.0f, 0.5f, 0.0f};
+
         VertexLayOut layout;
+
+        VertexBuffer VBO;
+        std::unique_ptr<VertexArray> VAO;
+        Shader shader;
         friend class Render;
     };
 }// namespace Agate

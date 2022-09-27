@@ -17,7 +17,7 @@ public:
     void Detach() override
     {
     }
-    void onRender()override {
+    void OnRender()override {
             ImGui::Begin("window 2");
             ImGui::Text("Hello world");
             ImGui::End();
@@ -34,13 +34,13 @@ public:
 
     void Attach() override
     {
-        PRINTMSG("Attached example layer")
+        PRINTMSG("Attached triangle layer")
     }
 
     void Detach() override
     {
     }
-    void onRender() override
+    void OnRender() override
     {
         rend.RenderTriagle(tri);
     };

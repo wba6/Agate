@@ -50,7 +50,7 @@ void Agate::imguiLayer::Detach()
 void Agate::imguiLayer::OnEvent(Agate::Event &e)
 {
 }
-void Agate::imguiLayer::onRender()
+void Agate::imguiLayer::OnRender()
 {
 
     static bool show_demo_window = true;
