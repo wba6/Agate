@@ -46,6 +46,13 @@ namespace Agate
     {
         y = yPos;
     }
+    void Triangle::setColor(int r, int g, int b, int a)
+    {
+        color.x = (float) r;
+        color.y = (float) g;
+        color.z = (float) b;
+        color.w = (float) a;
+    }
 
 
 }// namespace Agate

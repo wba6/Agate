@@ -17,7 +17,7 @@ void Agate::Render::RenderTriagle(Triangle &tri)
 
     tri.shader.Bind();
     tri.shader.SetUniform4f("Ucolors", tri.color.x, tri.color.y, tri.color.z, tri.color.w);
-    glm::mat4 rotationMat4{1.0f};
+    static glm::mat4 rotationMat4{1.0f};
     rotationMat4 = glm::rotate(rotationMat4, (float) tri.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
     tri.shader.SetUniformMat4("rotation", rotationMat4);
 

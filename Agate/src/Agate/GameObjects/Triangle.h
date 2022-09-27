@@ -24,6 +24,7 @@ namespace Agate
 
         void setXPos(int xPos);
         void setYPos(int yPos);
+        void setColor(int r, int g, int b, int a);
 
         int x, y;
         float rotation;
