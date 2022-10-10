@@ -17,9 +17,11 @@ void Agate::Render::RenderTriagle(Triangle &tri)
 
     tri.shader.Bind();
     tri.shader.SetUniform4f("Ucolors", tri.color.x, tri.color.y, tri.color.z, tri.color.w);
-    static glm::mat4 rotationMat4{1.0f};
-    rotationMat4 = glm::rotate(rotationMat4, (float) tri.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-    tri.shader.SetUniformMat4("rotation", rotationMat4);
+    static glm::mat4 transformations{1.0f};
+    transformations = glm::translate(transformations, glm::vec3(tri.x, tri.y, 0));
+    transformations = glm::rotate(transformations, (float) tri.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    tri.shader.SetUniformMat4("transformations", transformations);
 
     glDrawArrays(GL_TRIANGLES, 0, indices);
     tri.VBO.UnBind();

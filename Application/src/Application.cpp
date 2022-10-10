@@ -51,7 +51,7 @@ public:
     {
     }
     Agate::Render rend;
-    Agate::Triangle tri{};
+    Agate::Triangle tri{0, 0};
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()
