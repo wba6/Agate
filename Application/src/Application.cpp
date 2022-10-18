@@ -19,9 +19,11 @@ public:
     {
     }
     void OnRender()override {
-            ImGui::Begin("window 2");
-            ImGui::Text("Hello world");
-            ImGui::End();
+        ImGui::Begin("window 2");
+        ImGui::Text("%s", "Frame: ");
+        ImGui::Text("%s", std::to_string(Agate::Render::GetRenderedFrames()).c_str());
+
+        ImGui::End();
     };
     void OnEvent(Agate::Event &e) override
     {
@@ -43,9 +45,13 @@ public:
     }
     void OnRender() override
     {
-        rend.RenderTriagle(tri);
-        sqr.rotation = glm::radians(45.0f);
-        sqr.Render();
+        //tri.rotation = glm::radians((float)(Agate::Render::GetRenderedFrames()%11));
+        //if(Agate::Render::GetRenderedFrames() <2000){
+            //rend.RenderTriagle(tri);
+        //}
+
+        //sqr.rotation = glm::radians(45.0f);
+        //sqr.Render();
     };
     void OnEvent(Agate::Event &e) override
     {
@@ -56,6 +62,7 @@ public:
     Agate::Render rend;
     Agate::Triangle tri{0, 0};
     Agate::Square sqr{};
+    int rotation;
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()

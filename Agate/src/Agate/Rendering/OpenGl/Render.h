@@ -20,5 +20,8 @@ namespace Agate
         Render() = default;
         void RenderTriagle(Triangle &tri);
         static void IndexRender(VertexArray*& vao,VertexBuffer& vbo, IndexBuffer& ibo,Shader& shader);
+        static long int GetRenderedFrames();
+    private:
+        static long int framesRendered;
     };
 }// namespace Agate

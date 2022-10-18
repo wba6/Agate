@@ -9,7 +9,7 @@ namespace Agate
     void Square::OnEvent(Event &e)
     {
     }
-    void Square::OnRender()
+    void Square::OnRenderLocal()
     {
         shader.Bind();
 
@@ -70,7 +70,7 @@ namespace Agate
     }
     void Square::Render()
     {
-        OnRender();
+        OnRenderLocal();
         Render::IndexRender(VAO,VBO,IBO,shader);
 
     }

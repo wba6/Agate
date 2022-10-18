@@ -7,6 +7,7 @@
 #include <glad/glad.h>
 #include "VertexBuffer.h"
 
+long int Agate::Render::framesRendered;
 void Agate::Render::RenderTriagle(Triangle &tri)
 {
     tri.OnRender();
@@ -19,7 +20,7 @@ void Agate::Render::RenderTriagle(Triangle &tri)
     tri.shader.SetUniform4f("Ucolors", tri.color.x, tri.color.y, tri.color.z, tri.color.w);
     static glm::mat4 transformations{1.0f};
     transformations = glm::translate(transformations, glm::vec3(tri.x, tri.y, 0));
-    transformations = glm::rotate(transformations, (float) tri.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+    transformations = glm::rotate(transformations,  tri.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 
     tri.shader.SetUniformMat4("transformations", transformations);
 
@@ -27,6 +28,7 @@ void Agate::Render::RenderTriagle(Triangle &tri)
     tri.VBO.UnBind();
     tri.VAO->UnBind();
     tri.shader.UnBind();
+    framesRendered++;
 }
 void Agate::Render::IndexRender(Agate::VertexArray*& vao, Agate::VertexBuffer& vbo, Agate::IndexBuffer& ibo, Shader& shader)
 {
@@ -39,4 +41,9 @@ void Agate::Render::IndexRender(Agate::VertexArray*& vao, Agate::VertexBuffer& v
     shader.UnBind();
     ibo.UnBind();
     vao->UnBind();
+    framesRendered++;
+}
+long int Agate::Render::GetRenderedFrames()
+{
+    return framesRendered;
 }

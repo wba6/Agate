@@ -15,13 +15,13 @@
 namespace Agate
 {
 
-    class Square : public Layer {
+    class Square:public Layer{
     public:
         Square(int xpos, int ypos);
         Square();
         ~Square();
         virtual void OnEvent(Event &e) override;
-        virtual void OnRender() override;
+        void OnRenderLocal();
 
         void Render();
         void setXPos(int xPos);
