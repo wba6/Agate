@@ -3,7 +3,7 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/Event.h"
 #include "LayerStack.h"
-#include "window/Window.h"
+#include "Window/Window.h"
 
 namespace Agate
 {

@@ -5,7 +5,7 @@
 #include "Events/MouseEvent.h"
 #include "Math/Math.h"
 #include "RenderContext/CurrentContext.h"
-#include "imgui-layer/imguiLayer.h"
+#include "ImGui-layer/imguiLayer.h"
 //TODO: TEMPORARY include
 #include "Agate/Rendering/temp_test_layer.h"
 #include <GLFW/glfw3.h>
