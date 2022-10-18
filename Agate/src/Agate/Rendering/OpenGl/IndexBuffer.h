@@ -1,0 +1,31 @@
+//
+// Created by William Aey on 10/17/2022.
+//
+
+#ifndef AGATE_INDEXBUFFER_H
+#define AGATE_INDEXBUFFER_H
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <vector>
+#include "VertexBuffer.h"
+namespace Agate
+{
+
+    class IndexBuffer {
+    public:
+        explicit IndexBuffer(std::vector<unsigned int>& vector, int32_t drawtype);
+        ~IndexBuffer();
+
+        void Bind();
+        void UnBind();
+
+        [[nodiscard]] unsigned int GetNumOfIndices() const;
+    private:
+        std::vector<unsigned int> m_indinces;
+        unsigned int m_ibo;
+    };
+
+}// namespace Agate
+
+#endif//AGATE_INDEXBUFFER_H

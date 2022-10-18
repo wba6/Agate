@@ -22,3 +22,4 @@
 #include "Agate/Rendering/OpenGl/Render.h"
 #include "Agate/Rendering/OpenGl/VertexArray.h"
 #include "Agate/Rendering/OpenGl/VertexBuffer.h"
+#include "Agate/Rendering/OpenGl/IndexBuffer.h"

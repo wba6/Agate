@@ -4,8 +4,10 @@
 
 #pragma once
 #include "Agate/GameObjects/Triangle.h"
+#include "Agate/GameObjects/Square.h"
 #include "Shader.h"
 #include "VertexArray.h"
+#include "IndexBuffer.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -17,5 +19,6 @@ namespace Agate
     public:
         Render() = default;
         void RenderTriagle(Triangle &tri);
+        static void IndexRender(VertexArray*& vao,VertexBuffer& vbo, IndexBuffer& ibo,Shader& shader);
     };
 }// namespace Agate

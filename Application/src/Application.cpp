@@ -1,5 +1,6 @@
 
 #include "Agate.h"
+#include <Agate/GameObjects/Square.h>
 #include <iostream>
 #include <string>
 class app : public Agate::EntryPoint {
@@ -43,6 +44,8 @@ public:
     void OnRender() override
     {
         rend.RenderTriagle(tri);
+        sqr.rotation = glm::radians(45.0f);
+        sqr.OnRender();
     };
     void OnEvent(Agate::Event &e) override
     {
@@ -52,6 +55,7 @@ public:
     }
     Agate::Render rend;
     Agate::Triangle tri{0, 0};
+    Agate::Square sqr{};
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()

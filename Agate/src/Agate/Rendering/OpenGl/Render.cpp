@@ -28,3 +28,15 @@ void Agate::Render::RenderTriagle(Triangle &tri)
     tri.VAO->UnBind();
     tri.shader.UnBind();
 }
+void Agate::Render::IndexRender(Agate::VertexArray*& vao, Agate::VertexBuffer& vbo, Agate::IndexBuffer& ibo, Shader& shader)
+{
+    vao->Bind();
+    ibo.Bind();
+
+
+    glDrawElements(GL_TRIANGLES, ibo.GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+
+    shader.UnBind();
+    ibo.UnBind();
+    vao->UnBind();
+}
