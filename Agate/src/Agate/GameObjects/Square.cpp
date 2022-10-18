@@ -22,7 +22,6 @@ namespace Agate
 
 
 
-        Render::IndexRender(VAO,VBO,IBO,shader);
     }
     Square::Square(int xpos, int ypos)
         : x(xpos), y(ypos), rotation(0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
@@ -68,5 +67,11 @@ namespace Agate
     Square::~Square()
     {
         delete VAO;
+    }
+    void Square::Render()
+    {
+        OnRender();
+        Render::IndexRender(VAO,VBO,IBO,shader);
+
     }
 }// namespace Agate

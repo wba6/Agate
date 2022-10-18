@@ -45,7 +45,7 @@ public:
     {
         rend.RenderTriagle(tri);
         sqr.rotation = glm::radians(45.0f);
-        sqr.OnRender();
+        sqr.Render();
     };
     void OnEvent(Agate::Event &e) override
     {

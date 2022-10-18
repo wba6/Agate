@@ -20,9 +20,10 @@ namespace Agate
         Square(int xpos, int ypos);
         Square();
         ~Square();
-        void OnEvent(Event &e) override;
-        void OnRender() override;
+        virtual void OnEvent(Event &e) override;
+        virtual void OnRender() override;
 
+        void Render();
         void setXPos(int xPos);
         void setYPos(int yPos);
         void setColor(int r, int g, int b, int a);
