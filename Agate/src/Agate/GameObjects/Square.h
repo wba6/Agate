@@ -5,6 +5,7 @@
 #ifndef AGATE_SQUARE_H
 #define AGATE_SQUARE_H
 #include "Agate/Layer.h"
+#include "GameObject.h"
 #include "Agate/Rendering/OpenGl/VertexArray.h"
 #include "Agate/Rendering/OpenGl/VertexBuffer.h"
 #include "Agate/Rendering/OpenGl/IndexBuffer.h"
@@ -15,21 +16,19 @@
 namespace Agate
 {
 
-    class Square:public Layer{
+    class Square:public Layer , public GameObject{
     public:
         Square(int xpos, int ypos);
         Square();
         ~Square();
         virtual void OnEvent(Event &e) override;
-        void OnRenderLocal();
 
-        void Render();
-        void setXPos(int xPos);
-        void setYPos(int yPos);
+        void Render() override;
+        void setXPos(int xPos)override;
+        void setYPos(int yPos)override;
         void setColor(int r, int g, int b, int a);
 
-        int x, y;
-        float rotation;
+
         glm::vec4 color;
 
     private:

@@ -3,6 +3,7 @@
 //
 
 #include "Triangle.h"
+#include "Rendering/OpenGl/Render.h"
 
 namespace Agate
 {
@@ -10,30 +11,29 @@ namespace Agate
     void Triangle::OnEvent(Event &e)
     {
     }
-    void Triangle::OnRender()
-    {
 
-    }
     Triangle::Triangle(int xpos, int ypos)
-        : x(xpos), y(ypos), rotation(0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
+        :  GameObject(0,0,0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
           layout({0, 3, false, 3 * sizeof(float), 0}),
+          IBO{indices,STATIC_DRAW},
           VBO{vertices, STATIC_DRAW},
           shader("Shaders/Basic.vs.shader", "Shaders/Basic.fg.shader")
     {
         VBO.Bind();
-        VAO = std::make_unique<VertexArray>(layout);
+        VAO = new VertexArray(layout);
         VAO->Bind();
         VBO.UnBind();
         VAO->UnBind();
     }
     Triangle::Triangle()
-        : x(0), y(0), rotation(0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
+        :  GameObject(0,0,0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
           layout({0, 3, false, 3 * sizeof(float), 0}),
+          IBO{indices,STATIC_DRAW},
           VBO{vertices, STATIC_DRAW},
           shader("Shaders/Basic.vs.shader", "Shaders/Basic.fg.shader")
     {
         VBO.Bind();
-        VAO = std::make_unique<VertexArray>(layout);
+        VAO = new VertexArray(layout);
         VAO->Bind();
         VBO.UnBind();
         VAO->UnBind();
@@ -52,6 +52,25 @@ namespace Agate
         color.y = (float) g;
         color.z = (float) b;
         color.w = (float) a;
+    }
+    void Triangle::Render()
+    {
+        shader.Bind();
+
+
+        shader.SetUniform4f("Ucolors", color.x, color.y, color.z, color.w);
+        glm::mat4 transformations{1.0f};
+        transformations = glm::translate(transformations, glm::vec3(x, y, 0));
+        transformations = glm::rotate(transformations, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        shader.SetUniformMat4("transformations", transformations);
+
+        Render::IndexRender(VAO,VBO,IBO,shader);
+
+
+    }
+    Triangle::~Triangle()
+    {
+        delete VAO;
     }
 
 

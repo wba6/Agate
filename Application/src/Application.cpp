@@ -45,13 +45,13 @@ public:
     }
     void OnRender() override
     {
-        tri.rotation = glm::radians((float)(Agate::Render::GetRenderedFrames()%11));
+        //tri.rotation = glm::radians((float)(Agate::Render::GetRenderedFrames()%11));
         if(Agate::Render::GetRenderedFrames() <2000){
-            rend.RenderTriagle(tri);
+            tri.Render();
         }
 
-        //sqr.rotation = glm::radians(45.0f);
-        //sqr.Render();
+        sqr.rotation = glm::radians(45.0f);
+        sqr.Render();
     };
     void OnEvent(Agate::Event &e) override
     {
