@@ -27,8 +27,8 @@ namespace Agate
         m_Window = glfwCreateWindow(m_windowProps.width, m_windowProps.height, m_windowProps.name.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_Window);
 
-        OpenGL context;
-        context.CreateContext();
+        context = new OpenGL;
+        context->CreateContext();
 
         glfwSetWindowUserPointer(m_Window, &m_windowProps);
 

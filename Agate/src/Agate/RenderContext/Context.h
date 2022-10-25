@@ -12,12 +12,14 @@ namespace Agate
     public:
         virtual void CreateContext() = 0;
         virtual void EndContext() = 0;
+        virtual void NewFrame() = 0;
     };
 
     class OpenGL: public Context{
     public:
         void CreateContext() override;
         void EndContext() override;
+        void NewFrame() override;
     };
 }// namespace Agate
 

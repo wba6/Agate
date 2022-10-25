@@ -6,10 +6,7 @@
 #include "Math/Math.h"
 #include "RenderContext/CurrentContext.h"
 #include "ImGui-layer/imguiLayer.h"
-//TODO: TEMPORARY include
-#include "Agate/Rendering/temp_test_layer.h"
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
+
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
@@ -33,8 +30,7 @@ void Agate::EntryPoint::Run()
 
     while (m_running)
     {
-        glClearColor(0.2, 0.2, 0.2, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
+        Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
         imguiLayer::Begin();
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)

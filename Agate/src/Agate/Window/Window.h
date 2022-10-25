@@ -7,6 +7,7 @@
 struct GLFWwindow;
 namespace Agate
 {
+    class Context;
     class Window {
 
     public:
@@ -32,7 +33,7 @@ namespace Agate
             EventCallbackFn callback;
             bool VSyncState;
         };
-
+        Context *context;
         GLFWwindow *m_Window;
 
         WindowProperies m_windowProps;
