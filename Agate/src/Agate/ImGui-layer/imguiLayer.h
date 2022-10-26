@@ -13,11 +13,11 @@ namespace Agate
         virtual void Detach() override;
         virtual void OnEvent(Event &e) override;
         virtual void OnRender() override;
-        static void Begin();
-        static void End();
+        static void BeginFrame();
+        static void EndFrame();
 
     private:
-        void* m_glfwWindow;
+        void *m_glfwWindow;
         bool m_Enabled = true;
     };
 }// namespace Agate

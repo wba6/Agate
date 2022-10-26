@@ -35,7 +35,7 @@ void Agate::EntryPoint::Run()
         double FrameTime = m_window->WindowOpenTime();
         Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
-        imguiLayer::Begin();
+        imguiLayer::BeginFrame();
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
         {
             m_layerStack.m_layers.at(i)->OnRender();
@@ -46,7 +46,7 @@ void Agate::EntryPoint::Run()
 
         ImGui::End();
 
-        imguiLayer::End();
+        imguiLayer::EndFrame();
 
         m_window->OnUpdate();
 

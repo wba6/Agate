@@ -59,16 +59,16 @@ void Agate::imguiLayer::OnRender()
 
 }
 Agate::imguiLayer::imguiLayer(void *GlfwWindow)
-:m_glfwWindow(GlfwWindow)
+    : m_glfwWindow(GlfwWindow)
 {
 }
-void Agate::imguiLayer::Begin()
+void Agate::imguiLayer::BeginFrame()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
-void Agate::imguiLayer::End()
+void Agate::imguiLayer::EndFrame()
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -78,7 +78,7 @@ void Agate::imguiLayer::End()
     ImGuiIO &io = ImGui::GetIO();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        GLFWwindow *backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
