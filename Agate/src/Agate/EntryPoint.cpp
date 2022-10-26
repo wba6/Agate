@@ -7,7 +7,7 @@
 #include "ImGui-layer/imguiLayer.h"
 #include "Math/Math.h"
 #include "RenderContext/CurrentContext.h"
-
+#include "Rendering/OpenGl/Render.h"
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
@@ -29,10 +29,10 @@ Agate::EntryPoint::~EntryPoint()
 void Agate::EntryPoint::Run()
 {
     double LastFrame = 0;
-    int framecount = 0;
+    int frameCount = 0;
     while (m_running)
     {
-        framecount++;
+        frameCount++;
         double FrameTime = m_window->WindowOpenTime();
         Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
@@ -42,9 +42,8 @@ void Agate::EntryPoint::Run()
             m_layerStack.m_layers.at(i)->OnRender();
         }
         ImGui::Begin("Frame");
-        ImGui::Text("%s", "Frame: ");
-
-        ImGui::Text("%s", std::to_string(LastFrame * 1000).c_str());
+        ImGui::Text("%s", ("Per Frame: " + std::to_string(LastFrame * 1000) + " ms").c_str() );
+        ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount )).c_str() );
 
         ImGui::End();
 
@@ -52,7 +51,7 @@ void Agate::EntryPoint::Run()
 
         m_window->OnUpdate();
 
-        if (std::fmod(framecount, 25.0) == 0)
+        if (std::fmod(frameCount, 25.0) == 0)
         {
             LastFrame = m_window->WindowOpenTime() - FrameTime;
         }

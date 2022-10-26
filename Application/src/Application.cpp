@@ -19,11 +19,6 @@ public:
     {
     }
     void OnRender()override {
-        ImGui::Begin("window 2");
-        ImGui::Text("%s", "Frame: ");
-        ImGui::Text("%s", std::to_string(Agate::Render::GetRenderedFrames()).c_str());
-
-        ImGui::End();
     };
     void OnEvent(Agate::Event &e) override
     {
@@ -38,6 +33,8 @@ public:
     void Attach() override
     {
         PRINTMSG("Attached triangle layer")
+        sqr.rotation = glm::radians(45.0f);
+        sqr.color=glm::vec4 (1.0f,0.0f,0.0f,1.0f);
     }
 
     void Detach() override
@@ -45,12 +42,10 @@ public:
     }
     void OnRender() override
     {
-        tri.rotation = glm::radians((float) (Agate::Render::GetRenderedFrames() % 11));
-        if(Agate::Render::GetRenderedFrames() <2000){
-            tri.Render();
-        }
+        tri.Render();
 
-        sqr.rotation = glm::radians(45.0f);
+
+
         sqr.Render();
     };
     void OnEvent(Agate::Event &e) override
