@@ -33,7 +33,7 @@ namespace Agate
         glfwSetWindowUserPointer(m_Window, &m_windowProps);
 
 
-        //SetVSync(true);//need glad to define this function or maybe not--------------------------------------------------------------------------------------------------------
+        SetVSync(true);
 
         glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window) {
             //need this bc lambda can't access non-static class members
@@ -113,6 +113,15 @@ namespace Agate
     GLFWwindow *Window::GetWindow()
     {
         return m_Window;
+    }
+    Window::~Window()
+    {
+        glfwDestroyWindow(m_Window);
+        delete context;
+    }
+    double Window::WindowOpenTime()
+    {
+        return glfwGetTime();
     }
 
 

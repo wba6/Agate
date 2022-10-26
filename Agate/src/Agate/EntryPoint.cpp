@@ -1,11 +1,12 @@
 #include "agpch.h"
 
+#include "../vender/imgui/imgui.h"
 #include "EntryPoint.h"
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
+#include "ImGui-layer/imguiLayer.h"
 #include "Math/Math.h"
 #include "RenderContext/CurrentContext.h"
-#include "ImGui-layer/imguiLayer.h"
 
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
@@ -27,9 +28,12 @@ Agate::EntryPoint::~EntryPoint()
 
 void Agate::EntryPoint::Run()
 {
-
+    double LastFrame = 0;
+    int framecount = 0;
     while (m_running)
     {
+        framecount++;
+        double FrameTime = m_window->WindowOpenTime();
         Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
         imguiLayer::Begin();
@@ -37,9 +41,21 @@ void Agate::EntryPoint::Run()
         {
             m_layerStack.m_layers.at(i)->OnRender();
         }
+        ImGui::Begin("Frame");
+        ImGui::Text("%s", "Frame: ");
+
+        ImGui::Text("%s", std::to_string(LastFrame * 1000).c_str());
+
+        ImGui::End();
+
         imguiLayer::End();
 
         m_window->OnUpdate();
+
+        if (std::fmod(framecount, 25.0) == 0)
+        {
+            LastFrame = m_window->WindowOpenTime() - FrameTime;
+        }
     };
 }
 

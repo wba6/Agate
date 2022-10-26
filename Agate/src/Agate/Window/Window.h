@@ -13,10 +13,10 @@ namespace Agate
     public:
         using EventCallbackFn = std::function<void(Event &)>;
         Window(std::string WindowName, int size_x, int size_y, EventCallbackFn callback, bool vsync);
-
+        ~Window();
 
         void OnUpdate();
-
+        double WindowOpenTime();
         void GetWidth();
         void GetHieght();
         void SetVSync(bool enable);

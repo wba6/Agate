@@ -45,7 +45,7 @@ public:
     }
     void OnRender() override
     {
-        //tri.rotation = glm::radians((float)(Agate::Render::GetRenderedFrames()%11));
+        tri.rotation = glm::radians((float) (Agate::Render::GetRenderedFrames() % 11));
         if(Agate::Render::GetRenderedFrames() <2000){
             tri.Render();
         }

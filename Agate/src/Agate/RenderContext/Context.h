@@ -10,6 +10,7 @@ namespace Agate
 
     class Context {
     public:
+        virtual ~Context(){};
         virtual void CreateContext() = 0;
         virtual void EndContext() = 0;
         virtual void NewFrame() = 0;
