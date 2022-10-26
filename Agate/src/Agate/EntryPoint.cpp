@@ -7,7 +7,6 @@
 #include "ImGui-layer/imguiLayer.h"
 #include "Math/Math.h"
 #include "RenderContext/CurrentContext.h"
-#include "Rendering/OpenGl/Render.h"
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
