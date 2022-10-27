@@ -32,8 +32,8 @@ namespace Agate
             int width, height;
             EventCallbackFn callback;
             bool VSyncState;
+            Context *context;
         };
-        Context *context;
         GLFWwindow *m_Window;
 
         WindowProperies m_windowProps;

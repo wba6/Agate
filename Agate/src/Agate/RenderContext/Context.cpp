@@ -30,4 +30,8 @@ namespace Agate
         glClearColor(0.2, 0.2, 0.2, 1);
         glClear(GL_COLOR_BUFFER_BIT);
     }
+    void OpenGL::SetWindowSize(int width, int height)
+    {
+        glViewport(0, 0, width, height);
+    }
 }// namespace Agate

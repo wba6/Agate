@@ -27,8 +27,8 @@ namespace Agate
         m_Window = glfwCreateWindow(m_windowProps.width, m_windowProps.height, m_windowProps.name.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_Window);
 
-        context = new OpenGL;
-        context->CreateContext();
+        m_windowProps.context = new OpenGL;
+        m_windowProps.context->CreateContext();
 
         glfwSetWindowUserPointer(m_Window, &m_windowProps);
 
@@ -70,6 +70,15 @@ namespace Agate
                 KeyReleased event(key);
                 data.callback(event);
             }
+        });
+
+        glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height) {
+            WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
+
+            WindowResizedEvent event(width, height);
+            data.callback(event);
+
+            data.context->SetWindowSize(width, height);
         });
     }
 
@@ -117,7 +126,7 @@ namespace Agate
     Window::~Window()
     {
         glfwDestroyWindow(m_Window);
-        delete context;
+        delete m_windowProps.context;
     }
     double Window::WindowOpenTime()
     {
