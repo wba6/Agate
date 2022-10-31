@@ -39,7 +39,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glm)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
-add_library(Agate-lib STATIC ${libSrc} ${libHead})
+add_library(Agate-lib STATIC ${libSrc} ${libHead} src/Agate/ImGui-layer/imgui_interface.cpp src/Agate/ImGui-layer/imgui_interface.h)
 
 target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"

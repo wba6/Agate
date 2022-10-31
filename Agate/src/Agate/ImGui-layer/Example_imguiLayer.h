@@ -6,20 +6,17 @@
 #include "Layer.h"
 namespace Agate
 {
-    class imguiLayer : public Layer {
+    class Example_imguiLayer : public Layer {
     public:
-        imguiLayer(void *GlfwWindow);
-        static void Init(void *window);
-        static void ImguiDestruct();
+        Example_imguiLayer();
+
         virtual void Attach() override;
         virtual void Detach() override;
         virtual void OnEvent(Event &e) override;
         virtual void OnRender() override;
-        static void BeginFrame();
-        static void EndFrame();
+
 
     private:
-        void *m_glfwWindow;
         bool m_Enabled = true;
     };
 }// namespace Agate

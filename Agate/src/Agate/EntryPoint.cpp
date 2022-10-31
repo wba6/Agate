@@ -4,7 +4,8 @@
 #include "EntryPoint.h"
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
-#include "ImGui-layer/imguiLayer.h"
+#include "ImGui-layer/Example_imguiLayer.h"
+#include "ImGui-layer/imgui_interface.h"
 #include "Math/Math.h"
 #include "RenderContext/CurrentContext.h"
 
@@ -16,15 +17,15 @@ Agate::EntryPoint::EntryPoint()
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
     m_running = true;
+    imgui_interface::Init(m_window->GetWindow());
 
-    //m_layerStack.AddOverlay(new imguiLayer(m_window->GetWindow()));
-    Agate::imguiLayer::Init(m_window->GetWindow());
+    //m_layerStack.AddOverlay(new Example_imguiLayer());
     CurrentContext::OpenGL = true;
 }
 
 Agate::EntryPoint::~EntryPoint()
 {
-    Agate::imguiLayer::ImguiDestruct();
+    imgui_interface::ImguiDestruct();
 }
 
 void Agate::EntryPoint::Run()
@@ -37,7 +38,7 @@ void Agate::EntryPoint::Run()
         double FrameTime = m_window->WindowOpenTime();
         Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
-        imguiLayer::BeginFrame();
+        imgui_interface::BeginFrame();
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
         {
             m_layerStack.m_layers.at(i)->OnRender();
@@ -48,7 +49,7 @@ void Agate::EntryPoint::Run()
 
         ImGui::End();
 
-        imguiLayer::EndFrame();
+        imgui_interface::EndFrame();
 
         m_window->OnUpdate();
 
