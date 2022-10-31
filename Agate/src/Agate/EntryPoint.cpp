@@ -17,12 +17,14 @@ Agate::EntryPoint::EntryPoint()
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
     m_running = true;
 
-    m_layerStack.AddOverlay(new imguiLayer(m_window->GetWindow()));
+    //m_layerStack.AddOverlay(new imguiLayer(m_window->GetWindow()));
+    Agate::imguiLayer::Init(m_window->GetWindow());
     CurrentContext::OpenGL = true;
 }
 
 Agate::EntryPoint::~EntryPoint()
 {
+    Agate::imguiLayer::ImguiDestruct();
 }
 
 void Agate::EntryPoint::Run()

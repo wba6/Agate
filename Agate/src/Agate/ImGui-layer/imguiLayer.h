@@ -9,6 +9,8 @@ namespace Agate
     class imguiLayer : public Layer {
     public:
         imguiLayer(void *GlfwWindow);
+        static void Init(void *window);
+        static void ImguiDestruct();
         virtual void Attach() override;
         virtual void Detach() override;
         virtual void OnEvent(Event &e) override;
