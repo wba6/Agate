@@ -2,7 +2,7 @@
 // Created by TANK1_41 on 9/21/2022.
 //
 #include "CurrentContext.h"
-#include "Logger.h"
+#include "Agate/Core/Logger.h"
 
 bool Agate::CurrentContext::OpenGL = false;
 Agate::Context *Agate::CurrentContext::CurrentContextPointer = nullptr;

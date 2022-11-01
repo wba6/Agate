@@ -3,7 +3,7 @@
 //
 #include "agpch.h"
 
-#include "Logger.h"
+#include "Agate/Core/Logger.h"
 #include "imgui_interface.h"
 #include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>

@@ -62,12 +62,12 @@ namespace Agate
 
             if (action == GLFW_PRESS)
             {
-                KeyPressed event(key);
+                KeyPressedEvent event(key);
                 data.callback(event);
             }
             else
             {
-                KeyReleased event(key);
+                KeyReleasedEvent event(key);
                 data.callback(event);
             }
         });

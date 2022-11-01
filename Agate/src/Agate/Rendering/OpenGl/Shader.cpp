@@ -3,7 +3,7 @@
 //
 #include "agpch.h"
 
-#include "Logger.h"
+#include "Agate/Core/Logger.h"
 #include "Shader.h"
 #include <glad/glad.h>
 #include <gtc/type_ptr.hpp>

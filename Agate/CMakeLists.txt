@@ -22,6 +22,7 @@ file(GLOB_RECURSE libHead
 
 include_directories("${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/src/Agate"
+        "${PROJECT_SOURCE_DIR}/src/Agate/Events"
         "${PROJECT_SOURCE_DIR}/vender/glfw/include"
         "${PROJECT_SOURCE_DIR}/vender/glad/include"
         "${PROJECT_SOURCE_DIR}/vender/spdlog/include"

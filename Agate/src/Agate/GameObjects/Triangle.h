@@ -4,12 +4,12 @@
 
 #ifndef AGATE_TRIANGLE_H
 #define AGATE_TRIANGLE_H
-#include "Agate/Layer.h"
+#include "Agate/Core/Layer.h"
+#include "Agate/Rendering/OpenGl/IndexBuffer.h"
 #include "Agate/Rendering/OpenGl/Shader.h"
 #include "Agate/Rendering/OpenGl/VertexArray.h"
 #include "Agate/Rendering/OpenGl/VertexBuffer.h"
 #include "GameObject.h"
-#include "Agate/Rendering/OpenGl/IndexBuffer.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

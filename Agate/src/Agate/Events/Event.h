@@ -1,8 +1,8 @@
 #pragma once
 #include "agpch.h"
 
-#include "../Core.h"
-#include "../Logger.h"
+#include "Agate/Core/Core.h"
+#include "Agate/Core/Logger.h"
 
 
 namespace Agate
