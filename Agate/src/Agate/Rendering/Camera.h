@@ -3,8 +3,9 @@
 //
 
 #pragma once
-#include "Events/Event.h"
-#include "Events/KeyEvents.h"
+#include "Agate/Events/Event.h"
+#include "Agate/Events/KeyEvents.h"
+#include "Agate/Events/MouseEvent.h"
 #include "OpenGl/Shader.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -18,7 +19,8 @@ namespace Agate
         void onEvent(Event& ev);
         void onUpdate();
     private:
-        bool KeyPess(KeyPressedEvent & ev);
+        bool KeyPess(KeyPressedEvent &ev);
+        bool MouseMove(MouseMoved &ev);
 
     private:
         static float s_lastX, s_lastY,s_yaw, s_pitch, s_fov;

@@ -38,7 +38,7 @@ namespace Agate
         using EventFn = std::function<bool(T &)>;
 
     public:
-        EventNotifier(Event &e)
+        explicit EventNotifier(Event &e)
             : m_Event(e){};
 
         template<typename T>

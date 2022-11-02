@@ -20,8 +20,14 @@ namespace Agate
             std::string eventString = "MouseMoved to: " + std::to_string(m_newXPos) + ", " + std::to_string(m_newYPos);
             PRINTMSG(eventString);
         }
-
-
+        int GetXPos()
+        {
+            return m_newXPos;
+        }
+        int GetYPos()
+        {
+            return m_newYPos;
+        }
         bool Handled() override
         {
             return this->EventFinised;

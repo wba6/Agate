@@ -12,6 +12,7 @@
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 Agate::EntryPoint::EntryPoint()
+    : deltaTime{0}
 {
     s_instance = this;
 
@@ -52,7 +53,7 @@ void Agate::EntryPoint::Run()
 
         m_window->OnUpdate();
 
-        if (std::fmod(frameCount, 25.0) == 0)
+        if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1)
         {
             deltaTime = m_window->WindowOpenTime() - FrameTime;
         }
@@ -65,6 +66,7 @@ void Agate::EntryPoint::OnEvent(Event &e)
 
     notifier.NotifyEvent<WindowCloseEvent>(BindFn(EntryPoint::OnWindowClose));
     e.PrintEventName();
+
 
     for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
     {

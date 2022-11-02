@@ -22,10 +22,15 @@ namespace Agate{
         {
             return this->EventFinised;
         }
+        unsigned int GetKeyCode()
+        {
+            return m_keycode;
+        }
         static EventTypes s_GetEventType()
         {
             return EventTypes::KeyPressed;
         }
+
     private:
         unsigned int m_keycode;
     };
@@ -48,10 +53,15 @@ namespace Agate{
         {
             return this->EventFinised;
         }
+        unsigned int GetKeyCode()
+        {
+            return m_keycode;
+        }
         static EventTypes s_GetEventType()
         {
             return EventTypes::KeyReleased;
         }
+
     private:
         unsigned int m_keycode;
     };

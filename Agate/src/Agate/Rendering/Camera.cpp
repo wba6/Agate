@@ -20,7 +20,7 @@ namespace Agate
 
     void Camera::onUpdate()
     {
-        float m_deltaTime = EntryPoint::GetInstance()->GetDeltaTime();
+        m_deltaTime = EntryPoint::GetInstance()->GetDeltaTime();
         m_view = glm::lookAt(m_cameraPos, m_cameraPos + s_cameraFront, m_cameraUp);
         m_projection = glm::perspective(glm::radians(s_fov), 800.0f / 600.0f, 0.1f, 100.0f);
         m_Shader.SetUniformMat4("view", m_view);
@@ -28,67 +28,55 @@ namespace Agate
     }
     void Camera::onEvent(Event &ev)
     {
-        const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
-        EventNotifier notifier();
-        notifier().NotifyEvent<KeyPressedEvent>(BindFn(Camera::KeyPess));
+        EventNotifier call(ev);
+        call.NotifyEvent<KeyPressedEvent>(BindFn(Camera::KeyPess));
+        call.NotifyEvent<MouseMoved>(BindFn(Camera::MouseMove));
     }
 
     bool Camera::KeyPess(KeyPressedEvent &ev)
     {
-        //w = 7 // s = 83 // d = 68 // a == 65
-        ev.PrintEventName();
+        //TODO: temporary way of handling key presses
+        //w = 87 // s = 83 // d = 68 // a == 65
+        unsigned int keyCode = ev.GetKeyCode();
+        const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
+        if (keyCode == 87)
+            m_cameraPos += cameraSpeed * s_cameraFront;
+        if (keyCode == 83)
+            m_cameraPos -= cameraSpeed * s_cameraFront;
+        if (keyCode == 65)
+            m_cameraPos -= glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
+        if (keyCode == 68)
+            m_cameraPos += glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
+        return false;
     }
-
-//    void Camera::processInput(GLFWwindow *window)
-//    {
-//        const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
-//        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-//            m_cameraPos += cameraSpeed * s_cameraFront;
-//        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-//            m_cameraPos -= cameraSpeed * s_cameraFront;
-//        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-//            m_cameraPos -= glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
-//        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-//            m_cameraPos += glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
-//    }
-//    void Camera::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
-//    {
-//        s_fov -= (float) yoffset;
-//        if (s_fov < 1.0f)
-//            s_fov = 1.0f;
-//        if (s_fov > 45.0f)
-//            s_fov = 45.0f;
-//    }
-//    void Camera::mouse_callback(GLFWwindow *window, double xpos, double ypos)
-//    {
-//        if (s_firstMouse)// initially set to true
-//        {
-//            s_lastX = xpos;
-//            s_lastY = ypos;
-//            s_firstMouse = false;
-//        }
-//
-//        float xoffset = xpos - s_lastX;
-//        float yoffset = s_lastY - ypos;// reversed since y-coordinates range from bottom to top
-//        s_lastX = xpos;
-//        s_lastY = ypos;
-//
-//        const float sensitivity = 0.1f;
-//        xoffset *= sensitivity;
-//        yoffset *= sensitivity;
-//
-//        s_yaw += xoffset;
-//        s_pitch += yoffset;
-//
-//        if (s_pitch > 89.0f)
-//            s_pitch = 89.0f;
-//        if (s_pitch < -89.0f)
-//            s_pitch = -89.0f;
-//
-//        glm::vec3 direction;
-//        direction.x = cos(glm::radians(s_yaw)) * cos(glm::radians(s_pitch));
-//        direction.y = sin(glm::radians(s_pitch));
-//        direction.z = sin(glm::radians(s_yaw)) * cos(glm::radians(s_pitch));
-//        s_cameraFront = glm::normalize(direction);
-//    }
-}
+    bool Camera::MouseMove(MouseMoved &ev)
+    {
+        int xpos = ev.GetXPos();
+        int ypos = ev.GetYPos();
+        if (s_firstMouse)// initially set to true
+        {
+            s_lastX = xpos;
+            s_lastY = ypos;
+            s_firstMouse = false;
+        }
+        float xoffset = xpos - s_lastX;
+        float yoffset = s_lastY - ypos;// reversed since y-coordinates range from bottom to
+        s_lastX = xpos;
+        s_lastY = ypos;
+        const float sensitivity = 0.1f;
+        xoffset *= sensitivity;
+        yoffset *= sensitivity;
+        s_yaw += xoffset;
+        s_pitch += yoffset;
+        if (s_pitch > 89.0f)
+            s_pitch = 89.0f;
+        if (s_pitch < -89.0f)
+            s_pitch = -89.0f;
+        glm::vec3 direction;
+        direction.x = cos(glm::radians(s_yaw)) * cos(glm::radians(s_pitch));
+        direction.y = sin(glm::radians(s_pitch));
+        direction.z = sin(glm::radians(s_yaw)) * cos(glm::radians(s_pitch));
+        s_cameraFront = glm::normalize(direction);
+        return false;
+    }
+}// namespace Agate

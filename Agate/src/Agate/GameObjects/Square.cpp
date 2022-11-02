@@ -8,6 +8,7 @@ namespace Agate
 {
     void Square::OnEvent(Event &e)
     {
+        camera->onEvent(e);
     }
 
     Square::Square(int xpos, int ypos)
@@ -35,6 +36,7 @@ namespace Agate
         VAO->Bind();
         VBO.UnBind();
         VAO->UnBind();
+        camera = new Camera(shader);
     }
     void Square::setXPos(int xPos)
     {
@@ -53,20 +55,19 @@ namespace Agate
     }
     Square::~Square()
     {
+        delete camera;
         delete VAO;
     }
     void Square::Render()
     {
         shader.Bind();
 
-
         shader.SetUniform4f("Ucolors", color.x, color.y, color.z, color.w);
-        glm::mat4 transformations{1.0f};
-        transformations = glm::translate(transformations, glm::vec3(x, y, 0));
-        transformations = glm::rotate(transformations, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-        shader.SetUniformMat4("transformations", transformations);
+        camera->onUpdate();
 
-        Render::IndexRender(VAO,VBO,IBO,shader);
+        glm::mat4 model = glm::mat4(1.0f);
+        shader.SetUniformMat4("model", model);
 
+        Render::IndexRender(VAO, VBO, IBO, shader);
     }
 }// namespace Agate

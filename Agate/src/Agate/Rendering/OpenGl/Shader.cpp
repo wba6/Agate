@@ -68,8 +68,8 @@ namespace Agate
         if (!success)
         {
             glGetProgramInfoLog(m_shaderProgramID, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
-                      << infoLog << std::endl;
+            PRINTCRIT("ERROR::SHADER::PROGRAM::LINKING_FAILED\n")
+            PRINTWARN(infoLog);
         }
     }
     void Shader::shaderCompileStatus(unsigned int id)
@@ -81,9 +81,8 @@ namespace Agate
         if (!success)
         {
             glGetShaderInfoLog(id, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::COMPILATION_FAILED\n"
-                      << infoLog << std::endl;
-            PRINTCRIT("m_Shader failed to compile");
+            PRINTCRIT("ERROR::SHADER::COMPILATION_FAILED\n");
+            PRINTWARN(infoLog);
         }
     }
     void Shader::Bind()
@@ -104,7 +103,10 @@ namespace Agate
 
         int loc = glGetUniformLocation(m_shaderProgramID, uniform);
         if (loc == -1)
-            PRINTCRIT("m_Shader not found");
+        {
+            PRINTCRIT("Uniform not found: ");
+            PRINTCRIT(uniform);
+        }
         return loc;
     }
     void Shader::SetUniform4f(const char *uniform, float x, float y, float z, float w)
