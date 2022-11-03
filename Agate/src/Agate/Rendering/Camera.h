@@ -19,7 +19,7 @@ namespace Agate
         void onEvent(Event& ev);
         void onUpdate();
     private:
-        bool KeyPess(KeyPressedEvent &ev);
+        bool KeyPess();
         bool MouseMove(MouseMoved &ev);
 
     private:

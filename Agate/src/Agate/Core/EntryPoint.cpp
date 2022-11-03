@@ -110,3 +110,7 @@ float Agate::EntryPoint::GetDeltaTime()
 {
     return deltaTime;
 }
+void *Agate::EntryPoint::GetWindow()
+{
+    return m_window->GetWindow();
+}

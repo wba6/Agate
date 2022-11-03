@@ -22,6 +22,7 @@ namespace Agate
         void EmplaceOverlay(Layer *overlay);
         void RemoveOverlay(Layer *overlay);
         float GetDeltaTime();
+        void *GetWindow();
 
         static EntryPoint *&GetInstance();
 

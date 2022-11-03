@@ -2,6 +2,7 @@
 // Created by William Aey on 8/15/2022.
 //
 #include "Camera.h"
+#include "Agate/Core/InputPulling.h"
 #include "Core/EntryPoint.h"
 #include "Core/keyCodes.h"
 #include "agpch.h"
@@ -21,6 +22,7 @@ namespace Agate
 
     void Camera::onUpdate()
     {
+        KeyPess();
         m_deltaTime = EntryPoint::GetInstance()->GetDeltaTime();
         m_view = glm::lookAt(m_cameraPos, m_cameraPos + s_cameraFront, m_cameraUp);
         m_projection = glm::perspective(glm::radians(s_fov), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -30,24 +32,22 @@ namespace Agate
     void Camera::onEvent(Event &ev)
     {
         EventNotifier call(ev);
-        call.NotifyEvent<KeyPressedEvent>(BindFn(Camera::KeyPess));
         call.NotifyEvent<MouseMoved>(BindFn(Camera::MouseMove));
     }
 
-    bool Camera::KeyPess(KeyPressedEvent &ev)
+    bool Camera::KeyPess()
     {
 
         //TODO: temporary way of handling key presses
         //w = 87 // s = 83 // d = 68 // a == 65
-        unsigned int keyCode = ev.GetKeyCode();
         const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
-        if (keyCode == AGATE_KEY_W)
+        if (InputPulling::IsKeyPressed(AGATE_KEY_W))
             m_cameraPos += cameraSpeed * s_cameraFront;
-        if (keyCode == AGATE_KEY_S)
+        if (InputPulling::IsKeyPressed(AGATE_KEY_S))
             m_cameraPos -= cameraSpeed * s_cameraFront;
-        if (keyCode == AGATE_KEY_A)
+        if (InputPulling::IsKeyPressed(AGATE_KEY_A))
             m_cameraPos -= glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
-        if (keyCode == AGATE_KEY_D)
+        if (InputPulling::IsKeyPressed(AGATE_KEY_D))
             m_cameraPos += glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
         return false;
     }
