@@ -4,7 +4,6 @@
 //TODO: Use a bridge and a factor to create this window so that there is only one instance so the api can be exposed to client
 
 
-struct GLFWwindow;
 namespace Agate
 {
     class Context;
@@ -21,7 +20,7 @@ namespace Agate
         void GetHieght();
         void SetVSync(bool enable);
         bool GetVSyncState();
-        GLFWwindow *GetWindow();
+        void *GetWindow();
 
     private:
         void InitWindow();
@@ -34,7 +33,7 @@ namespace Agate
             bool VSyncState;
             Context *context;
         };
-        GLFWwindow *m_Window;
+        void *m_Window;
 
         WindowProperies m_windowProps;
     };

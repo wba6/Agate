@@ -1,9 +1,10 @@
 //
 // Created by William Aey on 8/15/2022.
 //
-#include "agpch.h"
 #include "Camera.h"
 #include "Core/EntryPoint.h"
+#include "Core/keyCodes.h"
+#include "agpch.h"
 namespace Agate
 {
     float Camera::s_lastX{400.f};
@@ -35,17 +36,18 @@ namespace Agate
 
     bool Camera::KeyPess(KeyPressedEvent &ev)
     {
+
         //TODO: temporary way of handling key presses
         //w = 87 // s = 83 // d = 68 // a == 65
         unsigned int keyCode = ev.GetKeyCode();
         const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
-        if (keyCode == 87)
+        if (keyCode == AGATE_KEY_W)
             m_cameraPos += cameraSpeed * s_cameraFront;
-        if (keyCode == 83)
+        if (keyCode == AGATE_KEY_S)
             m_cameraPos -= cameraSpeed * s_cameraFront;
-        if (keyCode == 65)
+        if (keyCode == AGATE_KEY_A)
             m_cameraPos -= glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
-        if (keyCode == 68)
+        if (keyCode == AGATE_KEY_D)
             m_cameraPos += glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
         return false;
     }
