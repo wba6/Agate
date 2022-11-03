@@ -3,7 +3,7 @@
 //
 
 #pragma once
-//from AGATE3.h and modified
+//from GFLW3.h and modified
 
 #define AGATE_KEY_SPACE 32
 #define AGATE_KEY_APOSTROPHE 39
