@@ -5,7 +5,6 @@
 #include "Events/MouseEvent.h"
 #include "ImGui-layer/Example_imguiLayer.h"
 #include "ImGui-layer/imgui_interface.h"
-#include "Math/Math.h"
 #include "RenderContext/CurrentContext.h"
 #include "imgui.h"
 
