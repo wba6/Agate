@@ -4,15 +4,17 @@
 
 #ifndef AGATE_SQUARE_H
 #define AGATE_SQUARE_H
-#include "Agate/Layer.h"
-#include "GameObject.h"
-#include "Agate/Rendering/OpenGl/VertexArray.h"
-#include "Agate/Rendering/OpenGl/VertexBuffer.h"
+#include "Agate/Core/Layer.h"
+#include "Agate/Rendering/Camera.h"
 #include "Agate/Rendering/OpenGl/IndexBuffer.h"
 #include "Agate/Rendering/OpenGl/Shader.h"
+#include "Agate/Rendering/OpenGl/VertexArray.h"
+#include "Agate/Rendering/OpenGl/VertexBuffer.h"
+#include "GameObject.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
 namespace Agate
 {
 
@@ -47,7 +49,8 @@ namespace Agate
         VertexLayOut layout;
         IndexBuffer IBO;
         VertexBuffer VBO;
-        VertexArray* VAO;
+        VertexArray *VAO;
+        Camera *camera;
         Shader shader;
         friend class Render;
     };

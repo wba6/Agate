@@ -1,8 +1,8 @@
 #pragma once
 #include "agpch.h"
 
-#include "../Core.h"
-#include "../Logger.h"
+#include "Agate/Core/Core.h"
+#include "Agate/Core/Logger.h"
 
 
 namespace Agate
@@ -38,7 +38,7 @@ namespace Agate
         using EventFn = std::function<bool(T &)>;
 
     public:
-        EventNotifier(Event &e)
+        explicit EventNotifier(Event &e)
             : m_Event(e){};
 
         template<typename T>

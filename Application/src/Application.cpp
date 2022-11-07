@@ -42,20 +42,19 @@ public:
     }
     void OnRender() override
     {
-        tri.Render();
-
+        //tri.Render();
 
 
         sqr.Render();
     };
     void OnEvent(Agate::Event &e) override
     {
+        sqr.OnEvent(e);
     }
     virtual ~TemplayerEx()
     {
     }
-    Agate::Render rend;
-    Agate::Triangle tri{0, 0};
+    //Agate::Triangle tri{0, 0};
     Agate::Square sqr{};
     int rotation;
 };

@@ -4,9 +4,9 @@
 #include "Event.h"
 #pragma once
 namespace Agate{
-    class KeyPressed : public Event {
+    class KeyPressedEvent : public Event {
     public:
-        KeyPressed(int keyCode)
+        KeyPressedEvent(int keyCode)
                 :m_keycode(keyCode){};
 
         EventTypes GetEventType() override
@@ -15,20 +15,29 @@ namespace Agate{
         }
         void PrintEventName() override
         {
-            std::string eventString = "KeyPressed: " + std::to_string(m_keycode);
+            std::string eventString = "KeyPressedEvent: " + std::to_string(m_keycode);
             PRINTMSG(eventString);
         }
         bool Handled() override
         {
             return this->EventFinised;
         }
+        unsigned int GetKeyCode()
+        {
+            return m_keycode;
+        }
+        static EventTypes s_GetEventType()
+        {
+            return EventTypes::KeyPressed;
+        }
+
     private:
         unsigned int m_keycode;
     };
 
-    class KeyReleased : public Event {
+    class KeyReleasedEvent : public Event {
     public:
-        KeyReleased(int keyCode)
+        KeyReleasedEvent(int keyCode)
             :m_keycode(keyCode){};
 
         EventTypes GetEventType() override
@@ -37,13 +46,22 @@ namespace Agate{
         }
         void PrintEventName() override
         {
-            std::string eventString = "KeyReleased: " + std::to_string(m_keycode);
+            std::string eventString = "KeyReleasedEvent: " + std::to_string(m_keycode);
             PRINTMSG(eventString);
         }
         bool Handled() override
         {
             return this->EventFinised;
         }
+        unsigned int GetKeyCode()
+        {
+            return m_keycode;
+        }
+        static EventTypes s_GetEventType()
+        {
+            return EventTypes::KeyReleased;
+        }
+
     private:
         unsigned int m_keycode;
     };

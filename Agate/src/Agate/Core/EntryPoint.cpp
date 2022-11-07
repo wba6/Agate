@@ -1,6 +1,5 @@
 #include "agpch.h"
 
-#include "../vender/imgui/imgui.h"
 #include "EntryPoint.h"
 #include "Events/Event.h"
 #include "Events/MouseEvent.h"
@@ -8,10 +7,12 @@
 #include "ImGui-layer/imgui_interface.h"
 #include "Math/Math.h"
 #include "RenderContext/CurrentContext.h"
+#include "imgui.h"
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 Agate::EntryPoint::EntryPoint()
+    : deltaTime{0}
 {
     s_instance = this;
 
@@ -30,7 +31,6 @@ Agate::EntryPoint::~EntryPoint()
 
 void Agate::EntryPoint::Run()
 {
-    double LastFrame = 0;
     int frameCount = 0;
     while (m_running)
     {
@@ -44,7 +44,7 @@ void Agate::EntryPoint::Run()
             m_layerStack.m_layers.at(i)->OnRender();
         }
         ImGui::Begin("Frame");
-        ImGui::Text("%s", ("Per Frame: " + std::to_string(LastFrame * 1000) + " ms").c_str() );
+        ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str() );
         ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount )).c_str() );
 
         ImGui::End();
@@ -53,9 +53,9 @@ void Agate::EntryPoint::Run()
 
         m_window->OnUpdate();
 
-        if (std::fmod(frameCount, 25.0) == 0)
+        if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1)
         {
-            LastFrame = m_window->WindowOpenTime() - FrameTime;
+            deltaTime = m_window->WindowOpenTime() - FrameTime;
         }
     };
 }
@@ -65,6 +65,7 @@ void Agate::EntryPoint::OnEvent(Event &e)
     EventNotifier notifier(e);
 
     notifier.NotifyEvent<WindowCloseEvent>(BindFn(EntryPoint::OnWindowClose));
+    e.PrintEventName();
 
 
     for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
@@ -104,4 +105,12 @@ void Agate::EntryPoint::RemoveOverlay(Layer *overlay)
 Agate::EntryPoint *&Agate::EntryPoint::GetInstance()
 {
     return s_instance;
+}
+float Agate::EntryPoint::GetDeltaTime()
+{
+    return deltaTime;
+}
+void *Agate::EntryPoint::GetWindow()
+{
+    return m_window->GetWindow();
 }

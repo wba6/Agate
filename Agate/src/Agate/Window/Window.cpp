@@ -25,17 +25,17 @@ namespace Agate
         glfwSetErrorCallback(GlfwError);
 
         m_Window = glfwCreateWindow(m_windowProps.width, m_windowProps.height, m_windowProps.name.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(m_Window);
+        glfwMakeContextCurrent((GLFWwindow *) m_Window);
 
         m_windowProps.context = new OpenGL;
         m_windowProps.context->CreateContext();
 
-        glfwSetWindowUserPointer(m_Window, &m_windowProps);
+        glfwSetWindowUserPointer((GLFWwindow *) m_Window, &m_windowProps);
 
 
         SetVSync(true);
 
-        glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window) {
+        glfwSetWindowCloseCallback((GLFWwindow *) m_Window, [](GLFWwindow *window) {
             //need this bc lambda can't access non-static class members
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
@@ -43,36 +43,36 @@ namespace Agate
             data.callback(event);
         });
 
-        glfwSetCursorPosCallback(m_Window, [](GLFWwindow *window, double xpos, double ypos) {
+        glfwSetCursorPosCallback((GLFWwindow *) m_Window, [](GLFWwindow *window, double xpos, double ypos) {
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
             MouseMoved event((int) xpos, (int) ypos);
             data.callback(event);
         });
 
-        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow *window, int button, int action, int mods) {
+        glfwSetMouseButtonCallback((GLFWwindow *) m_Window, [](GLFWwindow *window, int button, int action, int mods) {
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
             MouseButtonPressed event((int) button);
             data.callback(event);
         });
 
-        glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+        glfwSetKeyCallback((GLFWwindow *) m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
             if (action == GLFW_PRESS)
             {
-                KeyPressed event(key);
+                KeyPressedEvent event(key);
                 data.callback(event);
             }
             else
             {
-                KeyReleased event(key);
+                KeyReleasedEvent event(key);
                 data.callback(event);
             }
         });
 
-        glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height) {
+        glfwSetWindowSizeCallback((GLFWwindow *) m_Window, [](GLFWwindow *window, int width, int height) {
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
             WindowResizedEvent event(width, height);
@@ -90,7 +90,7 @@ namespace Agate
     void Window::OnUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window);
+        glfwSwapBuffers((GLFWwindow *) m_Window);
     }
 
     void Window::GetWidth()
@@ -119,13 +119,13 @@ namespace Agate
     {
         return m_windowProps.VSyncState;
     }
-    GLFWwindow *Window::GetWindow()
+    void *Window::GetWindow()
     {
         return m_Window;
     }
     Window::~Window()
     {
-        glfwDestroyWindow(m_Window);
+        glfwDestroyWindow((GLFWwindow *) m_Window);
         delete m_windowProps.context;
     }
     double Window::WindowOpenTime()

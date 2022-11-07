@@ -3,9 +3,9 @@
 //
 #include "agpch.h"
 
+#include "Agate/Core/Logger.h"
 #include "Context.h"
 #include "CurrentContext.h"
-#include "Logger.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 namespace Agate

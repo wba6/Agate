@@ -1,9 +1,9 @@
 #pragma once
 #include "Core.h"
-#include "Events/ApplicationEvents.h"
-#include "Events/Event.h"
+#include "Agate/Events/ApplicationEvents.h"
+#include "Agate/Events/Event.h"
 #include "LayerStack.h"
-#include "Window/Window.h"
+#include "Agate/Window/Window.h"
 
 namespace Agate
 {
@@ -21,6 +21,8 @@ namespace Agate
         void RemoveLayer(Layer *layer);
         void EmplaceOverlay(Layer *overlay);
         void RemoveOverlay(Layer *overlay);
+        float GetDeltaTime();
+        void *GetWindow();
 
         static EntryPoint *&GetInstance();
 
@@ -28,6 +30,7 @@ namespace Agate
         std::shared_ptr<Window> m_window;
         LayerStack m_layerStack;
         bool m_running;
+        float deltaTime;
 
     private:
         static EntryPoint *s_instance;
