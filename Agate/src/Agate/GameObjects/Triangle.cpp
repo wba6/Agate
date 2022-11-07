@@ -17,7 +17,7 @@ namespace Agate
           layout({0, 3, false, 3 * sizeof(float), 0}),
           IBO{indices,STATIC_DRAW},
           VBO{vertices, STATIC_DRAW},
-          shader("Shaders/Basic.vs.shader", "Shaders/Basic.fg.shader")
+          shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl")
     {
         VBO.Bind();
         VAO = new VertexArray(layout);
@@ -30,7 +30,7 @@ namespace Agate
           layout({0, 3, false, 3 * sizeof(float), 0}),
           IBO{indices,STATIC_DRAW},
           VBO{vertices, STATIC_DRAW},
-          shader("Shaders/Basic.vs.shader", "Shaders/Basic.fg.shader")
+          shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl")
     {
         VBO.Bind();
         VAO = new VertexArray(layout);
