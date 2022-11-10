@@ -31,7 +31,7 @@ namespace Agate
         m_windowProps.context->CreateContext();
 
         glfwSetWindowUserPointer((GLFWwindow *) m_Window, &m_windowProps);
-
+        glfwSetInputMode((GLFWwindow *) m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         SetVSync(true);
 
@@ -131,6 +131,18 @@ namespace Agate
     double Window::WindowOpenTime()
     {
         return glfwGetTime();
+    }
+    void Window::GrabCursor(bool cursor)
+    {
+        if (!cursor)
+        {
+
+            glfwSetInputMode((GLFWwindow *) m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        else
+        {
+            glfwSetInputMode((GLFWwindow *) m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
     }
 
 

@@ -49,6 +49,11 @@ namespace Agate
             m_cameraPos -= glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
         if (InputPulling::IsKeyPressed(AGATE_KEY_D))
             m_cameraPos += glm::normalize(glm::cross(s_cameraFront, m_cameraUp)) * cameraSpeed;
+        if (InputPulling::IsKeyPressed(AGATE_KEY_SPACE))
+            m_cameraPos += m_cameraUp * cameraSpeed;
+        if (InputPulling::IsKeyPressed(AGATE_KEY_LEFT_CONTROL))
+            m_cameraPos -= m_cameraUp * cameraSpeed;
+
         return false;
     }
     bool Camera::MouseMove(MouseMoved &ev)

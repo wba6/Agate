@@ -18,6 +18,7 @@ namespace Agate
         double WindowOpenTime();
         void GetWidth();
         void GetHieght();
+        void GrabCursor(bool cursor);
         void SetVSync(bool enable);
         bool GetVSyncState();
         void *GetWindow();
