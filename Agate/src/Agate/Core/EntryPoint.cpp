@@ -17,7 +17,7 @@ Agate::EntryPoint::EntryPoint()
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
     m_running = true;
-    imgui_interface::Init(m_window->GetWindow());
+    imgui_interface::Init(m_window->GetInstanceWindow());
 
     //m_layerStack.AddOverlay(new Example_imguiLayer());
     CurrentContext::OpenGL = true;
@@ -109,7 +109,7 @@ float Agate::EntryPoint::GetDeltaTime()
 {
     return deltaTime;
 }
-void *Agate::EntryPoint::GetWindow()
+std::shared_ptr<Agate::Window> Agate::EntryPoint::GetWindow()
 {
-    return m_window->GetWindow();
+    return m_window;
 }

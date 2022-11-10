@@ -8,6 +8,7 @@
 #include "agpch.h"
 namespace Agate
 {
+    bool Agate::Camera::s_Active = false;
     float Camera::s_lastX{400.f};
     float Camera::s_lastY{300.f};
     bool Camera::s_firstMouse{true};
@@ -33,11 +34,13 @@ namespace Agate
     {
         EventNotifier call(ev);
         call.NotifyEvent<MouseMoved>(BindFn(Camera::MouseMove));
+        call.NotifyEvent<KeyPressedEvent>(BindFn(Camera::releaseCamera));
     }
 
     bool Camera::KeyPess()
     {
-
+        if (!s_Active)
+            return false;
         //TODO: temporary way of handling key presses
         //w = 87 // s = 83 // d = 68 // a == 65
         const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
@@ -54,10 +57,12 @@ namespace Agate
         if (InputPulling::IsKeyPressed(AGATE_KEY_LEFT_CONTROL))
             m_cameraPos -= m_cameraUp * cameraSpeed;
 
-        return false;
+        return true;
     }
     bool Camera::MouseMove(MouseMoved &ev)
     {
+        if (!s_Active)
+            return false;
         int xpos = ev.GetXPos();
         int ypos = ev.GetYPos();
         if (s_firstMouse)// initially set to true
@@ -84,6 +89,23 @@ namespace Agate
         direction.y = sin(glm::radians(s_pitch));
         direction.z = sin(glm::radians(s_yaw)) * cos(glm::radians(s_pitch));
         s_cameraFront = glm::normalize(direction);
+        return true;
+    }
+    bool Camera::releaseCamera(KeyPressedEvent &e)
+    {
+
+        if ((e.GetKeyCode() == AGATE_KEY_ESCAPE) && !s_Active)
+        {
+            Agate::EntryPoint::GetInstance()->GetWindow()->GrabCursor(true);
+            s_Active = true;
+            return true;
+        }
+        else if (s_Active && (e.GetKeyCode() == AGATE_KEY_ESCAPE))
+        {
+            Agate::EntryPoint::GetInstance()->GetWindow()->GrabCursor(false);
+            s_Active = false;
+            return true;
+        }
         return false;
     }
 }// namespace Agate

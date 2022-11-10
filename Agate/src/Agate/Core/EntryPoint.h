@@ -22,7 +22,7 @@ namespace Agate
         void EmplaceOverlay(Layer *overlay);
         void RemoveOverlay(Layer *overlay);
         float GetDeltaTime();
-        void *GetWindow();
+        std::shared_ptr<Agate::Window> GetWindow();
 
         static EntryPoint *&GetInstance();
 

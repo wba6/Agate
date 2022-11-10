@@ -16,12 +16,12 @@ namespace Agate
 
         void OnUpdate();
         double WindowOpenTime();
-        void GetWidth();
-        void GetHieght();
+        int GetWidth();
+        int GetHieght();
         void GrabCursor(bool cursor);
         void SetVSync(bool enable);
         bool GetVSyncState();
-        void *GetWindow();
+        void *GetInstanceWindow();
 
     private:
         void InitWindow();

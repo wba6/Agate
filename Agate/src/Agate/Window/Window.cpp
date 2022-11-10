@@ -31,7 +31,7 @@ namespace Agate
         m_windowProps.context->CreateContext();
 
         glfwSetWindowUserPointer((GLFWwindow *) m_Window, &m_windowProps);
-        glfwSetInputMode((GLFWwindow *) m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode((GLFWwindow *) m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
         SetVSync(true);
 
@@ -93,12 +93,14 @@ namespace Agate
         glfwSwapBuffers((GLFWwindow *) m_Window);
     }
 
-    void Window::GetWidth()
+    int Window::GetWidth()
     {
+        return m_windowProps.width;
     }
 
-    void Window::GetHieght()
+    int Window::GetHieght()
     {
+        return m_windowProps.width;
     }
 
     void Window::SetVSync(bool enable)
@@ -119,7 +121,7 @@ namespace Agate
     {
         return m_windowProps.VSyncState;
     }
-    void *Window::GetWindow()
+    void *Window::GetInstanceWindow()
     {
         return m_Window;
     }
@@ -134,9 +136,8 @@ namespace Agate
     }
     void Window::GrabCursor(bool cursor)
     {
-        if (!cursor)
+        if (cursor)
         {
-
             glfwSetInputMode((GLFWwindow *) m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
         else
