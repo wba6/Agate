@@ -8,7 +8,6 @@
 #include "agpch.h"
 namespace Agate
 {
-    bool Agate::Camera::s_Active = false;
     float Camera::s_lastX{400.f};
     float Camera::s_lastY{300.f};
     bool Camera::s_firstMouse{true};
@@ -18,11 +17,12 @@ namespace Agate
     glm::vec3 Camera::s_cameraFront{glm::vec3(0.0f, 0.0f, -1.0f)};
 
     Camera::Camera(Shader &shaderObj)
-        : m_deltaTime(0.0f), m_lastFrame(0.0f), m_Shader(shaderObj), m_cameraPos(glm::vec3(0.0f, 0.0f, 3.0f)), m_cameraUp(glm::vec3(0.0f, 1.0f, 0.0f))
+        : s_Active(false), m_deltaTime(0.0f), m_lastFrame(0.0f), m_Shader(shaderObj), m_cameraPos(glm::vec3(0.0f, 0.0f, 3.0f)), m_cameraUp(glm::vec3(0.0f, 1.0f, 0.0f))
     {}
 
     void Camera::onUpdate()
     {
+        MouseMove();
         KeyPess();
         m_deltaTime = EntryPoint::GetInstance()->GetDeltaTime();
         m_view = glm::lookAt(m_cameraPos, m_cameraPos + s_cameraFront, m_cameraUp);
@@ -33,7 +33,6 @@ namespace Agate
     void Camera::onEvent(Event &ev)
     {
         EventNotifier call(ev);
-        call.NotifyEvent<MouseMoved>(BindFn(Camera::MouseMove));
         call.NotifyEvent<KeyPressedEvent>(BindFn(Camera::releaseCamera));
     }
 
@@ -59,20 +58,20 @@ namespace Agate
 
         return true;
     }
-    bool Camera::MouseMove(MouseMoved &ev)
+    bool Camera::MouseMove()
     {
         if (!s_Active)
             return false;
-        int xpos = ev.GetXPos();
-        int ypos = ev.GetYPos();
+        double xpos = InputPulling::GetXMousePos();
+        double ypos = InputPulling::GetYMousePos();
         if (s_firstMouse)// initially set to true
         {
             s_lastX = xpos;
             s_lastY = ypos;
             s_firstMouse = false;
         }
-        float xoffset = xpos - s_lastX;
-        float yoffset = s_lastY - ypos;// reversed since y-coordinates range from bottom to
+        double xoffset = xpos - s_lastX;
+        double yoffset = s_lastY - ypos;// reversed since y-coordinates range from bottom to
         s_lastX = xpos;
         s_lastY = ypos;
         const float sensitivity = 0.1f;

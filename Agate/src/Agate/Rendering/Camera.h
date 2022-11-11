@@ -21,14 +21,14 @@ namespace Agate
     private:
         bool KeyPess();
         bool releaseCamera(KeyPressedEvent &e);
-        bool MouseMove(MouseMoved &ev);
+        bool MouseMove();
 
     private:
         static float s_lastX, s_lastY,s_yaw, s_pitch, s_fov;
         static bool s_firstMouse;
-        static bool s_Active;
         static glm::vec3 s_cameraFront;
         float m_lastFrame;
+        bool s_Active;
         Shader &m_Shader;
         glm::mat4 m_projection;
         glm::vec3 m_cameraPos;

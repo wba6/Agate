@@ -13,3 +13,16 @@ bool InputPulling::IsKeyPressed(unsigned int keycode)
     }
     return false;
 }
+double InputPulling::GetXMousePos()
+{
+    double x, y;
+    glfwGetCursorPos((GLFWwindow *) Agate::EntryPoint::GetInstance()->GetWindow()->GetInstanceWindow(), &x, &y);
+    return x;
+}
+
+double InputPulling::GetYMousePos()
+{
+    double x, y;
+    glfwGetCursorPos((GLFWwindow *) Agate::EntryPoint::GetInstance()->GetWindow()->GetInstanceWindow(), &x, &y);
+    return y;
+}
