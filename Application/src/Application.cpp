@@ -33,7 +33,7 @@ public:
     void Attach() override
     {
         PRINTMSG("Attached triangle layer")
-        //sqr.rotation = glm::radians(45.0f);
+        sqr.rotation = glm::radians(45.0f);
         tri.rotation = glm::radians(45.0f);
         sqr.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
         tri.color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
@@ -58,7 +58,7 @@ public:
     {
     }
     Agate::Triangle tri{0, 0};
-    Agate::Square sqr{};
+    Agate::Square sqr{1, 0};
     int rotation;
 };
 

@@ -14,9 +14,9 @@ namespace Agate
     }
 
     Triangle::Triangle(int xpos, int ypos)
-        :  GameObject(0,0,0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
+        : GameObject(xpos, ypos, 0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
           layout({0, 3, false, 3 * sizeof(float), 0}),
-          IBO{indices,STATIC_DRAW},
+          IBO{indices, STATIC_DRAW},
           VBO{vertices, STATIC_DRAW},
           shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl")
     {
@@ -64,6 +64,8 @@ namespace Agate
         camera->onUpdate();
 
         glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(x, y, 0));
+        model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
         shader.SetUniformMat4("model", model);
 
         Render::IndexRender(VAO, VBO, IBO, shader);
