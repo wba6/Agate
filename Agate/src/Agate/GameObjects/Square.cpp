@@ -23,6 +23,7 @@ namespace Agate
         VAO->Bind();
         VBO.UnBind();
         VAO->UnBind();
+        camera = new Camera(shader);
     }
     Square::Square()
         : GameObject(0,0,0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
@@ -55,7 +56,6 @@ namespace Agate
     }
     Square::~Square()
     {
-        delete camera;
         delete VAO;
     }
     void Square::Render()

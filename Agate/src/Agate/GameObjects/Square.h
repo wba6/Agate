@@ -50,7 +50,6 @@ namespace Agate
         IndexBuffer IBO;
         VertexBuffer VBO;
         VertexArray *VAO;
-        Camera *camera;
         Shader shader;
         friend class Render;
     };
