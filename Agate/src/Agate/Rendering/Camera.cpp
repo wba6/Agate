@@ -97,6 +97,7 @@ namespace Agate
         {
             Agate::EntryPoint::GetInstance()->GetWindow()->GrabCursor(true);
             s_Active = true;
+            s_firstMouse = true;
             return true;
         }
         else if (s_Active && (e.GetKeyCode() == AGATE_KEY_ESCAPE))
