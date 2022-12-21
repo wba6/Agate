@@ -5,6 +5,12 @@
 #pragma once
 
 #include "Agate/Rendering/Camera.h"
+
+enum GameObjectType{
+    Square,
+    Triangle
+};
+
 namespace Agate{
     class GameObject {
     public:
@@ -13,6 +19,8 @@ namespace Agate{
         virtual void Render() = 0;
         virtual void setXPos(int xPos) = 0;
         virtual void setYPos(int yPos) = 0;
+        virtual GameObjectType GetObjectType() = 0;
+        virtual char* GetObjectString() = 0;
         virtual ~GameObject()
         {
             delete camera;

@@ -1,4 +1,5 @@
 #include "agpch.h"
+#include <GameObjects/GameObjectsUI.h>
 
 #include "EntryPoint.h"
 #include "Events/Event.h"
@@ -18,7 +19,7 @@ Agate::EntryPoint::EntryPoint()
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
     m_running = true;
     imgui_interface::Init(m_window->GetInstanceWindow());
-
+    m_layerStack.AddOverlay(new GameObjectsUI);
     //m_layerStack.AddOverlay(new Example_imguiLayer());
     CurrentContext::OpenGL = true;
 }

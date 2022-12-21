@@ -24,6 +24,8 @@ namespace Agate
         Square();
         ~Square();
         virtual void OnEvent(Event &e) override;
+        virtual GameObjectType GetObjectType() override;
+        char* GetObjectString() override;
 
         void Render() override;
         void setXPos(int xPos)override;

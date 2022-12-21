@@ -23,6 +23,9 @@ namespace Agate
         Triangle();
         virtual ~Triangle();
         void OnEvent(Event &e) override;
+        GameObjectType GetObjectType() override;
+        char* GetObjectString() override;
+
 
         void Render() override;
         void setXPos(int xPos) override;

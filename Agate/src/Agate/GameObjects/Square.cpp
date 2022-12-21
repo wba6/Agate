@@ -4,6 +4,8 @@
 
 #include "Square.h"
 #include "Rendering/OpenGl/Render.h"
+#include "GameObjectsUI.h"
+
 namespace Agate
 {
     void Square::OnEvent(Event &e)
@@ -24,6 +26,8 @@ namespace Agate
         VBO.UnBind();
         VAO->UnBind();
         camera = new Camera(shader);
+        GameObjectsUI::AddObject(this);
+
     }
     Square::Square()
         : GameObject(0,0,0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
@@ -38,6 +42,8 @@ namespace Agate
         VBO.UnBind();
         VAO->UnBind();
         camera = new Camera(shader);
+        GameObjectsUI::AddObject(this);
+
     }
     void Square::setXPos(int xPos)
     {
@@ -71,5 +77,13 @@ namespace Agate
         shader.SetUniformMat4("model", model);
 
         Render::IndexRender(VAO, VBO, IBO, shader);
+    }
+    GameObjectType Square::GetObjectType()
+    {
+        return GameObjectType::Square;
+    }
+    char *Square::GetObjectString()
+    {
+        return "Square";
     }
 }// namespace Agate

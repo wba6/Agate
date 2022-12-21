@@ -4,7 +4,7 @@
 
 #include "Triangle.h"
 #include "Rendering/OpenGl/Render.h"
-
+#include "GameObjectsUI.h"
 namespace Agate
 {
 
@@ -26,6 +26,7 @@ namespace Agate
         VBO.UnBind();
         VAO->UnBind();
         camera = new Camera(shader);
+        GameObjectsUI::AddObject(this);
     }
     Triangle::Triangle()
         :  GameObject(0,0,0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
@@ -39,7 +40,8 @@ namespace Agate
         VAO->Bind();
         VBO.UnBind();
         VAO->UnBind();
-        //camera = new Camera(shader);
+        camera = new Camera(shader);
+        GameObjectsUI::AddObject(this);
     }
     void Triangle::setXPos(int xPos)
     {
@@ -73,6 +75,14 @@ namespace Agate
     Triangle::~Triangle()
     {
         delete VAO;
+    }
+    GameObjectType Triangle::GetObjectType()
+    {
+        return GameObjectType::Triangle;
+    }
+    char *Triangle::GetObjectString()
+    {
+        return "Triangle";
     }
 
 
