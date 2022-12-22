@@ -16,21 +16,13 @@ void Agate::GameObjectsUI::OnRender()
         if (ImGui::CollapsingHeader(m_gameobjects.at(i)->GetObjectString()))
         {
             ImGui::Text("Positions");
-            ImGui::BulletText("%s", ("Xpos: " + std::to_string(m_gameobjects.at(i)->x)).c_str());
-
             ImGui::Separator();
-
-            ImGui::Text("PROGRAMMER GUIDE:");
-            ImGui::BulletText("See the ShowDemoWindow() code in imgui_demo.cpp. <- you are here!");
-            ImGui::BulletText("See comments in imgui.cpp.");
-            ImGui::BulletText("See example applications in the examples/ folder.");
-            ImGui::BulletText("Read the FAQ at http://www.dearimgui.org/faq/");
-            ImGui::BulletText("Set 'io.ConfigFlags |= NavEnableKeyboard' for keyboard controls.");
-            ImGui::BulletText("Set 'io.ConfigFlags |= NavEnableGamepad' for gamepad controls.");
-            ImGui::Separator();
-
-            ImGui::Text("USER GUIDE:");
-            ImGui::ShowUserGuide();
+            ImGui::Text("xPos");
+            ImGui::SameLine();
+            ImGui::InputFloat(",", &m_gameobjects.at(i)->x, 1);
+            ImGui::Text("yPos");
+            ImGui::SameLine();
+            ImGui::InputFloat(";", &m_gameobjects.at(i)->y, 1);
         }
     }
     ImGui::End();

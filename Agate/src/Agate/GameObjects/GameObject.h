@@ -26,7 +26,7 @@ namespace Agate{
             delete camera;
         }
 
-        int x, y;
+        float x, y;
         float rotation;
         Camera *camera;
     };
