@@ -20,7 +20,8 @@ namespace Agate{
         virtual void setXPos(int xPos) = 0;
         virtual void setYPos(int yPos) = 0;
         virtual GameObjectType GetObjectType() = 0;
-        virtual char* GetObjectString() = 0;
+        virtual std::string GetObjectString() = 0;
+        virtual int GetInstanceNumber() { return instanceNumber; }
         virtual ~GameObject()
         {
             delete camera;
@@ -28,6 +29,7 @@ namespace Agate{
 
         float x, y;
         float rotation;
+        int instanceNumber;
         Camera *camera;
     };
 }

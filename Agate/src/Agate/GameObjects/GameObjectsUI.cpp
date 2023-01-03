@@ -4,6 +4,7 @@
 
 #include "GameObjectsUI.h"
 #include "../../../vender/imgui/imgui.h"
+
 std::vector<Agate::GameObject*> Agate::GameObjectsUI::m_gameobjects;
 
 
@@ -13,7 +14,7 @@ void Agate::GameObjectsUI::OnRender()
     ImGui::Begin("GameObjects");
     for (int i = 0; i < m_gameobjects.size(); ++i)
     {
-        if (ImGui::CollapsingHeader(m_gameobjects.at(i)->GetObjectString()))
+        if (ImGui::CollapsingHeader((m_gameobjects.at(i)->GetObjectString() + std::to_string(m_gameobjects.at(i)->GetInstanceNumber())).c_str()))
         {
             ImGui::Text("Positions");
             ImGui::Separator();

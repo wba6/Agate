@@ -7,7 +7,7 @@
 #include "GameObjectsUI.h"
 namespace Agate
 {
-
+    int Triangle::s_instanceNumberCounter = 0;
     void Triangle::OnEvent(Event &e)
     {
         camera->onEvent(e);
@@ -20,6 +20,7 @@ namespace Agate
           VBO{vertices, STATIC_DRAW},
           shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl")
     {
+        instanceNumber = ++s_instanceNumberCounter;
         VBO.Bind();
         VAO = new VertexArray(layout);
         VAO->Bind();
@@ -28,21 +29,7 @@ namespace Agate
         camera = new Camera(shader);
         GameObjectsUI::AddObject(this);
     }
-    Triangle::Triangle()
-        :  GameObject(0,0,0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
-          layout({0, 3, false, 3 * sizeof(float), 0}),
-          IBO{indices,STATIC_DRAW},
-          VBO{vertices, STATIC_DRAW},
-          shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl")
-    {
-        VBO.Bind();
-        VAO = new VertexArray(layout);
-        VAO->Bind();
-        VBO.UnBind();
-        VAO->UnBind();
-        camera = new Camera(shader);
-        GameObjectsUI::AddObject(this);
-    }
+
     void Triangle::setXPos(int xPos)
     {
         x = xPos;
@@ -80,9 +67,9 @@ namespace Agate
     {
         return GameObjectType::Triangle;
     }
-    char *Triangle::GetObjectString()
+    std::string Triangle::GetObjectString()
     {
-        return "Triangle";
+        return "Triangle ";
     }
 
 

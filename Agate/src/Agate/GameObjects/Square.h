@@ -20,12 +20,11 @@ namespace Agate
 
     class Square:public Layer , public GameObject{
     public:
-        Square(int xpos, int ypos);
-        Square();
+        Square(int xpos = 0, int ypos = 0);
         ~Square();
         virtual void OnEvent(Event &e) override;
         virtual GameObjectType GetObjectType() override;
-        char* GetObjectString() override;
+        std::string GetObjectString() override;
 
         void Render() override;
         void setXPos(int xPos)override;
@@ -53,6 +52,7 @@ namespace Agate
         VertexBuffer VBO;
         VertexArray *VAO;
         Shader shader;
+        static int s_instanceNumberCounter;
         friend class Render;
     };
 

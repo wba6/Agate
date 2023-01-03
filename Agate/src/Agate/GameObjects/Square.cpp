@@ -8,6 +8,7 @@
 
 namespace Agate
 {
+    int Square::s_instanceNumberCounter = 0;
     void Square::OnEvent(Event &e)
     {
         camera->onEvent(e);
@@ -20,6 +21,7 @@ namespace Agate
           IBO{indices, STATIC_DRAW},
           shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl")
     {
+        instanceNumber = ++s_instanceNumberCounter;
         VBO.Bind();
         VAO = new VertexArray(layout);
         VAO->Bind();
@@ -29,22 +31,7 @@ namespace Agate
         GameObjectsUI::AddObject(this);
 
     }
-    Square::Square()
-        : GameObject(0,0,0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
-          layout({0, 3, false, 3 * sizeof(float), 0}),
-          VBO{vertices, STATIC_DRAW},
-          IBO{indices,STATIC_DRAW},
-          shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl")
-    {
-        VBO.Bind();
-        VAO = new VertexArray(layout);
-        VAO->Bind();
-        VBO.UnBind();
-        VAO->UnBind();
-        camera = new Camera(shader);
-        GameObjectsUI::AddObject(this);
 
-    }
     void Square::setXPos(int xPos)
     {
         x = xPos;
@@ -82,8 +69,9 @@ namespace Agate
     {
         return GameObjectType::Square;
     }
-    char *Square::GetObjectString()
+    std::string Square::GetObjectString()
     {
-        return "Square";
+        return "Square ";
     }
+
 }// namespace Agate

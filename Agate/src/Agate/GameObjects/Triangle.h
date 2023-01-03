@@ -19,12 +19,11 @@ namespace Agate
 
     class Triangle : public Layer, public GameObject {
     public:
-        Triangle(int xpos, int ypos);
-        Triangle();
+        Triangle(int xpos = 0, int ypos = 0);
         virtual ~Triangle();
         void OnEvent(Event &e) override;
         GameObjectType GetObjectType() override;
-        char* GetObjectString() override;
+        std::string GetObjectString() override;
 
 
         void Render() override;
@@ -48,6 +47,7 @@ namespace Agate
         VertexBuffer VBO;
         VertexArray* VAO;
         Shader shader;
+        static int s_instanceNumberCounter;
         friend class Render;
     };
 }// namespace Agate
