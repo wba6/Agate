@@ -17,7 +17,7 @@ void Agate::GameObjectsUI::OnRender()
     {
         if (ImGui::CollapsingHeader((m_gameobjects.at(i)->GetObjectString() + std::to_string(m_gameobjects.at(i)->GetInstanceNumber())).c_str()))
         {
-            ImGui::Text("Positions");
+            ImGui::Text("Positions:");
             ImGui::Separator();
             ImGui::Text("xPos");
             ImGui::SameLine();
@@ -25,6 +25,9 @@ void Agate::GameObjectsUI::OnRender()
             ImGui::Text("yPos");
             ImGui::SameLine();
             ImGui::InputFloat(";", &m_gameobjects.at(i)->y, 1);
+            ImGui::Text("Color:");
+            ImGui::SameLine();
+            ImGui::ColorEdit4("##RefColor", &m_gameobjects.at(i)->color[0]);
         }
     }
     ImGui::End();

@@ -16,7 +16,7 @@ namespace Agate
 {
     class GameObject {
     public:
-        explicit GameObject(int x, int y, float rotation) : x(x), y(y), rotation(rotation){};
+        explicit GameObject(int x, int y, float rotation) : x(x), y(y), rotation(rotation), color(0){};
 
         virtual void Render() = 0;
         virtual void setXPos(int xPos) = 0;
@@ -28,7 +28,7 @@ namespace Agate
         {
             delete camera;
         }
-
+        glm::vec4 color;
         float x, y;
         float rotation;
         int instanceNumber;

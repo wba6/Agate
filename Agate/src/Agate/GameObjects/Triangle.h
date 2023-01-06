@@ -32,7 +32,6 @@ namespace Agate
         void setColor(int r, int g, int b, int a);
 
 
-        glm::vec4 color;
 
     private:
         std::vector<float> vertices = {

@@ -14,7 +14,7 @@ namespace Agate
     }
 
     Square::Square(int xpos, int ypos)
-        : GameObject(xpos, ypos, 0.0f), color(1.0f, 1.0f, 1.0f, 1.0f),
+        : GameObject(xpos, ypos, 0.0f),
           layout({0, 3, false, 3 * sizeof(float), 0}),
           VBO{vertices, STATIC_DRAW},
           IBO{indices, STATIC_DRAW},
