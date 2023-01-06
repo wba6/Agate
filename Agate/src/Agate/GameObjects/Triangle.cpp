@@ -3,7 +3,6 @@
 //
 
 #include "Triangle.h"
-#include "GameObjectsUI.h"
 #include "Rendering/OpenGl/Render.h"
 namespace Agate
 {

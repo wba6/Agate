@@ -3,7 +3,8 @@
 //
 
 #include "GameObjectsUI.h"
-#include "../../../vender/imgui/imgui.h"
+#include "../GameObject.h"
+#include "imgui.h"
 
 std::vector<Agate::GameObject *> Agate::GameObjectsUI::m_gameobjects;
 

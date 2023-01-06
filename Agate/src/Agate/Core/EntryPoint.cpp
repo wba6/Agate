@@ -1,5 +1,5 @@
 #include "agpch.h"
-#include <GameObjects/GameObjectsUI.h>
+#include <GameObjects/GameObjectUI/GameObjectsUI.h>
 
 #include "EntryPoint.h"
 #include "Events/Event.h"

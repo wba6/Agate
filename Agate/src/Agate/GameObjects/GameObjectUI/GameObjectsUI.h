@@ -5,9 +5,9 @@
 #ifndef AGATE_GAMEOBJECTSUI_H
 #define AGATE_GAMEOBJECTSUI_H
 #include "Agate/Core/Layer.h"
-#include "GameObject.h"
 namespace Agate
 {
+    class GameObject;
     class GameObjectsUI : public Layer {
     public:
         GameObjectsUI();

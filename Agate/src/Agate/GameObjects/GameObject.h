@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Agate/Rendering/Camera.h"
+#include "GameObjectUI/GameObjectsUI.h"
 
 enum GameObjectType {
     Square,
