@@ -17,11 +17,13 @@ void Agate::GameObjectsUI::OnRender()
     ImGui::Begin("GameObjects");
     for (int i = 0; i < m_gameobjects.size(); ++i)
     {
+        //need to pushID because else ImGui will not be able to tell the collapsing headers apart leading to crashes
+        ImGui::PushID(i);
         if (ImGui::CollapsingHeader((m_gameobjects.at(i)->GetObjectString() + std::to_string(m_gameobjects.at(i)->GetInstanceNumber())).c_str()))
         {
             /*
-             * TODO: Will crash if multiple headers are open and you modify color
-             *
+             * TODO:Menu needs redesigned
+             * select object then display properties menu for object will prevent current crash
              * */
 
             ImGui::Text("Positions:");
@@ -36,6 +38,7 @@ void Agate::GameObjectsUI::OnRender()
             ImGui::SameLine();
             ImGui::ColorEdit4("##RefColor", glm::value_ptr(m_gameobjects.at(i)->color));
         }
+        ImGui::PopID();
     }
     ImGui::End();
 }
