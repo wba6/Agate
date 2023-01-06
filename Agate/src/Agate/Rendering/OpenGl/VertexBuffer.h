@@ -20,7 +20,7 @@ namespace Agate
 
     class VertexBuffer {
     public:
-        explicit VertexBuffer(const std::vector<float>& vertices, int32_t drawtype);
+        explicit VertexBuffer(const std::vector<float> &vertices, int32_t drawtype);
         void Bind();
         void UnBind();
 

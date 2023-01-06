@@ -6,12 +6,13 @@
 
 #include "Agate/Rendering/Camera.h"
 
-enum GameObjectType{
+enum GameObjectType {
     Square,
     Triangle
 };
 
-namespace Agate{
+namespace Agate
+{
     class GameObject {
     public:
         explicit GameObject(int x, int y, float rotation) : x(x), y(y), rotation(rotation){};
@@ -32,4 +33,4 @@ namespace Agate{
         int instanceNumber;
         Camera *camera;
     };
-}
+}// namespace Agate

@@ -4,18 +4,19 @@
 
 #ifndef AGATE_GAMEOBJECTSUI_H
 #define AGATE_GAMEOBJECTSUI_H
-#include "GameObject.h"
 #include "Agate/Core/Layer.h"
+#include "GameObject.h"
 namespace Agate
 {
     class GameObjectsUI : public Layer {
     public:
         GameObjectsUI();
-        static void AddObject(GameObject* go);
+        static void AddObject(GameObject *go);
         void OnRender() override;
+
     private:
-        static std::vector<GameObject*> m_gameobjects;
+        static std::vector<GameObject *> m_gameobjects;
     };
-}
+}// namespace Agate
 
 #endif//AGATE_GAMEOBJECTSUI_H

@@ -1,9 +1,9 @@
 #pragma once
-#include "Core.h"
 #include "Agate/Events/ApplicationEvents.h"
 #include "Agate/Events/Event.h"
-#include "LayerStack.h"
 #include "Agate/Window/Window.h"
+#include "Core.h"
+#include "LayerStack.h"
 
 namespace Agate
 {

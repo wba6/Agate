@@ -13,6 +13,7 @@ namespace Agate
         static void printWarn(std::string msg);
         static void printError(std::string msg);
         static void printCrit(std::string msg);
+
     private:
         static std::shared_ptr<spdlog::logger> s_Logger;
     };

@@ -33,9 +33,8 @@ namespace Agate
             s_Logger->set_pattern("%^[%l][%n]%$[%H:%M:%S] %v");
             s_Logger->set_level(spdlog::level::trace);
             s_Logger->critical("Logger initialization");
-
         }
-        catch (const spdlog::spdlog_ex& ex)
+        catch (const spdlog::spdlog_ex &ex)
         {
             std::cout << "Log initialization failed: " << ex.what() << std::endl;
         }

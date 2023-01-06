@@ -3,8 +3,8 @@
 //
 
 #include "Triangle.h"
-#include "Rendering/OpenGl/Render.h"
 #include "GameObjectsUI.h"
+#include "Rendering/OpenGl/Render.h"
 namespace Agate
 {
     int Triangle::s_instanceNumberCounter = 0;

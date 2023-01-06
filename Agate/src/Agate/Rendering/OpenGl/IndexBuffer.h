@@ -4,23 +4,24 @@
 
 #ifndef AGATE_INDEXBUFFER_H
 #define AGATE_INDEXBUFFER_H
+#include "VertexBuffer.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
-#include "VertexBuffer.h"
 namespace Agate
 {
 
     class IndexBuffer {
     public:
-        explicit IndexBuffer(std::vector<unsigned int>& vector, int32_t drawtype);
+        explicit IndexBuffer(std::vector<unsigned int> &vector, int32_t drawtype);
         ~IndexBuffer();
 
         void Bind();
         void UnBind();
 
         [[nodiscard]] unsigned int GetNumOfIndices() const;
+
     private:
         std::vector<unsigned int> m_indinces;
         unsigned int m_ibo;

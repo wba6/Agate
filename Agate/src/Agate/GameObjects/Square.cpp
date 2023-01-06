@@ -3,8 +3,8 @@
 //
 
 #include "Square.h"
-#include "Rendering/OpenGl/Render.h"
 #include "GameObjectsUI.h"
+#include "Rendering/OpenGl/Render.h"
 
 namespace Agate
 {
@@ -29,7 +29,6 @@ namespace Agate
         VAO->UnBind();
         camera = new Camera(shader);
         GameObjectsUI::AddObject(this);
-
     }
 
     void Square::setXPos(int xPos)

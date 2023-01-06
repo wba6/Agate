@@ -7,13 +7,13 @@
 namespace Agate
 {
     IndexBuffer::IndexBuffer(std::vector<unsigned int> &vector, int32_t drawtype)
-    :m_indinces(vector)
+        : m_indinces(vector)
     {
         glGenBuffers(1, &m_ibo);
         Bind();
 
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof (float), &m_indinces[0], drawtype);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(float), &m_indinces[0], drawtype);
         UnBind();
     }
     void IndexBuffer::Bind()

@@ -3,11 +3,12 @@
 //
 #include "Event.h"
 #pragma once
-namespace Agate{
+namespace Agate
+{
     class KeyPressedEvent : public Event {
     public:
         KeyPressedEvent(int keyCode)
-                :m_keycode(keyCode){};
+            : m_keycode(keyCode){};
 
         EventTypes GetEventType() override
         {
@@ -38,7 +39,7 @@ namespace Agate{
     class KeyReleasedEvent : public Event {
     public:
         KeyReleasedEvent(int keyCode)
-            :m_keycode(keyCode){};
+            : m_keycode(keyCode){};
 
         EventTypes GetEventType() override
         {
@@ -65,5 +66,4 @@ namespace Agate{
     private:
         unsigned int m_keycode;
     };
-}
-
+}// namespace Agate

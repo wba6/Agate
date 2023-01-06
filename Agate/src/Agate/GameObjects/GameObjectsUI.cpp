@@ -5,7 +5,7 @@
 #include "GameObjectsUI.h"
 #include "../../../vender/imgui/imgui.h"
 
-std::vector<Agate::GameObject*> Agate::GameObjectsUI::m_gameobjects;
+std::vector<Agate::GameObject *> Agate::GameObjectsUI::m_gameobjects;
 
 
 Agate::GameObjectsUI::GameObjectsUI() = default;
@@ -32,4 +32,3 @@ void Agate::GameObjectsUI::AddObject(Agate::GameObject *go)
 {
     m_gameobjects.push_back(go);
 }
-

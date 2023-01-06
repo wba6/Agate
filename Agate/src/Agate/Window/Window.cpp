@@ -3,8 +3,8 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/KeyEvents.h"
 #include "Events/MouseEvent.h"
-#include "Window.h"
 #include "RenderContext/Context.h"
+#include "Window.h"
 #include <GLFW/glfw3.h>
 
 

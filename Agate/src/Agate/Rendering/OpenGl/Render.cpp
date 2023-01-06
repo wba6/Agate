@@ -4,12 +4,12 @@
 #include "agpch.h"
 
 #include "Render.h"
-#include <glad/glad.h>
 #include "VertexBuffer.h"
+#include <glad/glad.h>
 
 long int Agate::Render::framesRendered;
 
-void Agate::Render::IndexRender(Agate::VertexArray*& vao, Agate::VertexBuffer& vbo, Agate::IndexBuffer& ibo, Shader& shader)
+void Agate::Render::IndexRender(Agate::VertexArray *&vao, Agate::VertexBuffer &vbo, Agate::IndexBuffer &ibo, Shader &shader)
 {
     vao->Bind();
     ibo.Bind();

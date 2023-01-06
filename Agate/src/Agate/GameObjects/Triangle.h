@@ -39,13 +39,12 @@ namespace Agate
                 -0.5f, -0.5f, 0.0f,
                 0.5f, -0.5f, 0.0f,
                 0.0f, 0.5f, 0.0f};
-        std::vector<unsigned int> indices {
-                0,1,2
-        };
+        std::vector<unsigned int> indices{
+                0, 1, 2};
         VertexLayOut layout;
         IndexBuffer IBO;
         VertexBuffer VBO;
-        VertexArray* VAO;
+        VertexArray *VAO;
         Shader shader;
         static int s_instanceNumberCounter;
         friend class Render;

@@ -44,8 +44,8 @@ void Agate::EntryPoint::Run()
             m_layerStack.m_layers.at(i)->OnRender();
         }
         ImGui::Begin("Frame");
-        ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str() );
-        ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount )).c_str() );
+        ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
+        ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
 
         ImGui::End();
 

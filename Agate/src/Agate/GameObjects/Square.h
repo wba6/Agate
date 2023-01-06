@@ -18,7 +18,7 @@
 namespace Agate
 {
 
-    class Square:public Layer , public GameObject{
+    class Square : public Layer, public GameObject {
     public:
         Square(int xpos = 0, int ypos = 0);
         ~Square();
@@ -27,8 +27,8 @@ namespace Agate
         std::string GetObjectString() override;
 
         void Render() override;
-        void setXPos(int xPos)override;
-        void setYPos(int yPos)override;
+        void setXPos(int xPos) override;
+        void setYPos(int yPos) override;
         void setColor(int r, int g, int b, int a);
 
 
@@ -39,13 +39,11 @@ namespace Agate
                 -0.5f, -0.5f, 0.0f,
                 0.5f, -0.5f, 0.0f,
                 0.5f, 0.5f, 0.0f,
-                -0.5f, 0.5f, 0.0f
-        };
+                -0.5f, 0.5f, 0.0f};
 
-        std::vector<unsigned int> indices {
-                0,1,2,
-                2,3,0
-        };
+        std::vector<unsigned int> indices{
+                0, 1, 2,
+                2, 3, 0};
 
         VertexLayOut layout;
         IndexBuffer IBO;

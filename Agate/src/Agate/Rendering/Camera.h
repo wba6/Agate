@@ -16,15 +16,16 @@ namespace Agate
     public:
         explicit Camera(Shader &shaderObj);
 
-        void onEvent(Event& ev);
+        void onEvent(Event &ev);
         void onUpdate();
+
     private:
         bool KeyPess();
         bool releaseCamera(KeyPressedEvent &e);
         bool MouseMove();
 
     private:
-        static float s_lastX, s_lastY,s_yaw, s_pitch, s_fov;
+        static float s_lastX, s_lastY, s_yaw, s_pitch, s_fov;
         static bool s_firstMouse;
         static glm::vec3 s_cameraFront;
         float m_lastFrame;
@@ -37,4 +38,4 @@ namespace Agate
         float m_deltaTime;
     };
 
-}
+}// namespace Agate
