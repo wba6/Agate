@@ -1,5 +1,6 @@
 
 #include "Agate.h"
+#include <Agate/GameObjects/Light.h>
 #include <Agate/GameObjects/Square.h>
 #include <iostream>
 #include <string>
@@ -45,7 +46,7 @@ public:
     void OnRender() override
     {
 
-
+        li.Render();
         sqr.Render();
         sqr2.Render();
         tri.Render();
@@ -62,6 +63,7 @@ public:
     Agate::Triangle tri{0, 0};
     Agate::Square sqr{1, 0};
     Agate::Square sqr2{2, 0};
+    Agate::Light li{5, 5};
     int rotation;
 };
 

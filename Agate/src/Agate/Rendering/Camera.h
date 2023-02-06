@@ -18,9 +18,11 @@ namespace Agate
 
         void onEvent(Event &ev);
         void onUpdate();
+        glm::vec3 getCameraPos();
+        void setCameraPos(glm::vec3 pos);
 
     private:
-        bool KeyPess();
+        bool KeyPressed();
         bool releaseCamera(KeyPressedEvent &e);
         bool MouseMove();
 

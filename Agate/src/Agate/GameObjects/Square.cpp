@@ -30,14 +30,7 @@ namespace Agate
         GameObjectsUI::AddObject(this);
     }
 
-    void Square::setXPos(int xPos)
-    {
-        x = xPos;
-    }
-    void Square::setYPos(int yPos)
-    {
-        y = yPos;
-    }
+
     void Square::setColor(int r, int g, int b, int a)
     {
         color.x = (float) r;

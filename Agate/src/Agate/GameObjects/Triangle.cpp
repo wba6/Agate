@@ -29,14 +29,7 @@ namespace Agate
         GameObjectsUI::AddObject(this);
     }
 
-    void Triangle::setXPos(int xPos)
-    {
-        x = xPos;
-    }
-    void Triangle::setYPos(int yPos)
-    {
-        y = yPos;
-    }
+
     void Triangle::setColor(int r, int g, int b, int a)
     {
         color.x = (float) r;

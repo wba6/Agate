@@ -27,8 +27,7 @@ namespace Agate
 
 
         void Render() override;
-        void setXPos(int xPos) override;
-        void setYPos(int yPos) override;
+
         void setColor(int r, int g, int b, int a);
 
 

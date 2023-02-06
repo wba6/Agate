@@ -11,9 +11,7 @@
 #include "Agate/Rendering/OpenGl/VertexArray.h"
 #include "Agate/Rendering/OpenGl/VertexBuffer.h"
 #include "GameObject.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
 
 namespace Agate
 {
@@ -27,8 +25,6 @@ namespace Agate
         std::string GetObjectString() override;
 
         void Render() override;
-        void setXPos(int xPos) override;
-        void setYPos(int yPos) override;
         void setColor(int r, int g, int b, int a);
 
 

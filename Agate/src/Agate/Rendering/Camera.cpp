@@ -23,7 +23,7 @@ namespace Agate
     void Camera::onUpdate()
     {
         MouseMove();
-        KeyPess();
+        KeyPressed();
         m_deltaTime = EntryPoint::GetInstance()->GetDeltaTime();
         m_view = glm::lookAt(m_cameraPos, m_cameraPos + s_cameraFront, m_cameraUp);
         m_projection = glm::perspective(glm::radians(s_fov), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -36,7 +36,7 @@ namespace Agate
         call.NotifyEvent<KeyPressedEvent>(BindFn(Camera::releaseCamera));
     }
 
-    bool Camera::KeyPess()
+    bool Camera::KeyPressed()
     {
         if (!s_Active)
             return false;
@@ -62,16 +62,16 @@ namespace Agate
     {
         if (!s_Active)
             return false;
-        double xpos = InputPulling::GetXMousePos();
-        double ypos = InputPulling::GetYMousePos();
+        float xpos = (float) InputPulling::GetXMousePos();
+        float ypos = (float) InputPulling::GetYMousePos();
         if (s_firstMouse)// initially set to true
         {
             s_lastX = xpos;
             s_lastY = ypos;
             s_firstMouse = false;
         }
-        double xoffset = xpos - s_lastX;
-        double yoffset = s_lastY - ypos;// reversed since y-coordinates range from bottom to
+        float xoffset = xpos - s_lastX;
+        float yoffset = s_lastY - ypos;// reversed since y-coordinates range from bottom to
         s_lastX = xpos;
         s_lastY = ypos;
         const float sensitivity = 0.1f;
@@ -107,5 +107,13 @@ namespace Agate
             return true;
         }
         return false;
+    }
+    glm::vec3 Camera::getCameraPos()
+    {
+        return m_cameraPos;
+    }
+    void Camera::setCameraPos(glm::vec3 pos)
+    {
+        m_cameraPos = pos;
     }
 }// namespace Agate
