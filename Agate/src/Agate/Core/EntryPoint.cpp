@@ -20,7 +20,7 @@ Agate::EntryPoint::EntryPoint()
     m_running = true;
     imgui_interface::Init(m_window->GetInstanceWindow());
     m_layerStack.AddOverlay(new GameObjectsUI);
-    m_layerStack.AddOverlay(new Example_imguiLayer());
+    //m_layerStack.AddOverlay(new Example_imguiLayer());
     CurrentContext::OpenGL = true;
 }
 

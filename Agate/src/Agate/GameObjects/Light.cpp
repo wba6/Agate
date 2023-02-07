@@ -11,20 +11,17 @@ namespace Agate
 
     void Light::Render()
     {
-        /*shader.Bind();
+        shader.Bind();
 
-
-        shader.SetUniform4f("Ucolors", color.x, color.y, color.z, color.w);
-        camera->onUpdate();
+        glm::vec3 camPos = camera->getCameraPos();
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(x, y, 0));
-        model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::translate(model, glm::vec3(x, y, -1.5f));
+        model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         shader.SetUniformMat4("model", model);
-        shader.SetUniform3f("objectColor", 1.0f, 0.5f, 0.31f);
-        shader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
 
-        Render::IndexRender(VAO, VBO, IBO, shader);*/
+        camera->onUpdate();
+        Render::VertexArraryRender(VAO, shader);
     }
 
     GameObjectType Light::GetObjectType()
@@ -38,10 +35,10 @@ namespace Agate
     Light::Light()
         : Light(0, 0)
     {}
-    Light::Light(int x, int y) : GameObject(x, y, 0), layout({0, 3, false, 3 * sizeof(float), 0}),
+    Light::Light(int x, int y) : GameObject(x, y, 0), layout({0, 3, false, 6 * sizeof(float), 0}),
                                  VBO{vertices, STATIC_DRAW},
                                  IBO{indices, STATIC_DRAW},
-                                 shader("Shaders/lighting/light_cube.vs.shader", "Shaders/lighting/light_cube.fg.shader")
+                                 shader("Shaders/lighting/1.light_cube.vs.shader", "Shaders/lighting/1.light_cube.fs.shader")
     {
         instanceNumber = ++s_instanceNumberCounter;
         VBO.Bind();
@@ -51,5 +48,9 @@ namespace Agate
         VAO->UnBind();
         camera = new Camera(shader);
         GameObjectsUI::AddObject(this);
+    }
+    void Light::OnEvent(Event &e)
+    {
+        camera->onEvent(e);
     }
 }// namespace Agate

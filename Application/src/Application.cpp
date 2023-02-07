@@ -56,6 +56,7 @@ public:
         sqr.OnEvent(e);
         sqr2.OnEvent(e);
         tri.OnEvent(e);
+        li.OnEvent(e);
     }
     virtual ~TemplayerEx()
     {
@@ -63,7 +64,7 @@ public:
     Agate::Triangle tri{0, 0};
     Agate::Square sqr{1, 0};
     Agate::Square sqr2{2, 0};
-    Agate::Light li{5, 5};
+    Agate::Light li{0, 0};
     int rotation;
 };
 

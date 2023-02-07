@@ -8,12 +8,13 @@
 namespace Agate
 {
 
-    class Light : public GameObject {
+    class Light : public GameObject, public Layer {
     public:
         Light();
         Light(int x, int y);
 
         void Render() override;
+        void OnEvent(Event &e) override;
         GameObjectType GetObjectType() override;
         std::string GetObjectString() override;
 

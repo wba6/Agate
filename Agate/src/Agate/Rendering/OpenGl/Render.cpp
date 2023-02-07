@@ -26,3 +26,14 @@ long int Agate::Render::GetRenderedFrames()
 {
     return framesRendered;
 }
+void Agate::Render::VertexArraryRender(Agate::VertexArray *&vao, Agate::Shader &shader)
+{
+
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    vao->Bind();
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    shader.UnBind();
+    vao->UnBind();
+    glDisable(GL_DEPTH_TEST);
+}
