@@ -28,7 +28,7 @@ long int Agate::Render::GetRenderedFrames()
 }
 void Agate::Render::VertexArraryRender(Agate::VertexArray *&vao, Agate::Shader &shader)
 {
-
+    //TODO: Temporary was of handling the depth test buffer
     glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
     vao->Bind();
