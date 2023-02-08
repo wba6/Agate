@@ -36,7 +36,7 @@ public:
         PRINTMSG("Attached triangle layer")
         sqr.rotation = glm::radians(45.0f);
         tri.rotation = glm::radians(45.0f);
-        //sqr.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+        sqr.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
         tri.color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
     }
 

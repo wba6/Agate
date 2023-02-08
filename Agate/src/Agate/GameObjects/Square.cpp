@@ -47,7 +47,7 @@ namespace Agate
         glm::vec3 lightPos(0.0f, 0.0f, 1.0f);
         glm::vec3 cameraPos = camera->getCameraPos();
         shader.Bind();
-        shader.SetUniform3f("objectColor", 1.0f, 0.5f, 0.31f);
+        shader.SetUniform3f("objectColor", color.x, color.y, color.z);
         shader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
         shader.SetUniform3f("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
         camera->onUpdate();
