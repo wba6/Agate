@@ -36,7 +36,7 @@ public:
         PRINTMSG("Attached triangle layer")
         sqr.rotation = glm::radians(45.0f);
         tri.rotation = glm::radians(45.0f);
-        sqr.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+        //sqr.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
         tri.color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
     }
 
@@ -48,13 +48,11 @@ public:
 
         li.Render();
         sqr.Render();
-        sqr2.Render();
         tri.Render();
     };
     void OnEvent(Agate::Event &e) override
     {
         sqr.OnEvent(e);
-        sqr2.OnEvent(e);
         tri.OnEvent(e);
         li.OnEvent(e);
     }
@@ -63,7 +61,6 @@ public:
     }
     Agate::Triangle tri{0, 0};
     Agate::Square sqr{1, 0};
-    Agate::Square sqr2{2, 0};
     Agate::Light li{0, 0};
     int rotation;
 };

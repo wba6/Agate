@@ -18,7 +18,7 @@ namespace Agate
           layout({0, 3, false, 3 * sizeof(float), 0}),
           VBO{vertices, STATIC_DRAW},
           IBO{indices, STATIC_DRAW},
-          shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl")
+          shader("Shaders/lighting/colors_lighting.vs.glsl", "Shaders/lighting/colors_lighting.fg.glsl")
     {
         instanceNumber = ++s_instanceNumberCounter;
         VBO.Bind();
@@ -44,7 +44,7 @@ namespace Agate
     }
     void Square::Render()
     {
-        /* glm::vec3 lightPos(1.5f, 2.5f, 2.5f);
+        glm::vec3 lightPos(0.0f, 0.0f, 1.0f);
         glm::vec3 cameraPos = camera->getCameraPos();
         shader.Bind();
         shader.SetUniform3f("objectColor", 1.0f, 0.5f, 0.31f);
@@ -52,15 +52,12 @@ namespace Agate
         shader.SetUniform3f("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
         camera->onUpdate();
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.5f, -1.5f));
+        model = glm::translate(model, glm::vec3(x, y, 0.0f));
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         shader.SetUniformMat4("model", model);
         shader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
-        VAO->Bind();
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        shader.UnBind();
-        VAO->UnBind();*/
-        shader.Bind();
+
+        /*shader.Bind();
 
         shader.SetUniform4f("Ucolors", color.x, color.y, color.z, color.w);
         camera->onUpdate();
@@ -69,7 +66,7 @@ namespace Agate
         model = glm::translate(model, glm::vec3(x, y, 5));
         model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
         shader.SetUniformMat4("model", model);
-
+*/
         Render::IndexRender(VAO, VBO, IBO, shader);
     }
     GameObjectType Square::GetObjectType()

@@ -6,6 +6,7 @@
 #include "Agate/Core/Logger.h"
 #include "Context.h"
 #include "CurrentContext.h"
+#include "Rendering/OpenGl/Render.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 namespace Agate
@@ -21,6 +22,7 @@ namespace Agate
         {
             Agate::CurrentContext::SetContextPointer((Context *) this);
         }
+        glEnable(GL_DEPTH_TEST);
     }
     void OpenGL::EndContext()
     {
@@ -29,6 +31,8 @@ namespace Agate
     {
         glClearColor(0.2, 0.2, 0.2, 1);
         glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        Render::framesRendered++;
     }
     void OpenGL::SetWindowSize(int width, int height)
     {

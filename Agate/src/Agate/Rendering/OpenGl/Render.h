@@ -24,5 +24,6 @@ namespace Agate
 
     private:
         static long int framesRendered;
+        friend class OpenGL;
     };
 }// namespace Agate

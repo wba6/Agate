@@ -38,7 +38,7 @@ namespace Agate
     Light::Light(int x, int y) : GameObject(x, y, 0), layout({0, 3, false, 6 * sizeof(float), 0}),
                                  VBO{vertices, STATIC_DRAW},
                                  IBO{indices, STATIC_DRAW},
-                                 shader("Shaders/lighting/1.light_cube.vs.shader", "Shaders/lighting/1.light_cube.fs.shader")
+                                 shader("Shaders/lighting/lighting_cube.vs.glsl", "Shaders/lighting/lighting_cube.fg.glsl")
     {
         instanceNumber = ++s_instanceNumberCounter;
         VBO.Bind();

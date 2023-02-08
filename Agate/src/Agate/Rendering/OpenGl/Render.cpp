@@ -20,7 +20,6 @@ void Agate::Render::IndexRender(Agate::VertexArray *&vao, Agate::VertexBuffer &v
     shader.UnBind();
     ibo.UnBind();
     vao->UnBind();
-    framesRendered++;
 }
 long int Agate::Render::GetRenderedFrames()
 {
@@ -28,12 +27,8 @@ long int Agate::Render::GetRenderedFrames()
 }
 void Agate::Render::VertexArraryRender(Agate::VertexArray *&vao, Agate::Shader &shader)
 {
-    //TODO: Temporary was of handling the depth test buffer
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_DEPTH_BUFFER_BIT);
     vao->Bind();
     glDrawArrays(GL_TRIANGLES, 0, 36);
     shader.UnBind();
     vao->UnBind();
-    glDisable(GL_DEPTH_TEST);
 }
