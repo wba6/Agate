@@ -44,6 +44,7 @@ namespace Agate
     }
     void Square::Render()
     {
+        //TODO:Get actually position of light
         glm::vec3 lightPos(0.0f, 0.0f, 1.0f);
         glm::vec3 cameraPos = camera->getCameraPos();
         shader.Bind();
@@ -57,16 +58,6 @@ namespace Agate
         shader.SetUniformMat4("model", model);
         shader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
 
-        /*shader.Bind();
-
-        shader.SetUniform4f("Ucolors", color.x, color.y, color.z, color.w);
-        camera->onUpdate();
-
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(x, y, 5));
-        model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-        shader.SetUniformMat4("model", model);
-*/
         Render::IndexRender(VAO, VBO, IBO, shader);
     }
     GameObjectType Square::GetObjectType()
