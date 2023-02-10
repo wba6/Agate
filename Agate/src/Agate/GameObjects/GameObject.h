@@ -26,8 +26,8 @@ namespace Agate
         explicit GameObject(int x, int y, float rotation) : x(x), y(y), rotation(rotation), color(0){};
 
         virtual void Render() = 0;
-        virtual void setXPos(float xPos) { x = xPos; }
-        virtual void setYPos(float yPos) { x = yPos; }
+        virtual void setXPos(float xPos) { x = xPos; };
+        virtual void setYPos(float yPos) { y = yPos; };
         virtual GameObjectType GetObjectType() = 0;
         virtual std::string GetObjectString() = 0;
         virtual int GetInstanceNumber() { return instanceNumber; }

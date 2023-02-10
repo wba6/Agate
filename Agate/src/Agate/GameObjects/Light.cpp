@@ -8,20 +8,22 @@
 namespace Agate
 {
     int Light::s_instanceNumberCounter = 0;
-
+    glm::vec3 Light::s_lightPosition;
     void Light::Render()
     {
-        shader.Bind();
+        s_lightPosition = {x, y, 0.5};
+        m_shader.Bind();
 
         glm::vec3 camPos = camera->getCameraPos();
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(x, y, -1.5f));
+        model = glm::scale(model, {0.5, 0.5, 0.5});
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        shader.SetUniformMat4("model", model);
+        model = glm::translate(model, glm::vec3(x, y, -1.5f));
+        m_shader.SetUniformMat4("model", model);
 
         camera->onUpdate();
-        Render::VertexArraryRender(VAO, shader);
+        Render::VertexArraryRender(VAO, m_shader);
     }
 
     GameObjectType Light::GetObjectType()
@@ -35,22 +37,24 @@ namespace Agate
     Light::Light()
         : Light(0, 0)
     {}
-    Light::Light(int x, int y) : GameObject(x, y, 0), layout({0, 3, false, 6 * sizeof(float), 0}),
+    Light::Light(int x, int y) : GameObject(x, y, 0), m_layout({0, 3, false, 6 * sizeof(float), 0}),
                                  VBO{vertices, STATIC_DRAW},
                                  IBO{indices, STATIC_DRAW},
-                                 shader("Shaders/lighting/lighting_cube.vs.glsl", "Shaders/lighting/lighting_cube.fg.glsl")
+                                 m_shader("Shaders/lighting/lighting_cube.vs.glsl", "Shaders/lighting/lighting_cube.fg.glsl")
     {
         instanceNumber = ++s_instanceNumberCounter;
         VBO.Bind();
-        VAO = new VertexArray(layout);
+        VAO = new VertexArray(m_layout);
         VAO->Bind();
         VBO.UnBind();
         VAO->UnBind();
-        camera = new Camera(shader);
+        camera = new Camera(m_shader);
         GameObjectsUI::AddObject(this);
+        s_lightPosition = {x, y, 0.5};
     }
     void Light::OnEvent(Event &e)
     {
         camera->onEvent(e);
     }
+
 }// namespace Agate

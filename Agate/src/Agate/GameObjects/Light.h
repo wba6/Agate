@@ -17,6 +17,7 @@ namespace Agate
         void OnEvent(Event &e) override;
         GameObjectType GetObjectType() override;
         std::string GetObjectString() override;
+        static glm::vec3 GetLightPosition() { return s_lightPosition; }
 
     private:
         std::vector<float> vertices = {
@@ -66,12 +67,13 @@ namespace Agate
                 0, 1, 2,
                 2, 3, 0};
 
-        VertexLayOut layout;
+        VertexLayOut m_layout;
         IndexBuffer IBO;
         VertexBuffer VBO;
         VertexArray *VAO;
-        Shader shader;
+        Shader m_shader;
         static int s_instanceNumberCounter;
+        static glm::vec3 s_lightPosition;
         friend class Render;
     };
 

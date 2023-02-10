@@ -27,7 +27,7 @@
 // About Gamma Correct Blending:
 // - FreeType assumes blending in linear space rather than gamma space.
 // - See https://www.freetype.org/freetype2/docs/reference/ft2-base_interface.html#FT_Render_Glyph
-// - For correct results you need to be using sRGB and convert to linear space in the pixel shader output.
+// - For correct results you need to be using sRGB and convert to linear space in the pixel m_shader output.
 // - The default dear imgui styles will be impacted by this change (alpha values will need tweaking).
 
 // FIXME: cfg.OversampleH, OversampleV are not supported (but perhaps not so necessary with this rasterizer).

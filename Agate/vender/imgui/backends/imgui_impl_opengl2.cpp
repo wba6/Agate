@@ -139,7 +139,7 @@ static void ImGui_ImplOpenGL2_SetupRenderState(ImDrawData* draw_data, int fb_wid
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
     // If you are using this code with non-legacy OpenGL header/contexts (which you should not, prefer using imgui_impl_opengl3.cpp!!),
-    // you may need to backup/reset/restore other state, e.g. for current shader using the commented lines below.
+    // you may need to backup/reset/restore other state, e.g. for current m_shader using the commented lines below.
     // (DO NOT MODIFY THIS FILE! Add the code in your calling function)
     //   GLint last_program;
     //   glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);

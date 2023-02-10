@@ -95,7 +95,7 @@ static void ImGui_ImplDX10_SetupRenderState(ImDrawData* draw_data, ID3D10Device*
     vp.TopLeftX = vp.TopLeftY = 0;
     ctx->RSSetViewports(1, &vp);
 
-    // Bind shader and vertex buffers
+    // Bind m_shader and vertex buffers
     unsigned int stride = sizeof(ImDrawVert);
     unsigned int offset = 0;
     ctx->IASetInputLayout(bd->pInputLayout);
@@ -368,11 +368,11 @@ bool    ImGui_ImplDX10_CreateDeviceObjects()
 
     // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
     // If you would like to use this DX10 sample code but remove this dependency you can:
-    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  1) compile once, save the compiled m_shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
     //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
     // See https://github.com/ocornut/imgui/pull/638 for sources and details.
 
-    // Create the vertex shader
+    // Create the vertex m_shader
     {
         static const char* vertexShader =
             "cbuffer vertexBuffer : register(b0) \
@@ -437,7 +437,7 @@ bool    ImGui_ImplDX10_CreateDeviceObjects()
         }
     }
 
-    // Create the pixel shader
+    // Create the pixel m_shader
     {
         static const char* pixelShader =
             "struct PS_INPUT\

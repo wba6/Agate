@@ -61,7 +61,7 @@ public:
     }
     Agate::Triangle tri{0, 0};
     Agate::Square sqr{1, 0};
-    Agate::Light li{0, 0};
+    Agate::Light li{2, 0};
     int rotation;
 };
 

@@ -3,6 +3,7 @@
 //
 
 #include "Triangle.h"
+#include "Light.h"
 #include "Rendering/OpenGl/Render.h"
 namespace Agate
 {
@@ -14,18 +15,18 @@ namespace Agate
 
     Triangle::Triangle(int xpos, int ypos)
         : GameObject(xpos, ypos, 0.0f),
-          layout({0, 3, false, 3 * sizeof(float), 0}),
+          m_layout({0, 3, false, 3 * sizeof(float), 0}),
           IBO{indices, STATIC_DRAW},
           VBO{vertices, STATIC_DRAW},
-          shader("Shaders/lighting/colors_lighting.vs.glsl", "Shaders/lighting/colors_lighting.fg.glsl")
+          m_shader("Shaders/lighting/colors_lighting.vs.glsl", "Shaders/lighting/colors_lighting.fg.glsl")
     {
         instanceNumber = ++s_instanceNumberCounter;
         VBO.Bind();
-        VAO = new VertexArray(layout);
+        VAO = new VertexArray(m_layout);
         VAO->Bind();
         VBO.UnBind();
         VAO->UnBind();
-        camera = new Camera(shader);
+        camera = new Camera(m_shader);
         GameObjectsUI::AddObject(this);
     }
 
@@ -39,21 +40,20 @@ namespace Agate
     }
     void Triangle::Render()
     {
-        //TODO:Get actually position of light
-        glm::vec3 lightPos(0.0f, 0.0f, 1.0f);
+        glm::vec3 lightPos = Light::GetLightPosition();
         glm::vec3 cameraPos = camera->getCameraPos();
-        shader.Bind();
-        shader.SetUniform3f("objectColor", color.x, color.y, color.z);
-        shader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
-        shader.SetUniform3f("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
+        m_shader.Bind();
+        m_shader.SetUniform3f("objectColor", color.x, color.y, color.z);
+        m_shader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
+        m_shader.SetUniform3f("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
         camera->onUpdate();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(x, y, 0.0f));
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        shader.SetUniformMat4("model", model);
-        shader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+        m_shader.SetUniformMat4("model", model);
+        m_shader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
 
-        Render::IndexRender(VAO, VBO, IBO, shader);
+        Render::IndexRender(VAO, VBO, IBO, m_shader);
     }
     Triangle::~Triangle()
     {

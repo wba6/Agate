@@ -40,11 +40,11 @@ namespace Agate
                 0, 1, 2,
                 2, 3, 0};
 
-        VertexLayOut layout;
+        VertexLayOut m_layout;
         IndexBuffer IBO;
         VertexBuffer VBO;
         VertexArray *VAO;
-        Shader shader;
+        Shader m_shader;
         static int s_instanceNumberCounter;
         friend class Render;
     };

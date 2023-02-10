@@ -294,27 +294,27 @@ typedef void (APIENTRYP PFNGLUNIFORM1IPROC) (GLint location, GLint v0);
 typedef void (APIENTRYP PFNGLUNIFORMMATRIX4FVPROC) (GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
 typedef void (APIENTRYP PFNGLVERTEXATTRIBPOINTERPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);
 #ifdef GL_GLEXT_PROTOTYPES
-GLAPI void APIENTRY glBlendEquationSeparate (GLenum modeRGB, GLenum modeAlpha);
-GLAPI void APIENTRY glAttachShader (GLuint program, GLuint shader);
-GLAPI void APIENTRY glCompileShader (GLuint shader);
-GLAPI GLuint APIENTRY glCreateProgram (void);
-GLAPI GLuint APIENTRY glCreateShader (GLenum type);
-GLAPI void APIENTRY glDeleteProgram (GLuint program);
-GLAPI void APIENTRY glDeleteShader (GLuint shader);
-GLAPI void APIENTRY glDetachShader (GLuint program, GLuint shader);
-GLAPI void APIENTRY glEnableVertexAttribArray (GLuint index);
-GLAPI GLint APIENTRY glGetAttribLocation (GLuint program, const GLchar *name);
-GLAPI void APIENTRY glGetProgramiv (GLuint program, GLenum pname, GLint *params);
-GLAPI void APIENTRY glGetProgramInfoLog (GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
-GLAPI void APIENTRY glGetShaderiv (GLuint shader, GLenum pname, GLint *params);
-GLAPI void APIENTRY glGetShaderInfoLog (GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
-GLAPI GLint APIENTRY glGetUniformLocation (GLuint program, const GLchar *name);
-GLAPI void APIENTRY glLinkProgram (GLuint program);
-GLAPI void APIENTRY glShaderSource (GLuint shader, GLsizei count, const GLchar *const*string, const GLint *length);
-GLAPI void APIENTRY glUseProgram (GLuint program);
-GLAPI void APIENTRY glUniform1i (GLint location, GLint v0);
-GLAPI void APIENTRY glUniformMatrix4fv (GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-GLAPI void APIENTRY glVertexAttribPointer (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);
+GLAPI void APIENTRY glBlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha);
+GLAPI void APIENTRY glAttachShader(GLuint program, GLuint m_shader);
+GLAPI void APIENTRY glCompileShader(GLuint m_shader);
+GLAPI GLuint APIENTRY glCreateProgram(void);
+GLAPI GLuint APIENTRY glCreateShader(GLenum type);
+GLAPI void APIENTRY glDeleteProgram(GLuint program);
+GLAPI void APIENTRY glDeleteShader(GLuint m_shader);
+GLAPI void APIENTRY glDetachShader(GLuint program, GLuint m_shader);
+GLAPI void APIENTRY glEnableVertexAttribArray(GLuint index);
+GLAPI GLint APIENTRY glGetAttribLocation(GLuint program, const GLchar *name);
+GLAPI void APIENTRY glGetProgramiv(GLuint program, GLenum pname, GLint *params);
+GLAPI void APIENTRY glGetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
+GLAPI void APIENTRY glGetShaderiv(GLuint m_shader, GLenum pname, GLint *params);
+GLAPI void APIENTRY glGetShaderInfoLog(GLuint m_shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
+GLAPI GLint APIENTRY glGetUniformLocation(GLuint program, const GLchar *name);
+GLAPI void APIENTRY glLinkProgram(GLuint program);
+GLAPI void APIENTRY glShaderSource(GLuint m_shader, GLsizei count, const GLchar *const *string, const GLint *length);
+GLAPI void APIENTRY glUseProgram(GLuint program);
+GLAPI void APIENTRY glUniform1i(GLint location, GLint v0);
+GLAPI void APIENTRY glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+GLAPI void APIENTRY glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);
 #endif
 #endif /* GL_VERSION_2_0 */
 #ifndef GL_VERSION_3_0

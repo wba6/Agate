@@ -270,7 +270,7 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
 
 // We are retrieving and uploading the font atlas as a 4-channels RGBA texture here.
 // In theory we could call GetTexDataAsAlpha8() and upload a 1-channel texture to save on memory access bandwidth.
-// However, using a shader designed for 1-channel texture would make it less obvious to use the ImTextureID facility to render users own textures.
+// However, using a m_shader designed for 1-channel texture would make it less obvious to use the ImTextureID facility to render users own textures.
 // You can make that change in your implementation.
 - (void)makeFontTextureWithDevice:(id<MTLDevice>)device
 {
@@ -404,7 +404,7 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
 
     if (vertexFunction == nil || fragmentFunction == nil)
     {
-        NSLog(@"Error: failed to find Metal shader functions in library: %@", error);
+        NSLog(@"Error: failed to find Metal m_shader functions in library: %@", error);
         return nil;
     }
 
