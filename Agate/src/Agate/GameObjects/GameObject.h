@@ -16,18 +16,20 @@
 enum GameObjectType {
     Square,
     Triangle,
-    Light
+    Light,
+    Cube
 };
 
 namespace Agate
 {
     class GameObject {
     public:
-        explicit GameObject(int x, int y, float rotation) : x(x), y(y), rotation(rotation), color(0){};
+        explicit GameObject(int X, int Y, int Z, float rotation) : x(X), y(Y), z(Z), rotation(rotation), color(0){};
 
         virtual void Render() = 0;
         virtual void setXPos(float xPos) { x = xPos; };
         virtual void setYPos(float yPos) { y = yPos; };
+        virtual void setZPos(float zPos) { z = zPos; };
         virtual GameObjectType GetObjectType() = 0;
         virtual std::string GetObjectString() = 0;
         virtual int GetInstanceNumber() { return instanceNumber; }
@@ -36,7 +38,7 @@ namespace Agate
             delete camera;
         }
         glm::vec4 color;
-        float x, y;
+        float x, y, z;
         float rotation;
         int instanceNumber;
         Camera *camera;

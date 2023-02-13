@@ -19,7 +19,7 @@ namespace Agate
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::scale(model, {0.5, 0.5, 0.5});
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::translate(model, glm::vec3(x, y, -1.5f));
+        model = glm::translate(model, glm::vec3(x, y, z));
         m_shader.SetUniformMat4("model", model);
 
         camera->onUpdate();
@@ -34,13 +34,10 @@ namespace Agate
     {
         return "Light";
     }
-    Light::Light()
-        : Light(0, 0)
-    {}
-    Light::Light(int x, int y) : GameObject(x, y, 0), m_layout({0, 3, false, 6 * sizeof(float), 0}),
-                                 VBO{vertices, STATIC_DRAW},
-                                 IBO{indices, STATIC_DRAW},
-                                 m_shader("Shaders/lighting/lighting_cube.vs.glsl", "Shaders/lighting/lighting_cube.fg.glsl")
+
+    Light::Light(int x, int y, int z) : GameObject(x, y, z, 0), m_layout({0, 3, false, 6 * sizeof(float), 0}),
+                                        VBO{vertices, STATIC_DRAW},
+                                        m_shader("Shaders/lighting/lighting_cube.vs.glsl", "Shaders/lighting/lighting_cube.fg.glsl")
     {
         instanceNumber = ++s_instanceNumberCounter;
         VBO.Bind();
@@ -55,6 +52,11 @@ namespace Agate
     void Light::OnEvent(Event &e)
     {
         camera->onEvent(e);
+    }
+    Light::~Light()
+    {
+        delete VAO;
+        delete camera;
     }
 
 }// namespace Agate

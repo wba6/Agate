@@ -18,15 +18,14 @@ namespace Agate
 
     class Square : public Layer, public GameObject {
     public:
-        Square(int xpos = 0, int ypos = 0);
-        ~Square();
+        explicit Square(int xpos = 0, int ypos = 0, int zpos = 0);
+        ~Square() override;
         virtual void OnEvent(Event &e) override;
         virtual GameObjectType GetObjectType() override;
         std::string GetObjectString() override;
 
         void Render() override;
         void setColor(int r, int g, int b, int a);
-
 
 
     private:

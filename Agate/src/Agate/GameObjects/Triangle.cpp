@@ -13,8 +13,8 @@ namespace Agate
         camera->onEvent(e);
     }
 
-    Triangle::Triangle(int xpos, int ypos)
-        : GameObject(xpos, ypos, 0.0f),
+    Triangle::Triangle(int xpos, int ypos, int zpos)
+        : GameObject(xpos, ypos, zpos, 0),
           m_layout({0, 3, false, 3 * sizeof(float), 0}),
           IBO{indices, STATIC_DRAW},
           VBO{vertices, STATIC_DRAW},
@@ -48,7 +48,7 @@ namespace Agate
         m_shader.SetUniform3f("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
         camera->onUpdate();
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(x, y, 0.0f));
+        model = glm::translate(model, glm::vec3(x, y, z));
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         m_shader.SetUniformMat4("model", model);
         m_shader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
@@ -58,6 +58,7 @@ namespace Agate
     Triangle::~Triangle()
     {
         delete VAO;
+        delete camera;
     }
     GameObjectType Triangle::GetObjectType()
     {

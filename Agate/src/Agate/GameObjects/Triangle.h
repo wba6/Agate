@@ -19,8 +19,8 @@ namespace Agate
 
     class Triangle : public Layer, public GameObject {
     public:
-        Triangle(int xpos = 0, int ypos = 0);
-        virtual ~Triangle();
+        explicit Triangle(int xpos = 0, int ypos = 0, int zpos = 0);
+        ~Triangle();
         void OnEvent(Event &e) override;
         GameObjectType GetObjectType() override;
         std::string GetObjectString() override;
@@ -29,7 +29,6 @@ namespace Agate
         void Render() override;
 
         void setColor(int r, int g, int b, int a);
-
 
 
     private:

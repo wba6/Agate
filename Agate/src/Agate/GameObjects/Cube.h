@@ -1,22 +1,31 @@
 //
-// Created by TANK1_41 on 2/6/2023.
+// Created by TANK1_41 on 2/13/2023.
 //
 
-#ifndef AGATE_LIGHT_H
-#define AGATE_LIGHT_H
+#ifndef AGATE_CUBE_H
+#define AGATE_CUBE_H
+#include "Agate/Core/Layer.h"
+#include "Agate/Rendering/Camera.h"
+#include "Agate/Rendering/OpenGl/IndexBuffer.h"
+#include "Agate/Rendering/OpenGl/Shader.h"
+#include "Agate/Rendering/OpenGl/VertexArray.h"
+#include "Agate/Rendering/OpenGl/VertexBuffer.h"
 #include "GameObject.h"
+
 namespace Agate
 {
 
-    class Light : public GameObject, public Layer {
+    class Cube : public Layer, public GameObject {
     public:
-        explicit Light(int x = 0, int y = 0, int z = 0);
-        ~Light() override;
-        void Render() override;
-        void OnEvent(Event &e) override;
-        GameObjectType GetObjectType() override;
+        explicit Cube(int xpos = 0, int ypos = 0, int zpos = 0);
+        ~Cube() override;
+        virtual void OnEvent(Event &e) override;
+        virtual GameObjectType GetObjectType() override;
         std::string GetObjectString() override;
-        static glm::vec3 GetLightPosition() { return s_lightPosition; }
+
+        void Render() override;
+        void setColor(int r, int g, int b, int a);
+
 
     private:
         std::vector<float> vertices = {
@@ -67,10 +76,9 @@ namespace Agate
         VertexArray *VAO;
         Shader m_shader;
         static int s_instanceNumberCounter;
-        static glm::vec3 s_lightPosition;
         friend class Render;
     };
 
 }// namespace Agate
 
-#endif//AGATE_LIGHT_H
+#endif//AGATE_CUBE_H
