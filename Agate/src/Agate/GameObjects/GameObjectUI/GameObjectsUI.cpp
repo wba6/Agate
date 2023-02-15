@@ -21,11 +21,6 @@ void Agate::GameObjectsUI::OnRender()
         ImGui::PushID(i);
         if (ImGui::CollapsingHeader((m_gameobjects.at(i)->GetObjectString() + std::to_string(m_gameobjects.at(i)->GetInstanceNumber())).c_str()))
         {
-            /*
-             * TODO:Menu needs redesigned
-             * select object then display properties menu for object will prevent current crash
-             * */
-
             ImGui::Text("Positions:");
             ImGui::Separator();
             ImGui::Text("xPos");

@@ -40,8 +40,6 @@ namespace Agate
     {
         if (!s_Active)
             return false;
-        //TODO: temporary way of handling key presses
-        //w = 87 // s = 83 // d = 68 // a == 65
         const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
         if (InputPulling::IsKeyPressed(AGATE_KEY_W))
             m_cameraPos += cameraSpeed * s_cameraFront;
