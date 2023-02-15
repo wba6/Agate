@@ -35,8 +35,8 @@ public:
     void Attach() override
     {
         PRINTMSG("Attached triangle layer")
-        sqr.rotation = glm::radians(45.0f);
-        tri.rotation = glm::radians(45.0f);
+        //sqr.rotation = glm::radians(45.0f);
+        //tri.rotation = glm::radians(45.0f);
         sqr.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
         tri.color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
         cube.color = {1.0f, 0.0f, 1.0f, 1.0f};
@@ -49,8 +49,8 @@ public:
     {
 
         li.Render();
-        //sqr.Render();
-        //tri.Render();
+        sqr.Render();
+        tri.Render();
         cube.Render();
     };
     void OnEvent(Agate::Event &e) override
@@ -66,7 +66,7 @@ public:
     Agate::Triangle tri{0, 0, 0};
     Agate::Square sqr{1, 0};
     Agate::Light li{2, 0, 3};
-    Agate::Cube cube{0, 0, 0};
+    Agate::Cube cube{0, 0, 2};
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()

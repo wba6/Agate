@@ -29,6 +29,9 @@ void Agate::GameObjectsUI::OnRender()
             ImGui::Text("yPos");
             ImGui::SameLine();
             ImGui::InputFloat(";", &m_gameobjects.at(i)->y, 1);
+            ImGui::Text("zPos");
+            ImGui::SameLine();
+            ImGui::InputFloat(";", &m_gameobjects.at(i)->z, 1);
             ImGui::Text("Color:");
             ImGui::SameLine();
             ImGui::ColorEdit4("##RefColor", glm::value_ptr(m_gameobjects.at(i)->color));

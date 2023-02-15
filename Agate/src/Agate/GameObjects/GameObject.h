@@ -24,7 +24,8 @@ namespace Agate
 {
     class GameObject {
     public:
-        explicit GameObject(int X, int Y, int Z, float rotation) : x(X), y(Y), z(Z), rotation(rotation), color(0){};
+        explicit GameObject(float X = 0, float Y = 0, float Z = 0, float rotation = 0)
+            : x(X), y(Y), z(Z), rotation(rotation), color(0){};
 
         virtual void Render() = 0;
         virtual void setXPos(float xPos) { x = xPos; };
