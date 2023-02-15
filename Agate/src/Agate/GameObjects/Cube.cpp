@@ -5,6 +5,9 @@
 #include "Cube.h"
 #include "Light.h"
 #include "Rendering/OpenGl/Render.h"
+//TODO: temporary include
+#include "glad/glad.h"
+
 namespace Agate
 {
     int Cube::s_instanceNumberCounter = 0;
@@ -34,7 +37,7 @@ namespace Agate
     {
         return "Cube";
     }
-    Cube::Cube(int x, int y, int z) : GameObject(x, y, z, 0), m_layout({0, 3, false, 6 * sizeof(float), 0}),
+    Cube::Cube(int x, int y, int z) : GameObject(x, y, z, 0), m_layout({0, 3, false, 6 * sizeof(float), 0 * sizeof(float)}),
                                       VBO{vertices, STATIC_DRAW},
                                       m_shader("Shaders/lighting/colors_lighting.vs.glsl", "Shaders/lighting/colors_lighting.fg.glsl")
     {
@@ -42,6 +45,9 @@ namespace Agate
         VBO.Bind();
         VAO = new VertexArray(m_layout);
         VAO->Bind();
+        //TODO:temporary way of doing this
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
         VBO.UnBind();
         VAO->UnBind();
         camera = new Camera(m_shader);

@@ -11,15 +11,15 @@ namespace Agate
     glm::vec3 Light::s_lightPosition;
     void Light::Render()
     {
-        s_lightPosition = {x, y, 0.5};
+        s_lightPosition = {x, y, z};
         m_shader.Bind();
 
         glm::vec3 camPos = camera->getCameraPos();
 
         glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(x, y, z));
         model = glm::scale(model, {0.5, 0.5, 0.5});
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::translate(model, glm::vec3(x, y, z));
         m_shader.SetUniformMat4("model", model);
 
         camera->onUpdate();
