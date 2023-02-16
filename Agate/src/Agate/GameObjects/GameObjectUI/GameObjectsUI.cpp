@@ -23,15 +23,28 @@ void Agate::GameObjectsUI::OnRender()
         {
             ImGui::Text("Positions:");
             ImGui::Separator();
-            ImGui::Text("xPos");
+
+            //Position control
+            //x
+            ImGui::PushID("xpos");
+            ImGui::Text("xPos: ");
             ImGui::SameLine();
-            ImGui::InputFloat(",", &m_gameobjects.at(i)->x, 1);
-            ImGui::Text("yPos");
+            ImGui::InputFloat("", &m_gameobjects.at(i)->x, 1);
+            ImGui::PopID();
+
+            //y
+            ImGui::PushID("ypos");
+            ImGui::Text("yPos: ");
             ImGui::SameLine();
-            ImGui::InputFloat(";", &m_gameobjects.at(i)->y, 1);
-            ImGui::Text("zPos");
+            ImGui::InputFloat("", &m_gameobjects.at(i)->y, 1);
+            ImGui::PopID();
+            //z
+            ImGui::PushID("zpos");
+            ImGui::Text("zPos: ");
             ImGui::SameLine();
-            ImGui::InputFloat(";", &m_gameobjects.at(i)->z, 1);
+            ImGui::InputFloat("", &m_gameobjects.at(i)->z, 1);
+            ImGui::PopID();
+            //color positions
             ImGui::Text("Color:");
             ImGui::SameLine();
             ImGui::ColorEdit4("##RefColor", glm::value_ptr(m_gameobjects.at(i)->color));
