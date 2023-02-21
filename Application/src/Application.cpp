@@ -66,7 +66,7 @@ public:
     Agate::Triangle tri{0, 0, 0};
     Agate::Square sqr{1, 0};
     Agate::Light li{2, 0, 3};
-    Agate::Cube cube{0, 0, 2};
+    Agate::Cube cube{5, 0, 2};
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()

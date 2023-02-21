@@ -55,7 +55,6 @@ namespace Agate
         m_shader.Bind();
         m_shader.SetUniform3f("objectColor", color.x, color.y, color.z);
         m_shader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
-        m_shader.SetUniform3f("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
         camera->onUpdate();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(x, y, z));

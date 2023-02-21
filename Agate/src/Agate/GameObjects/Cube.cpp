@@ -13,18 +13,17 @@ namespace Agate
     int Cube::s_instanceNumberCounter = 0;
     void Cube::Render()
     {
-        glm::vec3 lightPos = Light::GetLightPosition();
         glm::vec3 cameraPos = camera->getCameraPos();
         m_shader.Bind();
         m_shader.SetUniform3f("objectColor", color.x, color.y, color.z);
         m_shader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
-        m_shader.SetUniform3f("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
         camera->onUpdate();
+        glm::vec3 lightPos = Light::GetLightPosition();
+        m_shader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(x, y, z));
-        //model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         m_shader.SetUniformMat4("model", model);
-        m_shader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+        //model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
         Render::VertexArraryRender(VAO, m_shader);
     }
