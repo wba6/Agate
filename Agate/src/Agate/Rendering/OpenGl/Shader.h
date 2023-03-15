@@ -5,7 +5,7 @@
 #ifndef AGATE_SHADER_H
 #define AGATE_SHADER_H
 #include <glm/glm.hpp>
-
+#include <unordered_map>
 namespace Agate
 {
 
@@ -31,6 +31,7 @@ namespace Agate
         int m_shaderProgramID;
         unsigned int m_fragmentShaderID;
         unsigned int m_vertexShaderID;
+        mutable std::unordered_map<std::string, int> m_UniformLocationCache;
     };
 
 

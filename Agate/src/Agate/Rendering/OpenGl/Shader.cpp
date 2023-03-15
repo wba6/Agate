@@ -100,13 +100,19 @@ namespace Agate
     }
     int Shader::getUniformLoc(const char *uniform) const
     {
+        //makes it so we don't have to get the uniform location again if we already have it
+        if (m_UniformLocationCache.find(uniform) != m_UniformLocationCache.end())
+            return m_UniformLocationCache[uniform];
 
         int loc = glGetUniformLocation(m_shaderProgramID, uniform);
         if (loc == -1)
         {
-            PRINTCRIT("Uniform not found: ");
+            PRINTCRIT("Uniform not found");
             PRINTCRIT(uniform);
         }
+
+        m_UniformLocationCache[uniform] = loc;
+
         return loc;
     }
     void Shader::SetUniform4f(const char *uniform, float x, float y, float z, float w)
