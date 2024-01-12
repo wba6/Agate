@@ -1,22 +1,18 @@
 //
 // Created by TANK1_41 on 9/16/2022.
 //
-
+#include "agpch.h"
 #include "VertexArray.h"
-
+#include "Agate/Core/Logger.h"
 #include <glad/glad.h>
 namespace Agate
 {
-    VertexArray::VertexArray(VertexLayOut vertexLayOut)
+    VertexArray::VertexArray()
     {
         glGenVertexArrays(1, &m_vao);
-        Bind();
-        glVertexAttribPointer(vertexLayOut.layoutNum, vertexLayOut.vertexSize,
-                              GL_FLOAT, GL_FALSE, vertexLayOut.stride, (void *) vertexLayOut.offset);
-
-        glEnableVertexAttribArray(vertexLayOut.layoutNum);
-        UnBind();
     }
+
+
     void VertexArray::Bind()
     {
         glBindVertexArray(m_vao);
@@ -25,4 +21,15 @@ namespace Agate
     {
         glBindVertexArray(0);
     }
+    void VertexArray::setUpVertexArray(VertexBuffer &VBO)
+    {
+
+        Bind();
+        glVertexAttribPointer(0, VBO.getLayout().vertexSize,
+                              GL_FLOAT, GL_FALSE, VBO.getLayout().stride, (void *) VBO.getLayout().offset);
+
+        glEnableVertexAttribArray(0);
+        UnBind();
+    }
+
 }// namespace Agate

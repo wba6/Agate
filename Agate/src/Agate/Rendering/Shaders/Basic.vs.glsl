@@ -8,7 +8,7 @@ uniform mat4 projection;
 out vec4 colors;
 
 void main(){
-    gl_Position = projection * view * model * vec4(Pos, 1.0);
-    colors = Ucolors;
+    gl_Position = vec4(Pos, 1.0);
+    colors = vec4(0.6,0.6,.0,1.0);
 }
 
