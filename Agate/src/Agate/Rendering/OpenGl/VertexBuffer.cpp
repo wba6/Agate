@@ -7,21 +7,15 @@
 
 namespace Agate
 {
-    VertexBuffer::VertexBuffer(const float *vertices, unsigned vertCount, int32_t drawtype)
+    VertexBuffer::VertexBuffer(const float *vertices, int32_t drawtype, size_t data_size)
     {
         glGenBuffers(1, &m_vbo);
         Bind();
 
-
-        glBufferData(GL_ARRAY_BUFFER, vertCount * sizeof(float), &vertices[0], drawtype);
+        //TODO: how to get the individual size of each buffer without asking for the number of vertices
+        glBufferData(GL_ARRAY_BUFFER, data_size, &vertices[0], drawtype);
         UnBind();
 
-        m_vertexLayOut.Normilized = false;
-        //TODO: layout num
-        m_vertexLayOut.layoutNum = 0;
-        m_vertexLayOut.vertexSize = vertCount;
-        m_vertexLayOut.stride = vertCount * sizeof (float);
-        m_vertexLayOut.offset = 0;
     }
     void VertexBuffer::Bind()
     {

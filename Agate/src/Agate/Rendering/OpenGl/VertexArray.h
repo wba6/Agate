@@ -5,15 +5,15 @@
 #ifndef AGATE_VERTEXARRAY_H
 #define AGATE_VERTEXARRAY_H
 #include "VertexBuffer.h"
-#include "VertexLayout.h"
+#include "BufferLayout.h"
 namespace Agate
 {
     class VertexArray {
     public:
-        explicit VertexArray(VertexBuffer VBO);
+        //takes in a data layout and the data through a void pointer
+        VertexArray(BufferDataLayout bufferInformation, float *data, size_t data_size);
         void Bind();
         void UnBind();
-        void setVertexLayout(VertexLayOut layout);
 
     private:
         unsigned int m_vao;
