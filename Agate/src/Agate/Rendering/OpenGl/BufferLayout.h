@@ -18,9 +18,7 @@ namespace Agate{
         std::string name;
         vertexType type;
         bool normalized;
-        size_t stride{0};
         size_t offset{0};
-
     };
 
 
