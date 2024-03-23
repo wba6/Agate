@@ -40,8 +40,8 @@ void Agate::EntryPoint::Run()
     };
 
     BufferDataLayout layout{
-            {"triangle", vertexType::Float3, false},
-            {"colors", vertexType::Float4,false},
+            {"triangle", vertexType::Float3},
+            {"colors", vertexType::Float4},
     };
 
     VertexArray VA(layout, verticesOne, sizeof (verticesOne));

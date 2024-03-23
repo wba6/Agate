@@ -2,6 +2,7 @@
 #ifndef AGATE_BUFFERLAYOUT_H
 #define AGATE_BUFFERLAYOUT_H
 #include <utility>
+#include <optional>
 
 #include "Agate/Core/Logger.h"
 namespace Agate{
@@ -14,10 +15,11 @@ namespace Agate{
     };
 
     //stores attribute data for a set of vertices
+    //user must set name and type
     struct vertexAttributes {
         std::string name;
         vertexType type;
-        bool normalized;
+        bool normalized{false};
         size_t offset{0};
     };
 
@@ -28,7 +30,7 @@ namespace Agate{
         BufferDataLayout(std::initializer_list<vertexAttributes> attributes)
             : m_attribute(attributes){
                 calculateOffsets();
-              };
+        };
 
         //TODO: breaks rules for accessing private things
         const std::vector<vertexAttributes>& getAttributes(){
