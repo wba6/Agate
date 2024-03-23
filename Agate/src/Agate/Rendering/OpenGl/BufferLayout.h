@@ -82,7 +82,6 @@ namespace Agate{
             return stride;
         }
 
-        //TODO: implement without this no way to set offsets
         size_t calculateOffsets()  {
             size_t offset = 0;
 
