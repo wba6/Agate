@@ -17,8 +17,9 @@ namespace Agate{
     struct vertexAttributes {
         std::string name;
         vertexType type;
-        size_t offset;
         bool normalized;
+        size_t stride{0};
+        size_t offset{0};
 
     };
 
@@ -28,7 +29,7 @@ namespace Agate{
     public:
         BufferDataLayout(std::initializer_list<vertexAttributes> attributes)
             : m_attribute(attributes){
-
+                calculateOffsets();
               };
 
         //TODO: breaks rules for accessing private things
@@ -68,7 +69,7 @@ namespace Agate{
                 case vertexType::Float4:
                     return 4;
             }
-            PRINTCRIT("Error unknown vertexType BufferDataLayout::getSize()");
+            PRINTCRIT("Error unknown vertexType BufferDataLayout::getVerticieCount()");
         }
     private:
 
@@ -84,7 +85,16 @@ namespace Agate{
         }
 
         //TODO: implement without this no way to set offsets
-        //int getOffset();
+        size_t calculateOffsets()  {
+            size_t offset = 0;
+
+            //loop through all attributes in the data and add up the total size to the next piece of data
+            for(auto& item: m_attribute){
+                item.offset = offset;
+                offset += getSize(item.type);
+            }
+            return 1;
+        }
     private:
         std::vector<vertexAttributes> m_attribute;
     };
