@@ -14,7 +14,7 @@ namespace Agate
 
     class IndexBuffer {
     public:
-        explicit IndexBuffer(std::vector<unsigned int> &vector, int32_t drawtype);
+        explicit IndexBuffer(std::vector<unsigned int> &vector);
         ~IndexBuffer();
 
         void Bind();
@@ -22,6 +22,7 @@ namespace Agate
 
         [[nodiscard]] unsigned int GetNumOfIndices() const;
 
+        void setUpBuffer();
     private:
         std::vector<unsigned int> m_indinces;
         unsigned int m_ibo;

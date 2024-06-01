@@ -34,19 +34,27 @@ void Agate::EntryPoint::Run()
 {
     Shader shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl");
     float verticesOne[] = {
-            -0.5f, -0.5f, 0.0f, 0.9f, 0.3f,0.6f,1.0f, // left
-            0.5f, -0.5f, 0.0f, 0.9f, 0.3f,0.6f,1.0f,// right
-            0.0f,  0.5f, 0.0f,  0.9f, 0.3f,0.6f,1.0f// top
+            0.5f,  0.5f, 0.0f,  // top right
+            0.5f, -0.5f, 0.0f,  // bottom right
+            -0.5f, -0.5f, 0.0f,  // bottom left
+            -0.5f,  0.5f, 0.0f   // top left
     };
 
+    std::vector<unsigned int> indexBuffer {  // note that we start from 0!
+            0, 1, 3,  // first Triangle
+            1, 2, 3   // second Triangle
+    };
+
+    IndexBuffer IB(indexBuffer);
     BufferDataLayout layout{
             {"triangle", vertexType::Float3},
-            {"colors", vertexType::Float4},
     };
 
     VertexArray VA(layout, verticesOne, sizeof (verticesOne));
+    VA.addIndexBuffer(IB);
+
     //TODO: Abstract all of this
-    /*float vertices[] = {
+/*    float vertices[] = {
             0.5f,  0.5f, 0.0f,  // top right
             0.5f, -0.5f, 0.0f,  // bottom right
             -0.5f, -0.5f, 0.0f,  // bottom left
@@ -68,14 +76,14 @@ void Agate::EntryPoint::Run()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);*/
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -101,8 +109,8 @@ void Agate::EntryPoint::Run()
         shader.Bind();
         // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         VA.Bind();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         ImGui::Begin("Frame");
         ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());

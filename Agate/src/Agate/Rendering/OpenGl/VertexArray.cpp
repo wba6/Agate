@@ -1,6 +1,3 @@
-//
-// Created by TANK1_41 on 9/16/2022.
-//
 #include "agpch.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
@@ -32,6 +29,14 @@ namespace Agate
             glEnableVertexAttribArray(i);
             UnBind();
         }
+    }
+
+    void VertexArray::addIndexBuffer(IndexBuffer indexBuffer) {
+        Bind();
+        indexBuffer.setUpBuffer();
+        // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+        UnBind();
+        indexBuffer.UnBind();
     }
 
 }// namespace Agate
