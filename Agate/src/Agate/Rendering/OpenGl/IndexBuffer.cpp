@@ -6,15 +6,10 @@
 #include <glad/glad.h>
 namespace Agate
 {
-    IndexBuffer::IndexBuffer(std::vector<unsigned int> &vector, int32_t drawtype)
+    IndexBuffer::IndexBuffer(std::vector<unsigned int> &vector)
         : m_indinces(vector)
     {
         glGenBuffers(1, &m_ibo);
-        Bind();
-
-
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(float), &m_indinces[0], drawtype);
-        UnBind();
     }
     void IndexBuffer::Bind()
     {
@@ -30,5 +25,11 @@ namespace Agate
     }
     IndexBuffer::~IndexBuffer()
     {
+    }
+
+    void IndexBuffer::setUpBuffer() {
+        Bind();
+
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(float), &m_indinces[0], STATIC_DRAW);
     }
 }// namespace Agate

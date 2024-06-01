@@ -4,18 +4,18 @@
 
 #ifndef AGATE_VERTEXARRAY_H
 #define AGATE_VERTEXARRAY_H
+#include "VertexBuffer.h"
+#include "BufferLayout.h"
+#include "IndexBuffer.h"
 namespace Agate
 {
-    struct VertexLayOut {
-        unsigned int layoutNum;
-        unsigned int vertexSize;
-        bool Normilized;
-        unsigned int stride;
-        unsigned int offset;
-    };
     class VertexArray {
     public:
-        explicit VertexArray(VertexLayOut vertexLayOut);
+        //takes in a data layout and the data through a void pointer
+        VertexArray(BufferDataLayout bufferInformation, float *data, size_t data_size);
+
+        void addIndexBuffer(IndexBuffer indexBuffer);
+
         void Bind();
         void UnBind();
 

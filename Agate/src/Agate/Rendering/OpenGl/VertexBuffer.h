@@ -4,7 +4,7 @@
 
 #ifndef AGATE_VERTEXBUFFER_H
 #define AGATE_VERTEXBUFFER_H
-
+#include "BufferLayout.h"
 
 #define STREAM_DRAW 0x88E0
 #define STREAM_READ 0x88E1
@@ -20,7 +20,7 @@ namespace Agate
 
     class VertexBuffer {
     public:
-        explicit VertexBuffer(const std::vector<float> &vertices, int32_t drawtype);
+        explicit VertexBuffer(const float *vertices, int32_t drawtype, size_t data_size);
         void Bind();
         void UnBind();
 

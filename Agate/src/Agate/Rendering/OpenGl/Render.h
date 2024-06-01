@@ -3,8 +3,6 @@
 //
 
 #pragma once
-#include "Agate/GameObjects/Square.h"
-#include "Agate/GameObjects/Triangle.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
 #include "VertexArray.h"
