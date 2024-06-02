@@ -1,12 +1,16 @@
 name: CI
 
 on:
+  schedule:
+    - cron: "0 18 * * 5"  # Runs every Friday at 6 PM UTC
   push:
     branches:
       - main
+      - develop
   pull_request:
     branches:
       - main
+      - develop
 
 jobs:
   build:
