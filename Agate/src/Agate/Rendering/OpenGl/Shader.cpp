@@ -8,12 +8,10 @@
 #include <glad/glad.h>
 #include <gtc/type_ptr.hpp>
 
-namespace Agate
-{
+namespace Agate {
 
 
-    Shader::Shader(const char *vertexShaderPath, const char *fragmentShaderPath)
-    {
+    Shader::Shader(const char *vertexShaderPath, const char *fragmentShaderPath) {
         // 1. retrieve the vertex/fragment source code from filePath
         std::string vertexCode;
         std::string fragmentCode;
@@ -22,8 +20,7 @@ namespace Agate
         // ensure ifstream objects can throw exceptions:
         vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-        try
-        {
+        try {
             // open files
             vShaderFile.open(vertexShaderPath);
             fShaderFile.open(fragmentShaderPath);
@@ -38,8 +35,7 @@ namespace Agate
             vertexCode = vShaderStream.str();
             fragmentCode = fShaderStream.str();
         }
-        catch (std::ifstream::failure &e)
-        {
+        catch (std::ifstream::failure &e) {
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
         }
 
@@ -65,48 +61,45 @@ namespace Agate
         int success;
         char infoLog[512];
         glGetProgramiv(m_shaderProgramID, GL_LINK_STATUS, &success);
-        if (!success)
-        {
+        if (!success) {
             glGetProgramInfoLog(m_shaderProgramID, 512, NULL, infoLog);
             PRINTCRIT("ERROR::SHADER::PROGRAM::LINKING_FAILED\n")
             PRINTWARN(infoLog);
         }
     }
-    void Shader::shaderCompileStatus(unsigned int id)
-    {
+
+    void Shader::shaderCompileStatus(unsigned int id) {
         int success;
         char infoLog[512];
         glGetShaderiv(id, GL_COMPILE_STATUS, &success);
 
-        if (!success)
-        {
+        if (!success) {
             glGetShaderInfoLog(id, 512, NULL, infoLog);
             PRINTCRIT("ERROR::SHADER::COMPILATION_FAILED\n");
             PRINTWARN(infoLog);
         }
     }
-    void Shader::Bind()
-    {
+
+    void Shader::Bind() {
         glUseProgram(m_shaderProgramID);
     }
-    void Shader::UnBind()
-    {
+
+    void Shader::UnBind() {
         glUseProgram(0);
     }
-    Shader::~Shader()
-    {
+
+    Shader::~Shader() {
         glDeleteShader(m_vertexShaderID);
         glDeleteShader(m_vertexShaderID);
     }
-    int Shader::getUniformLoc(const char *uniform) const
-    {
+
+    int Shader::getUniformLoc(const char *uniform) const {
         //makes it so we don't have to get the uniform location again if we already have it
         if (m_UniformLocationCache.find(uniform) != m_UniformLocationCache.end())
             return m_UniformLocationCache[uniform];
 
         int loc = glGetUniformLocation(m_shaderProgramID, uniform);
-        if (loc == -1)
-        {
+        if (loc == -1) {
             PRINTCRIT("Uniform not found");
             PRINTCRIT(uniform);
         }
@@ -115,20 +108,20 @@ namespace Agate
 
         return loc;
     }
-    void Shader::SetUniform4f(const char *uniform, float x, float y, float z, float w)
-    {
+
+    void Shader::SetUniform4f(const char *uniform, float x, float y, float z, float w) {
         glUniform4f(getUniformLoc(uniform), x, y, z, w);
     }
-    void Shader::SetUniform1i(const char *uniform, int value)
-    {
+
+    void Shader::SetUniform1i(const char *uniform, int value) {
         glUniform1i(getUniformLoc(uniform), value);
     }
-    void Shader::SetUniformMat4(const char *uniform, glm::mat4 trans)
-    {
+
+    void Shader::SetUniformMat4(const char *uniform, glm::mat4 trans) {
         glUniformMatrix4fv(getUniformLoc(uniform), 1, GL_FALSE, glm::value_ptr(trans));
     }
-    void Shader::SetUniform3f(const char *uniform, float x, float y, float z)
-    {
+
+    void Shader::SetUniform3f(const char *uniform, float x, float y, float z) {
         glUniform3f(getUniformLoc(uniform), x, y, z);
     }
 }// namespace Agate

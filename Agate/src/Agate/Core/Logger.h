@@ -19,6 +19,7 @@ namespace Agate
     };
 }// namespace Agate
 
+//types of supported logging
 #define PRINTMSG(x) Agate::Logger::printMSG(x);
 #define PRINTWARN(x) Agate::Logger::printWarn(x);
 #define PRINTERROR(x) Agate::Logger::printError(x);

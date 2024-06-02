@@ -1,11 +1,13 @@
 
 #ifndef AGATE_BUFFERLAYOUT_H
 #define AGATE_BUFFERLAYOUT_H
+
 #include <utility>
 #include <optional>
 
 #include "Agate/Core/Logger.h"
-namespace Agate{
+
+namespace Agate {
     //classify what data type the data is
     enum class vertexType {
         Float1,
@@ -14,8 +16,10 @@ namespace Agate{
         Float4,
     };
 
-    //stores attribute data for a set of vertices
-    //user must set name and type
+    /**
+     * stores attribute data for a set of vertices
+     * user must set name and type
+     */
     struct vertexAttributes {
         std::string name;
         vertexType type;
@@ -28,12 +32,13 @@ namespace Agate{
     class BufferDataLayout {
     public:
         BufferDataLayout(std::initializer_list<vertexAttributes> attributes)
-            : m_attribute(attributes){
-                calculateOffsets();
+                : m_attribute(attributes) {
+            calculateOffsets();
         };
 
         //TODO: breaks rules for accessing private things
-        const std::vector<vertexAttributes>& getAttributes(){
+        //solution make functions to get everything from m_attribute that vertex array needs
+        const std::vector<vertexAttributes> &getAttributes() {
             return m_attribute;
         }
 
@@ -41,9 +46,13 @@ namespace Agate{
             return calculateStride();
         }
 
+        /**
+         * getSize returns the size of a given type in bytes
+         * @param type
+         * @return the size of each vertex of the provided type
+         */
         int getSize(vertexType type) const {
-            switch (type)
-            {
+            switch (type) {
                 case vertexType::Float1:
                     return 1 * sizeof(float);
                 case vertexType::Float2:
@@ -54,12 +63,12 @@ namespace Agate{
                     return 4 * sizeof(float);
             }
             PRINTCRIT("Error unknown vertexType BufferDataLayout::getSize()");
+            return 0;
         }
 
         //get the size of given vertex
         int getVerticieCount(vertexType type) const {
-            switch (type)
-            {
+            switch (type) {
                 case vertexType::Float1:
                     return 1;
                 case vertexType::Float2:
@@ -71,29 +80,36 @@ namespace Agate{
             }
             PRINTCRIT("Error unknown vertexType BufferDataLayout::getVerticieCount()");
         }
+
     private:
 
-        //calculate the stride between each vertex based on data type
+        /**
+         * calculate the stride between each vertex based on data type
+         * returns: the stride between each vertex
+        */
         [[nodiscard]] size_t calculateStride() const {
             size_t stride = 0;
 
             //loop through all attributes in the data and add up the total size to the next piece of data
-            for(const auto& item: m_attribute){
+            for (const auto &item: m_attribute) {
                 stride += getSize(item.type);
             }
             return stride;
         }
 
-        size_t calculateOffsets()  {
+        /**
+         * Calculates the offset for each attribute of a vertex
+         */
+        void calculateOffsets() {
             size_t offset = 0;
 
             //loop through all attributes in the data and add up the total size to the next piece of data
-            for(auto& item: m_attribute){
+            for (auto &item: m_attribute) {
                 item.offset = offset;
                 offset += getSize(item.type);
             }
-            return 1;
         }
+
     private:
         std::vector<vertexAttributes> m_attribute;
     };

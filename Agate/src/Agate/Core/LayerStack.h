@@ -13,8 +13,16 @@ namespace Agate
         LayerStack() = default;
         ~LayerStack();
 
+        /**
+         * Adds layer to the end of the layer stack but before overlay layers
+         * @param layer
+         */
         virtual void AddLayer(Layer *layer);
         virtual void RemoveLayer(Layer *layer);
+        /**
+         * adds an overlay layer, overlay layers are the last to be rendered
+         * @param overlay
+         */
         virtual void AddOverlay(Layer *overlay);
         virtual void RemoveOverlay(Layer *overlay);
 

@@ -4,6 +4,7 @@
 
 #ifndef AGATE_VERTEXBUFFER_H
 #define AGATE_VERTEXBUFFER_H
+
 #include "BufferLayout.h"
 
 #define STREAM_DRAW 0x88E0
@@ -15,13 +16,20 @@
 #define DYNAMIC_DRAW 0x88E8
 #define DYNAMIC_READ 0x88E9
 #define DYNAMIC_COPY 0x88EA
-namespace Agate
-{
+namespace Agate {
 
     class VertexBuffer {
     public:
+        /**
+         * Constructor creates a vertex buffer
+         * @param vertices
+         * @param drawtype
+         * @param data_size
+         */
         explicit VertexBuffer(const float *vertices, int32_t drawtype, size_t data_size);
+
         void Bind();
+
         void UnBind();
 
     private:
