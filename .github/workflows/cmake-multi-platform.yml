@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake libxrandr-dev
+        sudo apt-get install -y cmake libxrandr-dev libxinerama-dev
 
     - name: Configure and build
       run: |
