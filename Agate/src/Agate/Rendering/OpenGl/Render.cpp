@@ -9,8 +9,8 @@
 
 long int Agate::Render::framesRendered;
 
-void Agate::Render::IndexRender(Agate::VertexArray *&vao, Agate::VertexBuffer &vbo, Agate::IndexBuffer &ibo, Shader &shader)
-{
+void Agate::Render::IndexRender(Agate::VertexArray *&vao, Agate::VertexBuffer &vbo, Agate::IndexBuffer &ibo,
+                                Shader &shader) {
     vao->Bind();
     ibo.Bind();
 
@@ -21,12 +21,12 @@ void Agate::Render::IndexRender(Agate::VertexArray *&vao, Agate::VertexBuffer &v
     ibo.UnBind();
     vao->UnBind();
 }
-long int Agate::Render::GetRenderedFrames()
-{
+
+long int Agate::Render::GetRenderedFrames() {
     return framesRendered;
 }
-void Agate::Render::VertexArraryRender(Agate::VertexArray *&vao, Agate::Shader &shader)
-{
+
+void Agate::Render::VertexArraryRender(Agate::VertexArray *&vao, Agate::Shader &shader) {
     vao->Bind();
     glDrawArrays(GL_TRIANGLES, 0, 36);
     shader.UnBind();
