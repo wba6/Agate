@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake libxrandr-dev libxinerama-dev libxcursor-dev build-essential
+        sudo apt-get install -y cmake libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
 
     - name: Configure and build
       run: |
@@ -29,4 +29,4 @@ jobs:
         cd build
         cmake ..
         make
-        
+
