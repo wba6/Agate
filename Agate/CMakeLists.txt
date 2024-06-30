@@ -36,11 +36,11 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glfw)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/spdlog)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/imgui)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glm)
+add_subdirectory(${PROJECT_SOURCE_DIR}/vender/assimp)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
-add_library(Agate-lib STATIC ${libSrc} ${libHead} src/Agate/ImGui-layer/imgui_interface.cpp src/Agate/ImGui-layer/imgui_interface.h src/Agate/Core/keyCodes.h src/Agate/Core/InputPulling.cpp src/Agate/Core/InputPulling.h
-)
+add_library(Agate-lib STATIC ${libSrc} ${libHead})
 
 target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"
