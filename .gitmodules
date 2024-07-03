@@ -14,3 +14,6 @@
 [submodule "Agate/vender/assimp"]
 	path = Agate/vender/assimp
 	url = https://github.com/wba6/assimp.git
+[submodule "Agate/vender/stb"]
+	path = Agate/vender/stb
+	url = https://github.com/wba6/stb.git

@@ -29,6 +29,8 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/vender/imgui/"
         "${PROJECT_SOURCE_DIR}/vender/glm/glm"
         "${PROJECT_SOURCE_DIR}/vender/glm/"
+        "${PROJECT_SOURCE_DIR}/vender/assimp/include"
+        "${PROJECT_SOURCE_DIR}/vender/stb"
         )
 
 
@@ -41,6 +43,9 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/vender/assimp)
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
 add_library(Agate-lib STATIC ${libSrc} ${libHead})
+
+# Link library to the Agate-lib target
+target_link_libraries(Agate-lib PUBLIC assimp glfw spdlog imgui glm)
 
 target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"
