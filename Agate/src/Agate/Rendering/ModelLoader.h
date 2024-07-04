@@ -3,7 +3,6 @@
 
 #include "agpch.h"
 #include "OpenGl/Shader.h"
-#include <stb_image.h>
 #include <glm/glm.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

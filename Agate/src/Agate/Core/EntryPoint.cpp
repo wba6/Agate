@@ -5,12 +5,17 @@
 #include "ImGui-layer/imgui_interface.h"
 #include "RenderContext/CurrentContext.h"
 #include "imgui.h"
-//TODO: remove this include
+//TODO: remove these include
 #include "glad/glad.h"
 #include "Agate/Rendering/OpenGl/Shader.h"
 #include "Rendering/OpenGl/VertexArray.h"
+#include "Rendering/ModelLoader.h"
+#include <filesystem>
+#include <iostream>
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
+
+
 
 Agate::EntryPoint::EntryPoint()
     : deltaTime{0}
@@ -32,26 +37,29 @@ Agate::EntryPoint::~EntryPoint()
 
 void Agate::EntryPoint::Run()
 {
-    Shader shader("Shaders/Basic.vs.glsl", "Shaders/Basic.fg.glsl");
-    float verticesOne[] = {
-            0.5f,  0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            -0.5f,  0.5f, 0.0f   // top left
-    };
+    //Shader shader("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
+    // load models
+    // -----------
+    //Model ourModel(std::filesystem::path("Shaders/backpack/backpack.obj").generic_string());
+//    float verticesOne[] = {
+//            0.5f,  0.5f, 0.0f,  // top right
+//            0.5f, -0.5f, 0.0f,  // bottom right
+//            -0.5f, -0.5f, 0.0f,  // bottom left
+//            -0.5f,  0.5f, 0.0f   // top left
+//    };
+//
+//    std::vector<unsigned int> indexBuffer {  // note that we start from 0!
+//            0, 1, 3,  // first Triangle
+//            1, 2, 3   // second Triangle
+//    };
+//
+//    IndexBuffer IB(indexBuffer);
+//    BufferDataLayout layout{
+//            {"triangle", vertexType::Float3},
+//    };
 
-    std::vector<unsigned int> indexBuffer {  // note that we start from 0!
-            0, 1, 3,  // first Triangle
-            1, 2, 3   // second Triangle
-    };
-
-    IndexBuffer IB(indexBuffer);
-    BufferDataLayout layout{
-            {"triangle", vertexType::Float3},
-    };
-
-    VertexArray VA(layout, verticesOne, sizeof (verticesOne));
-    VA.addIndexBuffer(IB);
+//    VertexArray VA(layout, verticesOne, sizeof (verticesOne));
+//    VA.addIndexBuffer(IB);
 
     int frameCount = 0;
     while (m_running)
@@ -67,11 +75,13 @@ void Agate::EntryPoint::Run()
         }
 
         //TODO: abstract this
-        shader.Bind();
+        //shader.Bind();
         // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        VA.Bind();
+        //VA.Bind();
         //glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //render model
+        //ourModel.Draw(shader);
 
         ImGui::Begin("Frame");
         ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
