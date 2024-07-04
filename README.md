@@ -7,3 +7,6 @@
 # How to clone 
 ```git clone --recursive <repo_url>```
 
+# Other details
+My current focus is working on the feature/model_loading branch
+
