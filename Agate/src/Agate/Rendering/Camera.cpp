@@ -6,8 +6,8 @@
 #include "Core/EntryPoint.h"
 #include "Core/keyCodes.h"
 #include "agpch.h"
-namespace Agate
-{
+
+namespace Agate {
     float Camera::s_lastX{400.f};
     float Camera::s_lastY{300.f};
     bool Camera::s_firstMouse{true};
@@ -17,11 +17,10 @@ namespace Agate
     glm::vec3 Camera::s_cameraFront{glm::vec3(0.0f, 0.0f, -1.0f)};
 
     Camera::Camera(Shader &shaderObj)
-        : s_Active(false), m_deltaTime(0.0f), m_lastFrame(0.0f), m_Shader(shaderObj), m_cameraPos(glm::vec3(0.0f, 0.0f, 3.0f)), m_cameraUp(glm::vec3(0.0f, 1.0f, 0.0f))
-    {}
+            : s_Active(false), m_deltaTime(0.0f), m_lastFrame(0.0f), m_Shader(shaderObj),
+              m_cameraPos(glm::vec3(0.0f, 0.0f, 3.0f)), m_cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)) {}
 
-    void Camera::onUpdate()
-    {
+    void Camera::onUpdate() {
         MouseMove();
         KeyPressed();
         m_deltaTime = EntryPoint::GetInstance()->GetDeltaTime();
@@ -30,14 +29,13 @@ namespace Agate
         m_Shader.SetUniformMat4("view", m_view);
         m_Shader.SetUniformMat4("projection", m_projection);
     }
-    void Camera::onEvent(Event &ev)
-    {
+
+    void Camera::onEvent(Event &ev) {
         EventNotifier call(ev);
         call.NotifyEvent<KeyPressedEvent>(BindFn(Camera::releaseCamera));
     }
 
-    bool Camera::KeyPressed()
-    {
+    bool Camera::KeyPressed() {
         if (!s_Active)
             return false;
         const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
@@ -56,8 +54,8 @@ namespace Agate
 
         return true;
     }
-    bool Camera::MouseMove()
-    {
+
+    bool Camera::MouseMove() {
         if (!s_Active)
             return false;
         float xpos = (float) InputPulling::GetXMousePos();
@@ -88,30 +86,27 @@ namespace Agate
         s_cameraFront = glm::normalize(direction);
         return true;
     }
-    bool Camera::releaseCamera(KeyPressedEvent &e)
-    {
 
-        if ((e.GetKeyCode() == AGATE_KEY_ESCAPE) && !s_Active)
-        {
+    bool Camera::releaseCamera(KeyPressedEvent &e) {
+
+        if ((e.GetKeyCode() == AGATE_KEY_ESCAPE) && !s_Active) {
             Agate::EntryPoint::GetInstance()->GetWindow()->GrabCursor(true);
             s_Active = true;
             s_firstMouse = true;
             return true;
-        }
-        else if (s_Active && (e.GetKeyCode() == AGATE_KEY_ESCAPE))
-        {
+        } else if (s_Active && (e.GetKeyCode() == AGATE_KEY_ESCAPE)) {
             Agate::EntryPoint::GetInstance()->GetWindow()->GrabCursor(false);
             s_Active = false;
             return true;
         }
         return false;
     }
-    glm::vec3 Camera::getCameraPos()
-    {
+
+    glm::vec3 Camera::getCameraPos() {
         return m_cameraPos;
     }
-    void Camera::setCameraPos(glm::vec3 pos)
-    {
+
+    void Camera::setCameraPos(glm::vec3 pos) {
         m_cameraPos = pos;
     }
 }// namespace Agate

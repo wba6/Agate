@@ -18,15 +18,14 @@ void Agate::Mesh::Draw(Agate::Shader &shader) {
     shader.Bind();
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
-    for(unsigned int i = 0; i < textures.size(); i++)
-    {
-        textures[i].bind( i);
+    for (unsigned int i = 0; i < textures.size(); i++) {
+        textures[i].bind(i);
         // retrieve texture number (the N in diffuse_textureN)
         std::string number;
         std::string name = textures[i].getType();
-        if(name == "texture_diffuse")
+        if (name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
-        else if(name == "texture_specular")
+        else if (name == "texture_specular")
             number = std::to_string(specularNr++);
 
         shader.SetUniform1i(("material." + name + number).c_str(), i);
@@ -43,12 +42,12 @@ void Agate::Mesh::Draw(Agate::Shader &shader) {
 void Agate::Mesh::setupMesh() {
 
     BufferDataLayout layout{
-           {"vertex positions", vertexType::Float3},
-           {"vertex normals", vertexType::Float3},
-           {"vertex texture coords", vertexType::Float2},
-           {"tangent", vertexType::Float3},
-           {"BiTangent", vertexType::Float3},
-     };
+            {"vertex positions",      vertexType::Float3},
+            {"vertex normals",        vertexType::Float3},
+            {"vertex texture coords", vertexType::Float2},
+            {"tangent",               vertexType::Float3},
+            {"BiTangent",             vertexType::Float3},
+    };
 
     IndexBuffer IB(indices);
 
@@ -59,22 +58,24 @@ void Agate::Mesh::setupMesh() {
 Agate::Mesh::~Mesh() {}
 
 Agate::Model::Model(const std::string &path, bool gamma)
-: gammaCorrection(gamma) {
+        : gammaCorrection(gamma) {
     loadModel(path);
     PRINTMSG("Model::Model model at path " + path + " loaded")
 }
 
 void Agate::Model::Draw(Agate::Shader &shader) {
-    for(unsigned int i = 0; i < meshes.size(); i++)
+    for (unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader);
 }
 
 void Agate::Model::loadModel(const std::string &path) {
     // read file via ASSIMP
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene *scene = importer.ReadFile(path,
+                                             aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs |
+                                             aiProcess_CalcTangentSpace);
     // check for errors
-    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
         PRINTERROR(std::string("ERROR::ASSIMP::loadModel:: ") + importer.GetErrorString());
         return;
@@ -88,16 +89,14 @@ void Agate::Model::loadModel(const std::string &path) {
 
 void Agate::Model::processNode(aiNode *node, const aiScene *scene) {
     // process each mesh located at the current node
-    for(unsigned int i = 0; i < node->mNumMeshes; i++)
-    {
+    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         // the node object only contains indices to index the actual objects in the scene.
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
-    for(unsigned int i = 0; i < node->mNumChildren; i++)
-    {
+    for (unsigned int i = 0; i < node->mNumChildren; i++) {
         processNode(node->mChildren[i], scene);
     }
 }
@@ -109,8 +108,7 @@ Agate::Mesh Agate::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     std::vector<Texture> textures;
 
     // walk through each of the mesh's vertices
-    for(unsigned int i = 0; i < mesh->mNumVertices; i++)
-    {
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
         Vertex vertex;
         glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
         // positions
@@ -119,15 +117,14 @@ Agate::Mesh Agate::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         vector.z = mesh->mVertices[i].z;
         vertex.Position = vector;
         // normals
-        if (mesh->HasNormals())
-        {
+        if (mesh->HasNormals()) {
             vector.x = mesh->mNormals[i].x;
             vector.y = mesh->mNormals[i].y;
             vector.z = mesh->mNormals[i].z;
             vertex.Normal = vector;
         }
         // texture coordinates
-        if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+        if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
         {
             glm::vec2 vec;
             // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't
@@ -145,22 +142,20 @@ Agate::Mesh Agate::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
             vector.y = mesh->mBitangents[i].y;
             vector.z = mesh->mBitangents[i].z;
             vertex.Bitangent = vector;
-        }
-        else
+        } else
             vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 
         vertices.push_back(vertex);
     }
     // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
-    for(unsigned int i = 0; i < mesh->mNumFaces; i++)
-    {
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
         aiFace face = mesh->mFaces[i];
         // retrieve all indices of the face and store them in the indices vector
-        for(unsigned int j = 0; j < face.mNumIndices; j++)
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
     // process materials
-    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
     // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
     // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER.
     // Same applies to other texture as the following list summarizes:
@@ -185,29 +180,27 @@ Agate::Mesh Agate::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<Agate::Texture> Agate::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName) {
+std::vector<Agate::Texture>
+Agate::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName) {
     std::vector<Texture> textures;
-    for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-    {
+    for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
         aiString str;
         mat->GetTexture(type, i, &str);
         // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
         bool skip = false;
-        for(auto & j : textures_loaded)
-        {
-            if(std::strcmp(j.getPath().data(), str.C_Str()) == 0)
-            {
+        for (auto &j: textures_loaded) {
+            if (std::strcmp(j.getPath().data(), str.C_Str()) == 0) {
                 textures.push_back(j);
                 skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
                 break;
             }
         }
-        if(!skip)
-        {   // if texture hasn't been loaded already, load it
+        if (!skip) {   // if texture hasn't been loaded already, load it
             Texture texture(str.C_Str(), this->directory, gammaCorrection);
             texture.setType(typeName);
             textures.push_back(texture);
-            textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
+            textures_loaded.push_back(
+                    texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
         }
     }
     return textures;

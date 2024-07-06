@@ -3,6 +3,7 @@
 //
 
 #pragma once
+
 #include "Agate/Events/Event.h"
 #include "Agate/Events/KeyEvents.h"
 #include "Agate/Events/MouseEvent.h"
@@ -10,20 +11,25 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-namespace Agate
-{
+
+namespace Agate {
     class Camera {
     public:
         explicit Camera(Shader &shaderObj);
 
         void onEvent(Event &ev);
+
         void onUpdate();
+
         glm::vec3 getCameraPos();
+
         void setCameraPos(glm::vec3 pos);
 
     private:
         bool KeyPressed();
+
         bool releaseCamera(KeyPressedEvent &e);
+
         bool MouseMove();
 
     private:

@@ -3,6 +3,7 @@
 
 //This has to be the final include with this definition here
 #define STB_IMAGE_IMPLEMENTATION
+
 #include <stb_image.h>
 #include <Core/Logger.h>
 
