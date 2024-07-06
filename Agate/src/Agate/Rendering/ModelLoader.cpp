@@ -60,7 +60,7 @@ Agate::Mesh::~Mesh() = default;
 Agate::Model::Model(const std::string &path, bool gamma)
         : gammaCorrection(gamma) {
     loadModel(path);
-    PRINTMSG("Model::Model model at path " + path + " loaded")
+    PRINTMSG("Model::Model model loaded from path " + path)
 }
 
 void Agate::Model::Draw(Agate::Shader &shader) {
