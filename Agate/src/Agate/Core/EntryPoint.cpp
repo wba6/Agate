@@ -37,7 +37,7 @@ Agate::EntryPoint::~EntryPoint()
 
 void Agate::EntryPoint::Run()
 {
-    Shader shader("Shaders/basic.vs.glsl", "Shaders/basic.fg.glsl");
+    //Shader shader("Shaders/basic.vs.glsl", "Shaders/basic.fg.glsl");
     // load models
     // -----------
     //Model ourModel(std::filesystem::path("Shaders/backpack/backpack.obj").generic_string());
