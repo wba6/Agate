@@ -13,7 +13,7 @@ namespace Agate {
     class VertexArray {
     public:
         //takes in a data layout and the data through a void pointer
-        VertexArray(BufferDataLayout bufferInformation, float *data, size_t data_size);
+        VertexArray(BufferDataLayout bufferInformation, void *data, size_t data_size);
 
         /**
          * Adds index buffer to the vertex array
@@ -24,6 +24,8 @@ namespace Agate {
         void Bind();
 
         void UnBind();
+
+        virtual ~VertexArray();
 
     private:
         unsigned int m_vao;

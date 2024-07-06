@@ -26,7 +26,7 @@ namespace Agate {
          * @param drawtype
          * @param data_size
          */
-        explicit VertexBuffer(const float *vertices, int32_t drawtype, size_t data_size);
+        explicit VertexBuffer(const void *vertices, int32_t drawtype, size_t data_size);
 
         void Bind();
 

@@ -3,6 +3,7 @@
 
 #include "agpch.h"
 #include "OpenGl/Shader.h"
+#include "OpenGl/VertexArray.h"
 #include <glm/glm.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -23,10 +24,6 @@ namespace Agate {
         glm::vec3 Tangent;
         // bitangent
         glm::vec3 Bitangent;
-        //bone indexes which will influence this vertex
-        int m_BoneIDs[MAX_BONE_INFLUENCE];
-        //weights from each bone
-        float m_Weights[MAX_BONE_INFLUENCE];
     };
 
     struct Texture {
@@ -44,11 +41,14 @@ namespace Agate {
 
         Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 
+
         void Draw(Shader &shader);
+
+        virtual ~Mesh();
 
     private:
         //  render data
-        unsigned int VAO, VBO, EBO;
+        std::shared_ptr<VertexArray> VA;
 
         void setupMesh();
     };

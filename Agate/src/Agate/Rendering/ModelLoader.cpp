@@ -2,13 +2,16 @@
 #include "ModelLoader.h"
 #include "Agate/Core/Logger.h"
 #include "glad/glad.h"
+#include "OpenGl/VertexArray.h"
 #include <utility>
 
 //This has to be the final include with this definition here
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+
 namespace Agate {
+    //@todo we should not use direct calls to opengl here fix before merge
     unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma) {
         std::string filename = std::string(path);
         filename = directory + '/' + filename;
@@ -78,38 +81,28 @@ void Agate::Mesh::Draw(Agate::Shader &shader) {
     glActiveTexture(GL_TEXTURE0);
 
     // draw mesh
-    glBindVertexArray(VAO);
+    VA->Bind();
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    VA->Bind();
 }
 
-//@todo we should not use direct calls to opengl here fix before merge
 void Agate::Mesh::setupMesh() {
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
 
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    BufferDataLayout layout{
+           {"vertex positions", vertexType::Float3},
+           {"vertex normals", vertexType::Float3},
+           {"vertex texture coords", vertexType::Float2},
+           {"tangent", vertexType::Float3},
+           {"BiTangent", vertexType::Float3},
+     };
 
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+    IndexBuffer IB(indices);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
-                 &indices[0], GL_STATIC_DRAW);
-
-    // vertex positions
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    // vertex normals
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-    // vertex texture coords
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-
-    glBindVertexArray(0);
+    VA = std::make_shared<VertexArray>(layout, &vertices[0], vertices.size() * sizeof(Vertex));
+    VA->addIndexBuffer(IB);
 }
+
+Agate::Mesh::~Mesh() {}
 
 Agate::Model::Model(const std::string &path, bool gamma)
 : gammaCorrection(gamma) {

@@ -37,7 +37,7 @@ Agate::EntryPoint::~EntryPoint()
 
 void Agate::EntryPoint::Run()
 {
-    //Shader shader("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
+    Shader shader("Shaders/basic.vs.glsl", "Shaders/basic.fg.glsl");
     // load models
     // -----------
     //Model ourModel(std::filesystem::path("Shaders/backpack/backpack.obj").generic_string());
@@ -79,7 +79,7 @@ void Agate::EntryPoint::Run()
         // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //VA.Bind();
         //glDrawArrays(GL_TRIANGLES, 0, 3);
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         //render model
         //ourModel.Draw(shader);
 
