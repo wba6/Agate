@@ -4,6 +4,7 @@
 #include "agpch.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/VertexArray.h"
+#include "OpenGl/Texture.h"
 #include <glm/glm.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -24,12 +25,6 @@ namespace Agate {
         glm::vec3 Tangent;
         // bitangent
         glm::vec3 Bitangent;
-    };
-
-    struct Texture {
-        unsigned int id;
-        std::string type;
-        std::string path;
     };
 
     class Mesh {
@@ -80,12 +75,6 @@ namespace Agate {
         // the required info is returned as a Texture struct.
         std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
     };
-
-
-    class ModelLoader {
-
-    };
-
 }
 
 #endif //AGATE_MODELLOADER_H
