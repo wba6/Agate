@@ -55,7 +55,7 @@ void Agate::Mesh::setupMesh() {
     VA->addIndexBuffer(IB);
 }
 
-Agate::Mesh::~Mesh() {}
+Agate::Mesh::~Mesh() = default;
 
 Agate::Model::Model(const std::string &path, bool gamma)
         : gammaCorrection(gamma) {
@@ -64,8 +64,8 @@ Agate::Model::Model(const std::string &path, bool gamma)
 }
 
 void Agate::Model::Draw(Agate::Shader &shader) {
-    for (unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].Draw(shader);
+    for (auto & mesh : meshes)
+        mesh.Draw(shader);
 }
 
 void Agate::Model::loadModel(const std::string &path) {
@@ -77,7 +77,7 @@ void Agate::Model::loadModel(const std::string &path) {
     // check for errors
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
-        PRINTERROR(std::string("ERROR::ASSIMP::loadModel:: ") + importer.GetErrorString());
+        PRINTERROR(std::string("ERROR::Model::loadModel Assimp Error: ") + importer.GetErrorString());
         return;
     }
     // retrieve the directory path of the filepath
@@ -177,7 +177,7 @@ Agate::Mesh Agate::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     // return a mesh object created from the extracted mesh data
-    return Mesh(vertices, indices, textures);
+    return Mesh{vertices, indices, textures};
 }
 
 std::vector<Agate::Texture>
@@ -203,5 +203,5 @@ Agate::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::str
                     texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
         }
     }
-    return textures;
+    return std::move(textures);
 }
