@@ -17,7 +17,7 @@ namespace Agate {
     glm::vec3 Camera::s_cameraFront{glm::vec3(0.0f, 0.0f, -1.0f)};
 
     Camera::Camera(Shader &shaderObj)
-            : s_Active(false), m_deltaTime(0.0f), m_lastFrame(0.0f), m_Shader(shaderObj),
+            : m_cameraSpeed(2.5f), s_Active(false), m_deltaTime(0.0f), m_lastFrame(0.0f), m_Shader(shaderObj),
               m_cameraPos(glm::vec3(0.0f, 0.0f, 3.0f)), m_cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)) {}
 
     void Camera::onUpdate() {
@@ -38,7 +38,7 @@ namespace Agate {
     bool Camera::KeyPressed() {
         if (!s_Active)
             return false;
-        const float cameraSpeed = 2.5f * m_deltaTime;// adjust accordingly
+        float cameraSpeed = m_cameraSpeed * m_deltaTime;// adjust accordingly
         if (InputPulling::IsKeyPressed(AGATE_KEY_W))
             m_cameraPos += cameraSpeed * s_cameraFront;
         if (InputPulling::IsKeyPressed(AGATE_KEY_S))
@@ -108,5 +108,9 @@ namespace Agate {
 
     void Camera::setCameraPos(glm::vec3 pos) {
         m_cameraPos = pos;
+    }
+
+    void Camera::setCameraSpeed(float cameraSpeed) {
+        m_cameraSpeed = cameraSpeed;
     }
 }// namespace Agate

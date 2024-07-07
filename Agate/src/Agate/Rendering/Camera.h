@@ -25,6 +25,8 @@ namespace Agate {
 
         void setCameraPos(glm::vec3 pos);
 
+        void setCameraSpeed(float cameraSpeed);
+
     private:
         bool KeyPressed();
 
@@ -36,6 +38,7 @@ namespace Agate {
         static float s_lastX, s_lastY, s_yaw, s_pitch, s_fov;
         static bool s_firstMouse;
         static glm::vec3 s_cameraFront;
+        float m_cameraSpeed;
         float m_lastFrame;
         bool s_Active;
         Shader &m_Shader;
