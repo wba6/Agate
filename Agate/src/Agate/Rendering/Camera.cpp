@@ -25,7 +25,7 @@ namespace Agate {
         KeyPressed();
         m_deltaTime = EntryPoint::GetInstance()->GetDeltaTime();
         m_view = glm::lookAt(m_cameraPos, m_cameraPos + s_cameraFront, m_cameraUp);
-        m_projection = glm::perspective(glm::radians(s_fov), 800.0f / 600.0f, 0.1f, 100.0f);
+        m_projection = glm::perspective(glm::radians(s_fov), 800.0f / 600.0f, 0.1f, 1000.0f);
         m_Shader.SetUniformMat4("view", m_view);
         m_Shader.SetUniformMat4("projection", m_projection);
     }
