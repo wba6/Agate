@@ -36,7 +36,7 @@ public:
         camera = new Agate::Camera(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
-        model = new Agate::Model(std::filesystem::path("Shaders/Sponza-master/sponza.obj").generic_string());
+        model = new Agate::Model(std::filesystem::path("Shaders/backpack/backpack.obj").generic_string());
     }
 
     void Detach() override
@@ -49,24 +49,9 @@ public:
 
         glm::mat4 trans_model = glm::mat4(1.0f);
         trans_model = glm::translate(trans_model, glm::vec3(0.0f, 0.0f, 0.0f));// translate it down so it's at the center of the scene
-        trans_model = glm::scale(trans_model, glm::vec3(0.01f, 0.01f, 0.01f));    // it's a bit too big for our scene, so scale it down
+        trans_model = glm::scale(trans_model, glm::vec3(0.5f, 0.5f, 0.5f));    // it's a bit too big for our scene, so scale it down
         shader->SetUniformMat4("model", trans_model);
         model->Draw(*shader);
-//        glm::mat4 trans_model = glm::mat4(1.0f);
-//
-//        for(int i = 1; i < 10; i+=2){
-//            for(int j = 1; j < 10; j+=2) {
-//                trans_model = glm::mat4(1.0f);
-//                trans_model = glm::translate(trans_model, glm::vec3(j*1.0f, 0.0f, -i *
-//                                                                                 1.0f));// translate it down so it's at the center of the scene
-//                trans_model = glm::scale(trans_model, glm::vec3(1.0f, 1.0f,
-//                                                                1.0f));    // it's a bit too big for our scene, so scale it down
-//                shader->SetUniformMat4("model", trans_model);
-//                model->Draw(*shader);
-//            }
-//        }
-
-
     }
     void OnEvent(Agate::Event &e) override
     {
