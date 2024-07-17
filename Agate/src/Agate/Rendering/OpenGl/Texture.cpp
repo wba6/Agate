@@ -13,6 +13,7 @@ namespace Agate {
         std::string filename = directory + '/' + m_path;
 
         //because of the way the texture we have is loaded
+        //@todo when is it full necessary to flip textures
         stbi_set_flip_vertically_on_load(true);
 
         glGenTextures(1, &m_textureID);
