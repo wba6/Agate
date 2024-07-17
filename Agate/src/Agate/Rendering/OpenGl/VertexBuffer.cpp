@@ -6,11 +6,11 @@
 #include <glad/glad.h>
 
 namespace Agate {
-    VertexBuffer::VertexBuffer(const float *vertices, int32_t drawtype, size_t data_size) {
+    VertexBuffer::VertexBuffer(const void *vertices, int32_t drawtype, size_t data_size) {
         glGenBuffers(1, &m_vbo);
         Bind();
 
-        glBufferData(GL_ARRAY_BUFFER, data_size, &vertices[0], drawtype);
+        glBufferData(GL_ARRAY_BUFFER, data_size, vertices, drawtype);
         UnBind();
 
     }

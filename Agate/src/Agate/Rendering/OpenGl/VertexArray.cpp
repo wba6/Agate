@@ -14,7 +14,7 @@ namespace Agate {
         glBindVertexArray(0);
     }
 
-    VertexArray::VertexArray(BufferDataLayout bufferInformation, float *data, size_t data_size) {
+    VertexArray::VertexArray(BufferDataLayout bufferInformation, void *data, size_t data_size) {
         glGenVertexArrays(1, &m_vao);
         VertexBuffer VBO(data, STATIC_DRAW, data_size);
         VBO.Bind();
@@ -37,5 +37,7 @@ namespace Agate {
         UnBind();
         indexBuffer.UnBind();
     }
+
+    VertexArray::~VertexArray() {}
 
 }// namespace Agate

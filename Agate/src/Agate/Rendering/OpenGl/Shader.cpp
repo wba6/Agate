@@ -100,8 +100,7 @@ namespace Agate {
 
         int loc = glGetUniformLocation(m_shaderProgramID, uniform);
         if (loc == -1) {
-            PRINTCRIT("Uniform not found");
-            PRINTCRIT(uniform);
+            PRINTWARN(std::string("Shader::getUniformLoc Uniform not found: ") + uniform);
         }
 
         m_UniformLocationCache[uniform] = loc;

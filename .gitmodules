@@ -11,3 +11,9 @@
 [submodule "Agate/vender/glm"]
 	path = Agate/vender/glm
 	url = https://github.com/TANK1-41/glm
+[submodule "Agate/vender/assimp"]
+	path = Agate/vender/assimp
+	url = https://github.com/wba6/assimp.git
+[submodule "Agate/vender/stb"]
+	path = Agate/vender/stb
+	url = https://github.com/wba6/stb.git
