@@ -5,12 +5,6 @@
 #include "ImGui-layer/imgui_interface.h"
 #include "RenderContext/CurrentContext.h"
 #include "imgui.h"
-//TODO: remove these include
-#include "glad/glad.h"
-#include "Agate/Rendering/OpenGl/Shader.h"
-#include "Rendering/OpenGl/VertexArray.h"
-#include "Rendering/ModelLoader.h"
-#include <filesystem>
 #include <iostream>
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
