@@ -36,7 +36,7 @@ public:
         camera = new Agate::Camera(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
-        model = new Agate::Model(std::filesystem::path("Shaders/backpack/backpack.obj").generic_string());
+        model = new Agate::ModelLoader(std::filesystem::path("Shaders/backpack/backpack.obj").generic_string());
     }
 
     void Detach() override
@@ -63,7 +63,7 @@ public:
 
     Agate::Shader *shader;
     Agate::Camera *camera;
-    Agate::Model *model;
+    Agate::ModelLoader *model;
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()

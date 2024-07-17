@@ -12,7 +12,7 @@ namespace Agate {
 
         void bind(unsigned int slot);
 
-        void unBind(unsigned int slot);
+        void unBind();
 
         void setType(std::string &typeName);
 

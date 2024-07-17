@@ -53,7 +53,7 @@ namespace Agate {
         glBindTexture(GL_TEXTURE_2D, m_textureID);
     }
 
-    void Texture::unBind(unsigned int slot = 0) {
+    void Texture::unBind() {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 

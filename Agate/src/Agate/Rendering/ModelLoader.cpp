@@ -57,18 +57,18 @@ void Agate::Mesh::setupMesh() {
 
 Agate::Mesh::~Mesh() = default;
 
-Agate::Model::Model(const std::string &path, bool gamma)
+Agate::ModelLoader::ModelLoader(const std::string &path, bool gamma)
         : gammaCorrection(gamma) {
     loadModel(path);
     PRINTMSG("Model::Model model loaded from path " + path)
 }
 
-void Agate::Model::Draw(Agate::Shader &shader) {
+void Agate::ModelLoader::Draw(Agate::Shader &shader) {
     for (auto & mesh : meshes)
         mesh.Draw(shader);
 }
 
-void Agate::Model::loadModel(const std::string &path) {
+void Agate::ModelLoader::loadModel(const std::string &path) {
     // read file via ASSIMP
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(path,
@@ -87,7 +87,7 @@ void Agate::Model::loadModel(const std::string &path) {
     processNode(scene->mRootNode, scene);
 }
 
-void Agate::Model::processNode(aiNode *node, const aiScene *scene) {
+void Agate::ModelLoader::processNode(aiNode *node, const aiScene *scene) {
     // process each mesh located at the current node
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         // the node object only contains indices to index the actual objects in the scene.
@@ -101,7 +101,7 @@ void Agate::Model::processNode(aiNode *node, const aiScene *scene) {
     }
 }
 
-Agate::Mesh Agate::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
+Agate::Mesh Agate::ModelLoader::processMesh(aiMesh *mesh, const aiScene *scene) {
     // data to fill
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -181,7 +181,7 @@ Agate::Mesh Agate::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
 }
 
 std::vector<Agate::Texture>
-Agate::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName) {
+Agate::ModelLoader::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName) {
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
         aiString str;
