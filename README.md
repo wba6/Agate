@@ -10,3 +10,7 @@
 # How to clone 
 ```git clone --recursive <repo_url>```
 
+# Other details
+My current focus is working on
+- [feature/model_loading](https://github.com/wba6/Agate/tree/feature/model_loading)
+
