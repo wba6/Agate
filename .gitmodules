@@ -6,7 +6,7 @@
 	url = https://github.com/TANK1-41/spdlog
 [submodule "Agate/vender/imgui"]
 	path = Agate/vender/imgui
-	url = https://github.com/TANK1-41/imgui
+	url = https://github.com/wba6/imgui.git
 	branch = docking
 [submodule "Agate/vender/glm"]
 	path = Agate/vender/glm
