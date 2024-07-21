@@ -9,10 +9,27 @@ namespace Agate
     class API Logger {
     public:
         static void initLogger();
-        static void printMSG(std::string msg, const char* file, const char* function, int line);
-        static void printWarn(std::string msg, const char* file, const char* function, int line);
-        static void printError(std::string msg, const char* file, const char* function, int line);
-        static void printCrit(std::string msg, const char* file, const char* function, int line);
+
+        template<typename... Args>
+        static void printMSG(const char* file, const char* function, int line, const char* format, Args&&... args)
+        {
+            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, fmt::format(format, std::forward<Args>(args)...));
+        }
+
+        template<typename... Args>
+        static void printWarn(const char* file, const char* function, int line, const char* format, Args&&... args) {
+            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, fmt::format(format, std::forward<Args>(args)...));
+        }
+
+        template<typename... Args>
+        static void printError(const char* file, const char* function, int line, const char* format, Args&&... args) {
+            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, fmt::format(format, std::forward<Args>(args)...));
+        }
+
+        template<typename... Args>
+        static void printCrit(const char* file, const char* function, int line, const char* format, Args&&... args) {
+            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, fmt::format(format, std::forward<Args>(args)...));
+        }
 
     private:
         static std::shared_ptr<spdlog::logger> s_Logger;
@@ -20,7 +37,7 @@ namespace Agate
 }// namespace Agate
 
 //types of supported logging
-#define PRINTMSG(x) Agate::Logger::printMSG(x, __FILE__, __func__, __LINE__);
-#define PRINTWARN(x) Agate::Logger::printWarn(x, __FILE__, __func__, __LINE__);
-#define PRINTERROR(x) Agate::Logger::printError(x, __FILE__, __func__, __LINE__);
-#define PRINTCRIT(x) Agate::Logger::printCrit(x, __FILE__, __func__, __LINE__);
+#define PRINTMSG(format, ...) Agate::Logger::printMSG(__FILE__, __func__, __LINE__, format, ##__VA_ARGS__)
+#define PRINTWARN(format, ...) Agate::Logger::printWarn(__FILE__, __func__, __LINE__, format, ##__VA_ARGS__)
+#define PRINTERROR(format, ...) Agate::Logger::printError(__FILE__, __func__, __LINE__, format, ##__VA_ARGS__)
+#define PRINTCRIT(format, ...) Agate::Logger::printCrit(__FILE__, __func__, __LINE__, format, ##__VA_ARGS__)

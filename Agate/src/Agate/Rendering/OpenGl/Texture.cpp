@@ -43,7 +43,7 @@ namespace Agate {
             stbi_image_free(data);
             glBindTexture(GL_TEXTURE_2D, 0);
         } else {
-            PRINTERROR(std::string("Texture failed to load at path: ") + m_path)
+            PRINTERROR("Texture failed to load at path: {}", m_path);
             glBindTexture(GL_TEXTURE_2D, 0);
             stbi_image_free(data);
         }

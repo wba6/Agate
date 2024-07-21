@@ -84,7 +84,7 @@ namespace Agate
 
     void Window::GlfwError(int error_code, const char *description)
     {
-        PRINTCRIT("GLFW ERROR---CODE:" + std::to_string(error_code) + " :" + description);
+        PRINTCRIT("GLFW ERROR---CODE: {} : {}", error_code, description);
     }
 
     void Window::OnUpdate()

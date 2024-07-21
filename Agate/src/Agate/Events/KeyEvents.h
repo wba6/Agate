@@ -16,8 +16,7 @@ namespace Agate
         }
         void PrintEventName() override
         {
-            std::string eventString = "KeyPressedEvent: " + std::to_string(m_keycode);
-            PRINTMSG(eventString);
+            PRINTMSG("KeyPressedEvent: {}",m_keycode);
         }
         bool Handled() override
         {
@@ -47,8 +46,7 @@ namespace Agate
         }
         void PrintEventName() override
         {
-            std::string eventString = "KeyReleasedEvent: " + std::to_string(m_keycode);
-            PRINTMSG(eventString);
+            PRINTMSG("KeyReleasedEvent: {}", m_keycode);
         }
         bool Handled() override
         {
