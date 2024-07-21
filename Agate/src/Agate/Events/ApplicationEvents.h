@@ -17,8 +17,7 @@ namespace Agate
 
         void PrintEventName() override
         {
-            std::string eventString = "WindowResized to: " + std::to_string(m_xSize) + ", " + std::to_string(m_ySize);
-            PRINTMSG(eventString);
+            PRINTMSG("Window Resized to: {}, {}", m_xSize, m_ySize);
         }
 
         bool Handled() override
@@ -48,8 +47,7 @@ namespace Agate
 
         void PrintEventName() override
         {
-            std::string eventString = "Window Closing";
-            PRINTMSG(eventString);
+            PRINTMSG("Window Closing");
         }
 
         bool Handled() override

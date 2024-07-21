@@ -60,7 +60,7 @@ Agate::Mesh::~Mesh() = default;
 Agate::ModelLoader::ModelLoader(const std::string &path, bool gamma)
         : gammaCorrection(gamma) {
     loadModel(path);
-    PRINTMSG("Model::Model model loaded from path " + path)
+    PRINTMSG("model loaded from path {}", path);
 }
 
 void Agate::ModelLoader::Draw(Agate::Shader &shader) {
@@ -77,7 +77,7 @@ void Agate::ModelLoader::loadModel(const std::string &path) {
     // check for errors
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
-        PRINTERROR(std::string("ERROR::Model::loadModel Assimp Error: ") + importer.GetErrorString());
+        PRINTERROR("ERROR::Model::loadModel Assimp Error: {}", importer.GetErrorString());
         return;
     }
     // retrieve the directory path of the filepath

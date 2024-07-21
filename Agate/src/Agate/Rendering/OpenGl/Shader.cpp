@@ -63,8 +63,8 @@ namespace Agate {
         glGetProgramiv(m_shaderProgramID, GL_LINK_STATUS, &success);
         if (!success) {
             glGetProgramInfoLog(m_shaderProgramID, 512, NULL, infoLog);
-            PRINTCRIT("ERROR::SHADER::PROGRAM::LINKING_FAILED\n")
-            PRINTWARN(infoLog);
+            PRINTCRIT("ERROR::SHADER::PROGRAM::LINKING_FAILED\n");
+            PRINTWARN("",infoLog);
         }
     }
 
@@ -100,7 +100,7 @@ namespace Agate {
 
         int loc = glGetUniformLocation(m_shaderProgramID, uniform);
         if (loc == -1) {
-            PRINTWARN(std::string("Shader::getUniformLoc Uniform not found: ") + uniform);
+            PRINTWARN("Shader::getUniformLoc Uniform not found: {}", uniform);
         }
 
         m_UniformLocationCache[uniform] = loc;

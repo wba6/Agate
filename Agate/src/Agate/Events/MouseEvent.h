@@ -17,8 +17,7 @@ namespace Agate
 
         void PrintEventName() override
         {
-            std::string eventString = "MouseMoved to: " + std::to_string(m_newXPos) + ", " + std::to_string(m_newYPos);
-            PRINTMSG(eventString);
+            PRINTMSG("MouseMoved to: {}, {}", m_newXPos, m_newYPos);
         }
         int GetXPos()
         {
@@ -63,7 +62,7 @@ namespace Agate
         void PrintEventName() override
         {
             std::string eventString = "MousePressed button: " + std::to_string(m_button);
-            PRINTMSG(eventString);
+            PRINTMSG("MousePressed button: {}", m_button);
         }
         bool Handled() override
         {
@@ -88,8 +87,7 @@ namespace Agate
         }
         void PrintEventName() override
         {
-            std::string eventString = "MouseReleased button: " + std::to_string(m_button);
-            PRINTMSG(eventString);
+            PRINTMSG("MouseReleased button: {}", m_button);
         }
         bool Handled() override
         {
