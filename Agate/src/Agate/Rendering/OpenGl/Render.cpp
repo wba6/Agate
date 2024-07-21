@@ -5,6 +5,7 @@
 
 #include "Render.h"
 #include "VertexBuffer.h"
+#include "OpenGLCheck.h"
 #include <glad/glad.h>
 
 long int Agate::Render::framesRendered;
@@ -15,7 +16,7 @@ void Agate::Render::IndexRender(Agate::VertexArray *&vao, Agate::VertexBuffer &v
     ibo.Bind();
 
 
-    glDrawElements(GL_TRIANGLES, ibo.GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+    GLCall(glDrawElements(GL_TRIANGLES, ibo.GetNumOfIndices(), GL_UNSIGNED_INT, nullptr));
 
     shader.UnBind();
     ibo.UnBind();
@@ -28,7 +29,7 @@ long int Agate::Render::GetRenderedFrames() {
 
 void Agate::Render::VertexArraryRender(Agate::VertexArray *&vao, Agate::Shader &shader) {
     vao->Bind();
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
     shader.UnBind();
     vao->UnBind();
 }
