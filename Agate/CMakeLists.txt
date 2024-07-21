@@ -42,8 +42,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/vender/assimp)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
-add_library(Agate-lib STATIC ${libSrc} ${libHead}
-        src/Agate/Rendering/OpenGl/OpenGLCheck.h)
+add_library(Agate-lib STATIC ${libSrc} ${libHead})
 
 # Link library to the Agate-lib target
 target_link_libraries(Agate-lib PUBLIC assimp glfw spdlog imgui glm)
