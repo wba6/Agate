@@ -5,18 +5,20 @@
 #ifndef AGATE_IMGUI_INTERFACE_H
 #define AGATE_IMGUI_INTERFACE_H
 
-namespace Agate
-{
+namespace Agate {
     class imgui_interface {
 
     public:
         static void Init(void *window);
+
         static void ImguiDestruct();
+
         static void BeginFrame();
+
         static void EndFrame();
 
     private:
-        imgui_interface(){};
+        imgui_interface() {};
     };
 
 }// namespace Agate

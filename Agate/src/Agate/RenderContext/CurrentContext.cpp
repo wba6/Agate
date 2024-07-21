@@ -6,13 +6,13 @@
 
 bool Agate::CurrentContext::OpenGL = false;
 Agate::Context *Agate::CurrentContext::CurrentContextPointer = nullptr;
-Agate::Context *&Agate::CurrentContext::GetCurrentContex()
-{
+
+Agate::Context *&Agate::CurrentContext::GetCurrentContex() {
     if (CurrentContextPointer == nullptr)
         PRINTCRIT("Context Pointer Requested before initialized");
     return CurrentContextPointer;
 }
-void Agate::CurrentContext::SetContextPointer(Context *ptr)
-{
+
+void Agate::CurrentContext::SetContextPointer(Context *ptr) {
     CurrentContextPointer = ptr;
 }

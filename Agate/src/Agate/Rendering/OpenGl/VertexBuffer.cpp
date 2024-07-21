@@ -3,23 +3,25 @@
 //
 
 #include "VertexBuffer.h"
+#include "OpenGLCheck.h"
+
 #include <glad/glad.h>
 
 namespace Agate {
     VertexBuffer::VertexBuffer(const void *vertices, int32_t drawtype, size_t data_size) {
-        glGenBuffers(1, &m_vbo);
+        GLCall(glGenBuffers(1, &m_vbo));
         Bind();
 
-        glBufferData(GL_ARRAY_BUFFER, data_size, vertices, drawtype);
+        GLCall(glBufferData(GL_ARRAY_BUFFER, data_size, vertices, drawtype));
         UnBind();
 
     }
 
     void VertexBuffer::Bind() {
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
     }
 
     void VertexBuffer::UnBind() {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
 }// namespace Agate

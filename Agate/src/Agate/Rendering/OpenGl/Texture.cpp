@@ -1,5 +1,6 @@
 #include "Texture.h"
 #include <glad/glad.h>
+#include "OpenGLCheck.h"
 
 //This has to be the final include with this definition here
 #define STB_IMAGE_IMPLEMENTATION
@@ -16,7 +17,7 @@ namespace Agate {
         //@todo when is it full necessary to flip textures
         stbi_set_flip_vertically_on_load(true);
 
-        glGenTextures(1, &m_textureID);
+        GLCall(glGenTextures(1, &m_textureID));
 
         int nrComponents;
         unsigned char *data = stbi_load(filename.c_str(), &m_width, &m_height, &nrComponents, 0);
@@ -31,31 +32,31 @@ namespace Agate {
             else
                 PRINTERROR("Texture::Texture unknown nrComponents type");
 
-            glBindTexture(GL_TEXTURE_2D, m_textureID);
-            glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
+            GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
+            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, data));
+            GLCall(glGenerateMipmap(GL_TEXTURE_2D));
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
             stbi_image_free(data);
-            glBindTexture(GL_TEXTURE_2D, 0);
+            GLCall(glBindTexture(GL_TEXTURE_2D, 0));
         } else {
             PRINTERROR("Texture failed to load at path: {}", m_path);
-            glBindTexture(GL_TEXTURE_2D, 0);
+            GLCall(glBindTexture(GL_TEXTURE_2D, 0));
             stbi_image_free(data);
         }
     }
 
     void Texture::bind(unsigned int slot = 0) {
-        glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_2D, m_textureID);
+        GLCall(glActiveTexture(GL_TEXTURE0 + slot));
+        GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
     }
 
     void Texture::unBind() {
-        glBindTexture(GL_TEXTURE_2D, 0);
+        GLCall(glBindTexture(GL_TEXTURE_2D, 0));
     }
 
     const std::string &Texture::getPath() {

@@ -10,10 +10,8 @@
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 
-
 Agate::EntryPoint::EntryPoint()
-    : deltaTime{0}
-{
+        : deltaTime{0} {
     s_instance = this;
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
@@ -26,23 +24,19 @@ Agate::EntryPoint::EntryPoint()
     CurrentContext::OpenGL = true;
 }
 
-Agate::EntryPoint::~EntryPoint()
-{
+Agate::EntryPoint::~EntryPoint() {
     imgui_interface::ImguiDestruct();
 }
 
-void Agate::EntryPoint::Run()
-{
+void Agate::EntryPoint::Run() {
     int frameCount = 0;
-    while (m_running)
-    {
+    while (m_running) {
         frameCount++;
         double FrameTime = m_window->WindowOpenTime();
         Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
         imgui_interface::BeginFrame();
-        for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
-        {
+        for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
             m_layerStack.m_layers.at(i)->OnRender();
         }
 
@@ -56,23 +50,20 @@ void Agate::EntryPoint::Run()
 
         m_window->OnUpdate();
 
-        if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1)
-        {
+        if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1) {
             deltaTime = m_window->WindowOpenTime() - FrameTime;
         }
     };
 }
 
-void Agate::EntryPoint::OnEvent(Event &e)
-{
+void Agate::EntryPoint::OnEvent(Event &e) {
     EventNotifier notifier(e);
 
     notifier.NotifyEvent<WindowCloseEvent>(BindFn(EntryPoint::OnWindowClose));
     /*e.PrintEventName();*/
 
 
-    for (size_t i{0}; i < m_layerStack.m_layers.size(); i++)
-    {
+    for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
         m_layerStack.m_layers.at(i)->OnEvent(e);
         if (e.Handled())
             break;
@@ -80,40 +71,35 @@ void Agate::EntryPoint::OnEvent(Event &e)
 }
 
 
-bool Agate::EntryPoint::OnWindowClose(WindowCloseEvent &e)
-{
+bool Agate::EntryPoint::OnWindowClose(WindowCloseEvent &e) {
     m_running = false;
     return true;
 }
 
-void Agate::EntryPoint::EmplaceLayer(Layer *layer)
-{
+void Agate::EntryPoint::EmplaceLayer(Layer *layer) {
     m_layerStack.AddLayer(layer);
 }
 
-void Agate::EntryPoint::RemoveLayer(Layer *layer)
-{
+void Agate::EntryPoint::RemoveLayer(Layer *layer) {
     m_layerStack.RemoveLayer(layer);
 }
 
-void Agate::EntryPoint::EmplaceOverlay(Layer *overlay)
-{
+void Agate::EntryPoint::EmplaceOverlay(Layer *overlay) {
     m_layerStack.AddOverlay(overlay);
 }
 
-void Agate::EntryPoint::RemoveOverlay(Layer *overlay)
-{
+void Agate::EntryPoint::RemoveOverlay(Layer *overlay) {
     m_layerStack.RemoveOverlay(overlay);
 }
-Agate::EntryPoint *&Agate::EntryPoint::GetInstance()
-{
+
+Agate::EntryPoint *&Agate::EntryPoint::GetInstance() {
     return s_instance;
 }
-float Agate::EntryPoint::GetDeltaTime()
-{
+
+float Agate::EntryPoint::GetDeltaTime() {
     return deltaTime;
 }
-std::shared_ptr<Agate::Window> Agate::EntryPoint::GetWindow()
-{
+
+std::shared_ptr<Agate::Window> Agate::EntryPoint::GetWindow() {
     return m_window;
 }

@@ -1,32 +1,27 @@
 #pragma once
+
 #include "Agate/Events/Event.h"
 
-namespace Agate
-{
+namespace Agate {
     class WindowResizedEvent : public Event {
     public:
         WindowResizedEvent(int x, int y)
-            : m_xSize(x), m_ySize(y)
-        {
+                : m_xSize(x), m_ySize(y) {
         }
 
-        EventTypes GetEventType() override
-        {
+        EventTypes GetEventType() override {
             return EventTypes::WindowResized;
         }
 
-        void PrintEventName() override
-        {
+        void PrintEventName() override {
             PRINTMSG("Window Resized to: {}, {}", m_xSize, m_ySize);
         }
 
-        bool Handled() override
-        {
+        bool Handled() override {
             return this->EventFinised;
         }
 
-        static EventTypes s_GetEventType()
-        {
+        static EventTypes s_GetEventType() {
             return EventTypes::WindowResized;
         }
 
@@ -36,27 +31,22 @@ namespace Agate
 
     class WindowCloseEvent : public Event {
     public:
-        WindowCloseEvent()
-        {
+        WindowCloseEvent() {
         }
 
-        EventTypes GetEventType() override
-        {
+        EventTypes GetEventType() override {
             return EventTypes::WindowClose;
         }
 
-        void PrintEventName() override
-        {
+        void PrintEventName() override {
             PRINTMSG("Window Closing");
         }
 
-        bool Handled() override
-        {
+        bool Handled() override {
             return this->EventFinised;
         }
 
-        static EventTypes s_GetEventType()
-        {
+        static EventTypes s_GetEventType() {
             return EventTypes::WindowClose;
         }
     };

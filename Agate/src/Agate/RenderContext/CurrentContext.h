@@ -3,16 +3,20 @@
 //
 
 #pragma once
+
 #include "Context.h"
-namespace Agate
-{
+
+namespace Agate {
 
 
     class CurrentContext {
     public:
         CurrentContext() = delete;
+
         static bool OpenGL;
+
         static Context *&GetCurrentContex();
+
         static void SetContextPointer(Context *ptr);
 
     private:

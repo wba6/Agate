@@ -51,6 +51,25 @@ target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"
         )
 
+# Set compile definitions and options for debug and release configurations
+target_compile_definitions(Agate-lib PRIVATE
+        $<$<CONFIG:DEBUG>:DEBUG>
+        $<$<CONFIG:RELEASE>:RELEASE>
+)
+
+# Custom compile options for different compilers
+if (MSVC)
+        target_compile_options(Agate-lib PRIVATE
+                $<$<CONFIG:DEBUG>:/Zi>
+                $<$<CONFIG:RELEASE>:/O2>
+        )
+else()
+        target_compile_options(Agate-lib PRIVATE
+                $<$<CONFIG:DEBUG>:-g>
+                $<$<CONFIG:RELEASE>:-O3>
+        )
+endif()
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/src/Agate/Rendering/Shaders ${buildDirExecutable}/Shaders
         )

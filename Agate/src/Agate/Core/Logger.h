@@ -3,32 +3,34 @@
 #include "Core.h"
 #include <spdlog/logger.h>
 
-namespace Agate
-{
+namespace Agate {
 
     class API Logger {
     public:
         static void initLogger();
 
         template<typename... Args>
-        static void printMSG(const char* file, const char* function, int line, const char* format, Args&&... args)
-        {
-            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, fmt::format(format, std::forward<Args>(args)...));
+        static void printMSG(const char *file, const char *function, int line, const char *format, Args &&... args) {
+            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info,
+                          fmt::format(format, std::forward<Args>(args)...));
         }
 
         template<typename... Args>
-        static void printWarn(const char* file, const char* function, int line, const char* format, Args&&... args) {
-            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, fmt::format(format, std::forward<Args>(args)...));
+        static void printWarn(const char *file, const char *function, int line, const char *format, Args &&... args) {
+            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::warn,
+                          fmt::format(format, std::forward<Args>(args)...));
         }
 
         template<typename... Args>
-        static void printError(const char* file, const char* function, int line, const char* format, Args&&... args) {
-            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, fmt::format(format, std::forward<Args>(args)...));
+        static void printError(const char *file, const char *function, int line, const char *format, Args &&... args) {
+            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::err,
+                          fmt::format(format, std::forward<Args>(args)...));
         }
 
         template<typename... Args>
-        static void printCrit(const char* file, const char* function, int line, const char* format, Args&&... args) {
-            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, fmt::format(format, std::forward<Args>(args)...));
+        static void printCrit(const char *file, const char *function, int line, const char *format, Args &&... args) {
+            s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::critical,
+                          fmt::format(format, std::forward<Args>(args)...));
         }
 
     private:

@@ -3,16 +3,20 @@
 //
 
 #pragma once
+
 #include "Agate/Core/Layer.h"
-namespace Agate
-{
+
+namespace Agate {
     class Example_imguiLayer : public Layer {
     public:
         Example_imguiLayer();
 
         virtual void Attach() override;
+
         virtual void Detach() override;
+
         virtual void OnEvent(Event &e) override;
+
         virtual void OnRender() override;
 
 

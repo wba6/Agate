@@ -10,13 +10,10 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <imgui.h>
 
-namespace Agate
-{
-    void imgui_interface::Init(void *window)
-    {
+namespace Agate {
+    void imgui_interface::Init(void *window) {
         static bool status;
-        if (status)
-        {
+        if (status) {
             PRINTCRIT("IMGUI already init");
             return;
         }
@@ -38,8 +35,7 @@ namespace Agate
         //ImGui::StyleColorsClassic();
         // When view ports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
         ImGuiStyle &style = ImGui::GetStyle();
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             style.WindowRounding = 0.0f;
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
@@ -48,11 +44,10 @@ namespace Agate
         ImGui_ImplOpenGL3_Init("#version 430");
         status = true;
     }
-    void imgui_interface::ImguiDestruct()
-    {
+
+    void imgui_interface::ImguiDestruct() {
         static bool status;
-        if (status)
-        {
+        if (status) {
             PRINTCRIT("IMGUI already destructed");
             return;
         }
@@ -61,22 +56,21 @@ namespace Agate
         ImGui::DestroyContext();
         status = true;
     }
-    void imgui_interface::BeginFrame()
-    {
+
+    void imgui_interface::BeginFrame() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
     }
-    void imgui_interface::EndFrame()
-    {
+
+    void imgui_interface::EndFrame() {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         // Update and Render additional Platform Windows
         // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
         //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
         ImGuiIO &io = ImGui::GetIO();
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             GLFWwindow *backup_current_context = glfwGetCurrentContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
