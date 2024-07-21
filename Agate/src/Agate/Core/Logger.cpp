@@ -3,34 +3,37 @@
 
 #include "Logger.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+
 namespace Agate
 {
     std::shared_ptr<spdlog::logger> Logger::s_Logger;
-    void Logger::printMSG(std::string msg)
+    void Logger::printMSG(std::string msg, const char* file, const char* function, int line)
     {
-        s_Logger->info(msg.c_str());
+        s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::info, msg.c_str());
     }
 
-    void Logger::printWarn(std::string msg)
+    void Logger::printWarn(std::string msg, const char* file, const char* function, int line)
     {
-        s_Logger->warn(msg.c_str());
+        s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::warn, msg.c_str());
+
     }
 
-    void Logger::printError(std::string msg)
+    void Logger::printError(std::string msg, const char* file, const char* function, int line)
     {
-        s_Logger->error(msg.c_str());
+        s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::err, msg.c_str());
+
     }
 
-    void Logger::printCrit(std::string msg)
+    void Logger::printCrit(std::string msg, const char* file, const char* function, int line)
     {
-        s_Logger->critical(msg.c_str());
+        s_Logger->log(spdlog::source_loc{file, line, function}, spdlog::level::critical, msg.c_str());
     }
     void Logger::initLogger()
     {
         try
         {
             s_Logger = spdlog::stdout_color_mt("Core");
-            s_Logger->set_pattern("%^[%l][%n]%$[%H:%M:%S] %v");
+            s_Logger->set_pattern("%^[%l][%n]%$[%H:%M:%S][%s][Line:%#] %v");
             s_Logger->set_level(spdlog::level::trace);
             s_Logger->critical("Logger initialization");
         }
