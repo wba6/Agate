@@ -65,7 +65,7 @@ namespace Agate {
         if (!success) {
             glGetProgramInfoLog(m_shaderProgramID, 512, NULL, infoLog);
             PRINTCRIT("ERROR::SHADER::PROGRAM::LINKING_FAILED\n");
-            PRINTWARN("",infoLog);
+            PRINTWARN("", infoLog);
         }
     }
 

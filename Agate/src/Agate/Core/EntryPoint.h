@@ -1,27 +1,34 @@
 #pragma once
+
 #include "Agate/Events/ApplicationEvents.h"
 #include "Agate/Events/Event.h"
 #include "Agate/Window/Window.h"
 #include "Core.h"
 #include "LayerStack.h"
 
-namespace Agate
-{
+namespace Agate {
     class API EntryPoint {
     public:
         EntryPoint();
+
         virtual ~EntryPoint();
 
         void Run();
 
         void OnEvent(Event &e);
+
         bool OnWindowClose(WindowCloseEvent &e);
 
         void EmplaceLayer(Layer *layer);
+
         void RemoveLayer(Layer *layer);
+
         void EmplaceOverlay(Layer *overlay);
+
         void RemoveOverlay(Layer *overlay);
+
         float GetDeltaTime();
+
         std::shared_ptr<Agate::Window> GetWindow();
 
         static EntryPoint *&GetInstance();

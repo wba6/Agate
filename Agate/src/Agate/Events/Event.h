@@ -1,12 +1,12 @@
 #pragma once
+
 #include "agpch.h"
 
 #include "Agate/Core/Core.h"
 #include "Agate/Core/Logger.h"
 
 
-namespace Agate
-{
+namespace Agate {
 
     enum class API EventTypes {
         MouseButtonPressed,
@@ -24,9 +24,12 @@ namespace Agate
 
     public:
         Event()
-            : EventFinised(false) {}
+                : EventFinised(false) {}
+
         virtual EventTypes GetEventType() = 0;
+
         virtual void PrintEventName() = 0;
+
         virtual bool Handled() = 0;
 
     protected:
@@ -39,14 +42,12 @@ namespace Agate
 
     public:
         explicit EventNotifier(Event &e)
-            : m_Event(e){};
+                : m_Event(e) {};
 
         template<typename T>
 
-        bool NotifyEvent(EventFn<T> ev)
-        {
-            if (m_Event.GetEventType() == T::s_GetEventType())
-            {
+        bool NotifyEvent(EventFn<T> ev) {
+            if (m_Event.GetEventType() == T::s_GetEventType()) {
                 m_Event.EventFinised = ev(*(T *) &m_Event);
                 return true;
             }

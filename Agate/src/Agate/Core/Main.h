@@ -1,8 +1,9 @@
 #pragma once
+
 //-----------------------------------------Main Entry -----------------------------------
-extern Agate::EntryPoint *Agate ::CreateEntryPoint();
-int main()
-{
+extern Agate::EntryPoint *Agate::CreateEntryPoint();
+
+int main() {
     Agate::Logger::initLogger();
 
     Agate::EntryPoint *application = Agate::CreateEntryPoint();

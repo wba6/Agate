@@ -21,10 +21,11 @@ namespace Agate {
         VBO.Bind();
         for (int i = 0; i < bufferInformation.getAttributes().size(); ++i) {
             Bind();
-            GLCall(glVertexAttribPointer(i, bufferInformation.getVerticieCount(bufferInformation.getAttributes().at(i).type),
-                                  GL_FLOAT, bufferInformation.getAttributes().at(i).normalized,
-                                  bufferInformation.getStride(),
-                                  (void *) bufferInformation.getAttributes().at(i).offset));
+            GLCall(glVertexAttribPointer(i, bufferInformation.getVerticieCount(
+                                                 bufferInformation.getAttributes().at(i).type),
+                                         GL_FLOAT, bufferInformation.getAttributes().at(i).normalized,
+                                         bufferInformation.getStride(),
+                                         (void *) bufferInformation.getAttributes().at(i).offset));
 
             GLCall(glEnableVertexAttribArray(i));
             UnBind();

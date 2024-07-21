@@ -64,7 +64,7 @@ Agate::ModelLoader::ModelLoader(const std::string &path, bool gamma)
 }
 
 void Agate::ModelLoader::Draw(Agate::Shader &shader) {
-    for (auto & mesh : meshes)
+    for (auto &mesh: meshes)
         mesh.Draw(shader);
 }
 

@@ -2,32 +2,31 @@
 // Created by TANK1_41 on 8/23/2022.
 //
 #include "Event.h"
+
 #pragma once
-namespace Agate
-{
+namespace Agate {
     class KeyPressedEvent : public Event {
     public:
         KeyPressedEvent(int keyCode)
-            : m_keycode(keyCode){};
+                : m_keycode(keyCode) {};
 
-        EventTypes GetEventType() override
-        {
+        EventTypes GetEventType() override {
             return EventTypes::KeyPressed;
         }
-        void PrintEventName() override
-        {
-            PRINTMSG("KeyPressedEvent: {}",m_keycode);
+
+        void PrintEventName() override {
+            PRINTMSG("KeyPressedEvent: {}", m_keycode);
         }
-        bool Handled() override
-        {
+
+        bool Handled() override {
             return this->EventFinised;
         }
-        unsigned int GetKeyCode()
-        {
+
+        unsigned int GetKeyCode() {
             return m_keycode;
         }
-        static EventTypes s_GetEventType()
-        {
+
+        static EventTypes s_GetEventType() {
             return EventTypes::KeyPressed;
         }
 
@@ -38,26 +37,25 @@ namespace Agate
     class KeyReleasedEvent : public Event {
     public:
         KeyReleasedEvent(int keyCode)
-            : m_keycode(keyCode){};
+                : m_keycode(keyCode) {};
 
-        EventTypes GetEventType() override
-        {
+        EventTypes GetEventType() override {
             return EventTypes::KeyReleased;
         }
-        void PrintEventName() override
-        {
+
+        void PrintEventName() override {
             PRINTMSG("KeyReleasedEvent: {}", m_keycode);
         }
-        bool Handled() override
-        {
+
+        bool Handled() override {
             return this->EventFinised;
         }
-        unsigned int GetKeyCode()
-        {
+
+        unsigned int GetKeyCode() {
             return m_keycode;
         }
-        static EventTypes s_GetEventType()
-        {
+
+        static EventTypes s_GetEventType() {
             return EventTypes::KeyReleased;
         }
 
