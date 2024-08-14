@@ -10,3 +10,23 @@
 # How to clone 
 ```git clone --recursive <repo_url>```
 
+# How to build
+You must have cmake installed on your system to follow the instructions below
+
+## Make a directory for cmake files
+Windows and Linux: 
+```mkdir build```
+
+##Move into that directory
+Windows and Linux:
+```cd build```
+
+##Run cmake 
+Windows and Linux:
+```cmake ..```
+
+##Run make
+```make```
+
+The application will then be built and put into the bin directory that will be created
+
