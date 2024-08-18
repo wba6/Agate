@@ -1,4 +1,4 @@
-[![Build](https://github.com/wba6/Agate/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/wba6/Agate/actions/workflows/cmake-multi-platform.yml)
+[![Build](https://github.com/wba6/Agate/actions/workflows/weekly-multi-platform-build.yml/badge.svg)](https://github.com/wba6/Agate/actions/workflows/weekly-multi-platform-build.yml)
 # Agate: 
 ### A simple rendering backend for exploring mathematics and graphics programming
 ![image](https://github.com/user-attachments/assets/42662d4c-b7dc-4ad9-bc73-b0c6c2d60b3d)
