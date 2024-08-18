@@ -37,9 +37,7 @@ jobs:
 
     - name: Install CMake on Windows
       if: runner.os == 'Windows'
-      run: |
-        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-        refreshenv
+      run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
 
     - name: Configure CMake
       run: cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }}
