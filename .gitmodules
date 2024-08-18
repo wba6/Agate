@@ -17,3 +17,6 @@
 [submodule "Agate/vender/stb"]
 	path = Agate/vender/stb
 	url = https://github.com/wba6/stb.git
+[submodule "Agate/vender/glad"]
+	path = Agate/vender/glad
+	url = https://github.com/wba6/glad.git
