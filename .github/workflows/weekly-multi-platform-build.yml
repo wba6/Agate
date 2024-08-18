@@ -2,13 +2,15 @@ name: Build Debug and Release
 
 on:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 18 * * 5' # Runs every Friday at 6 PM UTC
   push:
     branches:
       - main
+      - develop
   pull_request:
     branches:
       - main
+      - develop
 
 jobs:
   build:
