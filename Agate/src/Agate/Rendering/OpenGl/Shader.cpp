@@ -123,4 +123,8 @@ namespace Agate {
     void Shader::SetUniform3f(const char *uniform, float x, float y, float z) {
         glUniform3f(getUniformLoc(uniform), x, y, z);
     }
+
+    void Shader::SetUniform1f(const char *uniform, float x) {
+        glUniform1f(getUniformLoc(uniform), x);
+    }
 }// namespace Agate

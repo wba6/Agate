@@ -30,6 +30,8 @@ namespace Agate {
 
         void SetUniform1i(const char *uniform, int value);
 
+        void SetUniform1f(const char *uniform, float x);
+
     private:
         int getUniformLoc(const char *uniform) const;
 
@@ -39,6 +41,7 @@ namespace Agate {
         unsigned int m_fragmentShaderID;
         unsigned int m_vertexShaderID;
         mutable std::unordered_map<std::string, int> m_UniformLocationCache;
+
     };
 
 

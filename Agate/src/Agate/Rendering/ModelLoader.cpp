@@ -15,23 +15,59 @@ Agate::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indice
 
 //@todo we should not really render here
 void Agate::Mesh::Draw(Agate::Shader &shader) {
-    shader.Bind();
-    unsigned int diffuseNr = 1;
-    unsigned int specularNr = 1;
-    for (unsigned int i = 0; i < textures.size(); i++) {
-        textures[i].bind(i);
-        // retrieve texture number (the N in diffuse_textureN)
-        std::string number;
-        std::string name = textures[i].getType();
-        if (name == "texture_diffuse")
-            number = std::to_string(diffuseNr++);
-        else if (name == "texture_specular")
-            number = std::to_string(specularNr++);
 
-        shader.SetUniform1i(("material." + name + number).c_str(), i);
+    // Initialize texture counters
+    int diffuseCount = 0;
+    int specularCount = 0;
+    int normalCount = 0;
+    int heightCount = 0;
+
+    shader.Bind();
+    // Activate and bind each texture, assign to the shader
+    for (unsigned int i = 0; i < textures.size(); i++) {
+        glActiveTexture(GL_TEXTURE0 + i); // Activate texture unit
+        textures[i].bind(i); // Bind texture to unit i
+
+        std::string type = textures[i].getType();
+        std::string name;
+        if (type == "texture_diffuse") {
+            name = "material.texture_diffuse[" + std::to_string(diffuseCount) + "]";
+            shader.SetUniform1i(name.c_str(), i);
+            diffuseCount++;
+        }
+        else if (type == "texture_specular") {
+            name = "material.texture_specular[" + std::to_string(specularCount) + "]";
+            shader.SetUniform1i(name.c_str(), i);
+            specularCount++;
+        }
+        else if (type == "texture_normal") {
+            name = "material.texture_normal[" + std::to_string(normalCount) + "]";
+            shader.SetUniform1i(name.c_str(), i);
+            normalCount++;
+        }
+        else if (type == "texture_height") {
+            name = "material.texture_height[" + std::to_string(heightCount) + "]";
+            shader.SetUniform1i(name.c_str(), i);
+            heightCount++;
+        }
     }
+
+    // Set the counts in the shader
+    shader.SetUniform1i("material.num_diffuse", diffuseCount);
+    shader.SetUniform1i("material.num_specular", specularCount);
+    shader.SetUniform1i("material.num_normal", normalCount);
+    shader.SetUniform1i("material.num_height", heightCount);
+    // Set light properties
+    shader.SetUniform3f("pointLight.Position", 1.0f, 1.0f, 1.0f);    // Position: (x, y, z)
+    shader.SetUniform3f("pointLight.Color", 1.0f, 1.0f, 1.0f);           // Color: White light
+    shader.SetUniform1f("pointLight.Intensity", 1.0f);                              // Intensity: Standard brightness
+    shader.SetUniform1f("pointLight.Constant", 1.0f);                               // Attenuation: Constant factor
+    shader.SetUniform1f("pointLight.Linear", 0.09f);                                // Attenuation: Linear factor
+    shader.SetUniform1f("pointLight.Quadratic", 0.032f);                           // Attenuation: Quadratic factor
+
+
     //don't think this line is needed
-    //glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
 
     // draw mesh
     VA->Bind();
