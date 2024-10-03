@@ -1,3 +1,8 @@
+---
+layout: default
+title: Agate
+---
+
 [![Build](https://github.com/wba6/Agate/actions/workflows/weekly-multi-platform-build.yml/badge.svg)](https://github.com/wba6/Agate/actions/workflows/weekly-multi-platform-build.yml)
 # Agate: 
 ### A simple rendering backend for exploring mathematics and graphics programming
