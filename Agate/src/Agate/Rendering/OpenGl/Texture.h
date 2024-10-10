@@ -21,7 +21,7 @@ namespace Agate {
         const std::string &getType();
 
     private:
-        unsigned int m_textureID;
+        unsigned int m_textureID, m_target;
         int m_width, m_height;
         std::string m_path, m_type;
     };

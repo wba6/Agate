@@ -4,6 +4,9 @@
 #include "glad/glad.h"
 #include "OpenGl/VertexArray.h"
 #include <utility>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 Agate::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) {
     this->vertices = std::move(vertices);
@@ -62,7 +65,7 @@ void Agate::Mesh::Draw(Agate::Shader &shader) {
     shader.SetUniform3f("pointLight.Color", 1.0f, 1.0f, 1.0f);           // Color: White light
     shader.SetUniform1f("pointLight.Intensity", 1.0f);                              // Intensity: Standard brightness
     shader.SetUniform1f("pointLight.Constant", 1.0f);                               // Attenuation: Constant factor
-    shader.SetUniform1f("pointLight.Linear", 0.09f);                                // Attenuation: Linear factor
+    shader.SetUniform1f("pointLight.Linear", .09f);                                // Attenuation: Linear factor
     shader.SetUniform1f("pointLight.Quadratic", 0.032f);                           // Attenuation: Quadratic factor
 
 
@@ -117,7 +120,9 @@ void Agate::ModelLoader::loadModel(const std::string &path) {
         return;
     }
     // retrieve the directory path of the filepath
-    directory = path.substr(0, path.find_last_of('/'));
+    this->path = path;
+    this->directory = extractDirectory(path);
+
 
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);
@@ -240,4 +245,9 @@ Agate::ModelLoader::loadMaterialTextures(aiMaterial *mat, aiTextureType type, st
         }
     }
     return std::move(textures);
+}
+
+std::string Agate::ModelLoader::extractDirectory(const std::string &path) {
+    fs::path p(path);
+    return p.parent_path().generic_string();
 }

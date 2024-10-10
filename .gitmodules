@@ -20,3 +20,12 @@
 [submodule "Agate/vender/glad"]
 	path = Agate/vender/glad
 	url = https://github.com/wba6/glad.git
+[submodule "Agate/vender/gli"]
+	path = Agate/vender/gli
+	url = https://github.com/g-truc/gli.git
+[submodule "Agate/vender/SOIL2"]
+	path = Agate/vender/SOIL2
+	url = https://github.com/SpartanJ/SOIL2.git
+[submodule "Agate/vender/KTX"]
+	path = Agate/vender/KTX
+	url = https://github.com/KhronosGroup/KTX-Software.git
