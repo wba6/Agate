@@ -1,4 +1,9 @@
-[![Build](https://github.com/wba6/Agate/actions/workflows/weekly-multi-platform-build.yml/badge.svg)](https://github.com/wba6/Agate/actions/workflows/weekly-multi-platform-build.yml)
+<p align="center">
+  <a href="https://github.com/wba6/Agate/actions/workflows/weekly-multi-platform-build.yml">
+    <img src="https://github.com/wba6/Agate/actions/workflows/weekly-multi-platform-build.yml/badge.svg" alt="Build Badge">
+  </a>
+</p>
+
 # Agate: 
 ### A simple rendering backend for exploring mathematics and graphics programming
 ![image](https://github.com/user-attachments/assets/42662d4c-b7dc-4ad9-bc73-b0c6c2d60b3d)
@@ -7,8 +12,8 @@
 
 ![image](https://github.com/wba6/Agate/assets/76547127/1ebbba4a-5f6b-40eb-aa5e-fac1ab247b11)
 
-# How to clone 
-```git clone --recursive <repo_url>```
+# How to clone
+```git clone --recursive --branch develop <repo_url>```
 
 # How to build
 You must have cmake installed on your system to follow the instructions below
