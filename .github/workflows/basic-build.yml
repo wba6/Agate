@@ -21,12 +21,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libwayland-dev libxkbcommon-dev libgl1-mesa-dev xorg-dev
+        sudo apt-get install -y cmake ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libwayland-dev libxkbcommon-dev libgl1-mesa-dev xorg-dev
 
-    - name: Configure and build
+    - name: Configure and build with Ninja
       run: |
         mkdir build
         cd build
-        cmake ..
-        make
-
+        cmake -G Ninja ..
+        ninja
