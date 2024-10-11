@@ -42,6 +42,7 @@ public:
     void Detach() override
     {
     }
+
     void OnRender() override
     {
         shader->Bind();
@@ -49,7 +50,7 @@ public:
 
         glm::mat4 trans_model = glm::mat4(1.0f);
         trans_model = glm::translate(trans_model, glm::vec3(0.0f, 0.0f, 0.0f));// translate it down so it's at the center of the scene
-        trans_model = glm::scale(trans_model, glm::vec3(0.5f, 0.5f, 0.5f));    // it's a bit too big for our scene, so scale it down
+        //trans_model = glm::scale(trans_model, glm::vec3(0.5f, 0.5f, 0.5f));    // it's a bit too big for our scene, so scale it down
         shader->SetUniformMat4("model", trans_model);
         model->Draw(*shader);
     }

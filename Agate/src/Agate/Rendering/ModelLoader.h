@@ -68,9 +68,9 @@ namespace Agate {
         void loadModel(std::string const &path);
 
         // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-        void processNode(aiNode *node, const aiScene *scene);
+        void processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform);
 
-        Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+        Mesh processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform);
 
         //helper function
         std::string extractDirectory(const std::string& path);
