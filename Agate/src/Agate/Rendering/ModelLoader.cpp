@@ -64,10 +64,10 @@ void Agate::Mesh::Draw(Agate::Shader &shader) {
     shader.SetUniform1i("material.num_specular", specularCount);
     shader.SetUniform1i("material.num_normal", normalCount);
     shader.SetUniform1i("material.num_height", heightCount);
+
     // Set light properties
-    shader.SetUniform3f("pointLight.Position", 1.0f, 1.0f, 1.0f);    // Position: (x, y, z)
     shader.SetUniform3f("pointLight.Color", 1.0f, 1.0f, 1.0f);           // Color: White light
-    shader.SetUniform1f("pointLight.Intensity", 1.0f);                              // Intensity: Standard brightness
+    shader.SetUniform1f("pointLight.Intensity", 5.0f);                              // Intensity: Standard brightness
     shader.SetUniform1f("pointLight.Constant", 1.0f);                               // Attenuation: Constant factor
     shader.SetUniform1f("pointLight.Linear", .09f);                                // Attenuation: Linear factor
     shader.SetUniform1f("pointLight.Quadratic", 0.032f);                           // Attenuation: Quadratic factor

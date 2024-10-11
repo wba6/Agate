@@ -72,7 +72,7 @@ void main()
     normal = normalize(normal); // Normalize the final normal
 
     // Ambient lighting
-    vec3 ambient = 0.1 * pointLight.Color * diffuseColor;
+    vec3 ambient = 0.2 * pointLight.Color * diffuseColor;
 
     // Diffuse lighting
     vec3 lightDir = normalize(pointLight.Position - fs_in.FragPos);
@@ -86,13 +86,13 @@ void main()
     vec3 specular = spec * pointLight.Color * specularColor;
 
     // Attenuation
-    float distance    = length(pointLight.Position - fs_in.FragPos);
+    float distance = length(pointLight.Position - fs_in.FragPos);
     float attenuation = 1.0 / (pointLight.Constant + pointLight.Linear * distance +
     pointLight.Quadratic * (distance * distance));
 
-    ambient  *= attenuation;
-    diffuse  *= attenuation;
-    specular *= attenuation;
+    ambient  *= attenuation * pointLight.Intensity;
+    diffuse  *= attenuation * pointLight.Intensity;
+    specular *= attenuation * pointLight.Intensity;
 
     // Combine results
     vec3 result = ambient + diffuse + specular;
