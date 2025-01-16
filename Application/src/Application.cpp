@@ -36,7 +36,7 @@ public:
         camera = new Agate::Camera(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
-        model = new Agate::ModelLoader(std::filesystem::path("/home/william/dev/Agate/Agate/src/Agate/Rendering/Shaders/sponza/sponza.obj").generic_string());
+        model = new Agate::ModelLoader(std::filesystem::path("Shaders/sponza/sponza.obj").generic_string());
     }
 
     void Detach() override
