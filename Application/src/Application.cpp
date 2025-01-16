@@ -36,7 +36,7 @@ public:
         camera = new Agate::Camera(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
-        model = new Agate::ModelLoader(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
+        model = new Agate::ModelLoader(std::filesystem::path("/home/william/dev/Agate/Agate/src/Agate/Rendering/Shaders/sponza/sponza.obj").generic_string());
     }
 
     void Detach() override
@@ -51,7 +51,7 @@ public:
         glm::mat4 trans_model = glm::mat4(1.0f);
         trans_model = glm::translate(trans_model, glm::vec3(0.0f, 0.0f, 0.0f));// translate it down so it's at the center of the scene
         shader->SetUniform3f("pointLight.Position", camera->getCameraPos().x,camera->getCameraPos().y,camera->getCameraPos().z);    // Position: (x, y, z)
-        trans_model = glm::scale(trans_model, glm::vec3(50.5f, 50.5f, 50.55f));    // it's a bit too big for our scene, so scale it down
+        trans_model = glm::scale(trans_model, glm::vec3(1.0f, 1.0f, 1.0f)*5.0f);    // it's a bit too big for our scene, so scale it down
         shader->SetUniformMat4("model", trans_model);
         model->Draw(*shader);
     }

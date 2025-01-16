@@ -77,7 +77,7 @@ namespace Agate {
         );
 
         if (textureID == 0) {
-            std::cerr << "SOIL2 failed to load texture at path: " << filename << ". Error: " << SOIL_last_result() << std::endl;
+            PRINTERROR("SOIL2 failed to load texture at path: {}. Error: {}", filename, SOIL_last_result());
             return false;
         }
 
