@@ -57,7 +57,7 @@ namespace Agate {
         // Unbind texture and destroy ktxTexture
         glBindTexture(target, 0);
         ktxTexture_Destroy(kTexture);
-        std::cout << "Successfully loaded KTX texture: " << filename << std::endl;
+        PRINTMSG("Successfully loaded KTX texture: {}", filename);
         return true;
     }
 
