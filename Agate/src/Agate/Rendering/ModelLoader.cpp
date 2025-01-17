@@ -99,34 +99,35 @@ void Agate::Mesh::setupMesh() {
 
 Agate::Mesh::~Mesh() = default;
 
-Agate::ModelLoader::ModelLoader(const std::string &path, bool gamma)
-        : gammaCorrection(gamma) {
-    loadModel(path);
-    PRINTMSG("model loaded from path {}", path);
+Agate::ModelLoader::ModelLoader(std::string const &path, bool gamma, bool flipUVs)
+    : gammaCorrection(gamma), m_path(path), m_directory(extractDirectory(path)) {
+    loadModel(flipUVs);
+    PRINTMSG("model loaded from m_path {}", m_path);
 }
 
 void Agate::ModelLoader::Draw(Agate::Shader &shader) {
-    for (auto &mesh: meshes)
+    for (auto &mesh: m_meshes)
         mesh.Draw(shader);
 }
 
-void Agate::ModelLoader::loadModel(const std::string &path) {
+void Agate::ModelLoader::loadModel(bool flipUVs) {
     // read file via ASSIMP
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path,
-                                             aiProcess_CalcTangentSpace         |
-                                                     aiProcess_Triangulate             |
-                                                     aiProcess_JoinIdenticalVertices   |
-                                                     aiProcess_SortByPType);//@TODO some models need | aiProcess_FlipUVs
+    unsigned int assimpFlags = aiProcess_CalcTangentSpace         |
+                               aiProcess_Triangulate             |
+                               aiProcess_JoinIdenticalVertices   |
+                               aiProcess_SortByPType;
+
+    if(flipUVs) {
+        assimpFlags |= aiProcess_FlipUVs;
+    }
+    const aiScene *scene = importer.ReadFile(m_path,assimpFlags);//@TODO some models need | aiProcess_FlipUVs
     // check for errors
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
         PRINTERROR("ERROR::Model::loadModel Assimp Error: {}", importer.GetErrorString());
         return;
     }
-    // retrieve the directory path of the filepath
-    this->path = path;
-    this->directory = extractDirectory(path);
 
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene, glm::mat4(1.0f));
@@ -138,7 +139,7 @@ void Agate::ModelLoader::processNode(aiNode *node, const aiScene *scene, const g
     // process each mesh located at the current node
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene, nodeTransform));
+        m_meshes.push_back(processMesh(mesh, scene, nodeTransform));
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
@@ -228,7 +229,7 @@ std::vector<Agate::Texture> Agate::ModelLoader::loadMaterialTextures(aiMaterial 
             }
         }
         if (!skip) {
-            Texture texture(str.C_Str(), this->directory, gammaCorrection);
+            Texture texture(str.C_Str(), this->m_directory, gammaCorrection);
             texture.setType(typeName);
             textures.push_back(texture);
             textures_loaded.push_back(texture);
@@ -241,4 +242,3 @@ std::string Agate::ModelLoader::extractDirectory(const std::string &path) {
     fs::path p(path);
     return p.parent_path().generic_string();
 }
-
