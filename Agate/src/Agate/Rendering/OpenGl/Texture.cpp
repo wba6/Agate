@@ -143,13 +143,13 @@ namespace Agate {
         if (extension == ".ktx" || extension == ".ktx2") {
             // Load KTX file using libktx
             if (!load_ktx_with_libktx(normalizedPath, m_textureID, m_target, m_width, m_height)) {
-                std::cerr << "Failed to load KTX texture at path: " << normalizedPath << std::endl;
+                PRINTERROR("Failed to load KTX texture at path: {}", normalizedPath);
                 // Optionally, set a default texture or handle the error gracefully @TODO
             }
         } else {
             // Load standard image using SOIL2
             if (!load_standard_texture_with_soil2(normalizedPath, m_textureID, m_target, m_width, m_height)) {
-                std::cerr << "Failed to load standard texture at path: " << normalizedPath << std::endl;
+                PRINTERROR("Failed to load standard texture at path: {}", normalizedPath);
                 // Optionally, set a default texture or handle the error gracefully @TODO
             }
         }
