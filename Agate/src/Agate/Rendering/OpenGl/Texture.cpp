@@ -80,7 +80,7 @@ namespace Agate {
      *
      * @return True if the texture was loaded successfully, false otherwise
      */
-    bool Texture::load_standard_texture(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height) {
+    bool Texture::load_standard_texture_with_soil2(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height) {
         // Load texture using SOIL2
         textureID = SOIL_load_OGL_texture(
                 filename.c_str(),
@@ -148,7 +148,7 @@ namespace Agate {
             }
         } else {
             // Load standard image using SOIL2
-            if (!load_standard_texture(normalizedPath, m_textureID, m_target, m_width, m_height)) {
+            if (!load_standard_texture_with_soil2(normalizedPath, m_textureID, m_target, m_width, m_height)) {
                 std::cerr << "Failed to load standard texture at path: " << normalizedPath << std::endl;
                 // Optionally, set a default texture or handle the error gracefully @TODO
             }

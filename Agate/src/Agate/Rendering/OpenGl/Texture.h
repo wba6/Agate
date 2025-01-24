@@ -21,7 +21,7 @@ namespace Agate {
         const std::string &getType();
 
     private:
-        bool load_standard_texture(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height);
+        bool load_standard_texture_with_soil2(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height);
         bool load_ktx_with_libktx(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height);
 
     private:
