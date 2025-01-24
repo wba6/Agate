@@ -6,7 +6,6 @@
 #include <filesystem>
 #include <algorithm>
 
-#define KHRONOS_STATIC
 #include <ktx.h>
 
 namespace Agate {
