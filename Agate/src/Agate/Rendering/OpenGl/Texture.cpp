@@ -111,7 +111,7 @@ namespace Agate {
         // Check for errors
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            std::cerr << "OpenGL error after setting texture parameters for " << filename << ": " << error << std::endl;
+            PRINTERROR("OpenGL error after setting texture parameters for {}, {}", filename, error);
             glBindTexture(target, 0);
             return false;
         }
