@@ -11,7 +11,14 @@
 
 namespace Agate {
 
-// Function to create a normalized path with forward slashes
+    /*
+     * Helper function to create a normalized path from a directory and a relative path
+     *
+     * @param directory: The directory path
+     * @param relative_path: The relative path
+     *
+     * @return The normalized path
+     */
     std::string create_normalized_path(const std::string& directory, const std::string& relative_path) {
         std::filesystem::path dir_path(directory);
         std::filesystem::path rel_path(relative_path);
@@ -19,16 +26,18 @@ namespace Agate {
         return combined_path.generic_string();
     }
 
-// Helper function to convert string to lowercase
-    std::string to_lowercase(const std::string& str) {
-        std::string lower = str;
-        std::transform(lower.begin(), lower.end(), lower.begin(),
-                       [](unsigned char c){ return std::tolower(c); });
-        return lower;
-    }
-
-// Function to load KTX texture using libktx
-    bool load_ktx_with_libktx(const std::string& filename, GLuint& textureID, GLenum& target, int& width, int& height) {
+    /*
+     * Helper function to load KTX texture using libktx
+     *
+     * @param filename: The path to the KTX file
+     * @param textureID: The texture ID to bind the texture to
+     * @param target: The texture target
+     * @param width: The width of the texture
+     * @param height: The height of the texture
+     *
+     * @return True if the texture was loaded successfully, false otherwise
+     */
+    bool Texture::load_ktx_with_libktx(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height) {
         // Load texture data
         ktxTexture* kTexture;
         KTX_error_code ktxerror = ktxTexture_CreateFromNamedFile(filename.c_str(),
@@ -61,13 +70,18 @@ namespace Agate {
         return true;
     }
 
-// Helper function to load KTX files using libktx
-    bool load_ktx_texture(const std::string& filename, GLuint& textureID, GLenum& target, int& width, int& height) {
-        return load_ktx_with_libktx(filename, textureID, target, width, height);
-    }
-
-// Helper function to load standard images using SOIL2
-    bool load_standard_texture(const std::string& filename, GLuint& textureID, GLenum& target, int& width, int& height) {
+    /*
+     * Helper function to load standard images using SOIL2
+     *
+     * @param filename: The path to the image file
+     * @param textureID: The texture ID to bind the texture to
+     * @param target: The texture target
+     * @param width: The width of the texture
+     * @param height: The height of the texture
+     *
+     * @return True if the texture was loaded successfully, false otherwise
+     */
+    bool Texture::load_standard_texture(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height) {
         // Load texture using SOIL2
         textureID = SOIL_load_OGL_texture(
                 filename.c_str(),
@@ -109,44 +123,85 @@ namespace Agate {
         return true;
     }
 
+    /*
+     * Constructor for Texture class
+     *
+     * @param file: The path to the texture file
+     * @param directory: The directory path
+     *
+     * @return A Texture object
+     */
     Texture::Texture(const char *file, std::string &directory, int pixelFormat)
-            : m_width(0), m_height(0), m_path(file), m_type("texture"), m_target(GL_TEXTURE_2D) {
+            : m_width(0), m_height(0), m_path(file), m_type("texture"), m_target(GL_TEXTURE_2D), m_textureID(0) {
         std::string normalizedPath = create_normalized_path(directory, m_path);
         std::filesystem::path filepath(normalizedPath);
-        std::string extension = to_lowercase(filepath.extension().string());
+
+        // Convert extension to lowercase
+        std::string extension = filepath.extension().string();
+        std::transform(extension.begin(), extension.end(), extension.begin(),
+                                              [](unsigned char c){ return std::tolower(c); });
 
         if (extension == ".ktx" || extension == ".ktx2") {
             // Load KTX file using libktx
-            if (!load_ktx_texture(normalizedPath, m_textureID, m_target, m_width, m_height)) {
+            if (!load_ktx_with_libktx(normalizedPath, m_textureID, m_target, m_width, m_height)) {
                 std::cerr << "Failed to load KTX texture at path: " << normalizedPath << std::endl;
-                // Optionally, set a default texture or handle the error gracefully
+                // Optionally, set a default texture or handle the error gracefully @TODO
             }
         } else {
             // Load standard image using SOIL2
             if (!load_standard_texture(normalizedPath, m_textureID, m_target, m_width, m_height)) {
                 std::cerr << "Failed to load standard texture at path: " << normalizedPath << std::endl;
-                // Optionally, set a default texture or handle the error gracefully
+                // Optionally, set a default texture or handle the error gracefully @TODO
             }
         }
     }
 
-    void Texture::bind(unsigned int slot) {
+    /*
+     * Bind the texture to a texture unit
+     *
+     * @param slot: The texture unit to bind the texture to
+     *
+     * @return void
+     */
+    void Texture::bind(unsigned int slot) const {
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(m_target, m_textureID);
     }
 
-    void Texture::unBind() {
+    /*
+     * Unbind the texture
+     *
+     * @return void
+     */
+    void Texture::unBind() const {
         glBindTexture(m_target, 0);
     }
 
+    /*
+     * Get the path of the texture
+     *
+     * @return The path of the texture
+     */
     const std::string &Texture::getPath() {
         return m_path;
     }
 
+    /*
+     * Get the type of the texture
+     *
+     * @return The type of the texture
+     */
     const std::string &Texture::getType() {
         return m_type;
     }
 
+    /*
+     * Set the type of the texture
+     *
+     * @param typeName: The type of the texture
+     *
+     * @return void
+     */
     void Texture::setType(std::string &typeName) {
         m_type = typeName;
     }

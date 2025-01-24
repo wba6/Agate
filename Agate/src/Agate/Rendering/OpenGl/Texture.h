@@ -10,15 +10,19 @@ namespace Agate {
     public:
         Texture(const char *file, std::string &directory, int pixelFormat);
 
-        void bind(unsigned int slot);
+        void bind(unsigned int slot) const;
 
-        void unBind();
+        void unBind() const;
 
         void setType(std::string &typeName);
 
         const std::string &getPath();
 
         const std::string &getType();
+
+    private:
+        bool load_standard_texture(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height);
+        bool load_ktx_with_libktx(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height);
 
     private:
         unsigned int m_textureID, m_target;
