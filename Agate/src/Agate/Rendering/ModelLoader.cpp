@@ -6,7 +6,14 @@
 #include <filesystem>
 
 namespace fs = std::filesystem;
-glm::mat4 convertMatrix(const aiMatrix4x4 &matrix) {
+
+/*
+ * Convert an assimp matrix to a glm matrix
+ *
+ * @param matrix The assimp matrix to convert
+ * @return The converted glm matrix
+ */
+inline glm::mat4 convertMatrix(const aiMatrix4x4 &matrix) {
     return glm::mat4(matrix.a1, matrix.b1, matrix.c1, matrix.d1,
                      matrix.a2, matrix.b2, matrix.c2, matrix.d2,
                      matrix.a3, matrix.b3, matrix.c3, matrix.d3,
