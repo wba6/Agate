@@ -87,7 +87,7 @@ namespace Agate {
          * calculate the stride between each vertex based on data type
          * returns: the stride between each vertex
         */
-        [[nodiscard]] size_t calculateStride() const {
+        size_t calculateStride() const {
             size_t stride = 0;
 
             //loop through all attributes in the data and add up the total size to the next piece of data

@@ -1,7 +1,6 @@
 #ifndef AGATE_MODELLOADER_H
 #define AGATE_MODELLOADER_H
 
-#include "agpch.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/VertexArray.h"
 #include "OpenGl/Texture.h"

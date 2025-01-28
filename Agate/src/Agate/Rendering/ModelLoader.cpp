@@ -1,9 +1,9 @@
+#include "agpch.h"
 #include "ModelLoader.h"
 #include "Agate/Core/Logger.h"
 #include "glad/glad.h"
 #include "OpenGl/VertexArray.h"
 #include <utility>
-#include <filesystem>
 
 namespace fs = std::filesystem;
 
@@ -107,7 +107,7 @@ void Agate::Mesh::setupMesh() {
 Agate::Mesh::~Mesh() = default;
 
 Agate::ModelLoader::ModelLoader(std::string const &path, bool gamma, bool flipUVs)
-    : gammaCorrection(gamma), m_path(path), m_directory(extractDirectory(path)) {
+    : m_directory(extractDirectory(path)),m_path(path), gammaCorrection(gamma){
     loadModel(flipUVs);
     PRINTMSG("model loaded from m_path {}", m_path);
 }
