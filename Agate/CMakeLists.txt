@@ -31,21 +31,26 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/vender/glm/"
         "${PROJECT_SOURCE_DIR}/vender/assimp/include"
         "${PROJECT_SOURCE_DIR}/vender/stb"
+        "${PROJECT_SOURCE_DIR}/vender/SOIL2/src"
+        "${PROJECT_SOURCE_DIR}/vender/KTX/include"
         )
 
+set(KTX_FEATURE_STATIC_LIBRARY ON CACHE BOOL "Build libktx as a static library" FORCE)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glfw)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/spdlog)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/imgui)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glm)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/assimp)
+add_subdirectory(${PROJECT_SOURCE_DIR}/vender/SOIL2)
+add_subdirectory(${PROJECT_SOURCE_DIR}/vender/KTX)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
 add_library(Agate-lib STATIC ${libSrc} ${libHead})
 
 # Link library to the Agate-lib target
-target_link_libraries(Agate-lib PUBLIC assimp glfw spdlog imgui glm)
+target_link_libraries(Agate-lib PUBLIC assimp glfw spdlog imgui glm soil2 ktx)
 
 target_precompile_headers(Agate-lib PUBLIC
         "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/agpch.h>"

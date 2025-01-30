@@ -5,7 +5,7 @@
 
 namespace Agate {
 
-    class API Logger {
+    class Logger {
     public:
         static void initLogger();
 
