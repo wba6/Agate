@@ -7,17 +7,21 @@ project(Agate VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(buildDirExecutable ${PROJECT_SOURCE_DIR}/bin/-windows-x86_64/Application/Static)
+set(buildDirExecutable ${PROJECT_SOURCE_DIR}/bin/Application/Static)
 
 set(EXECUTABLE_OUTPUT_PATH ${buildDirExecutable} CACHE PATH "Build directory" FORCE)
 
-set(buildDirLib ${PROJECT_SOURCE_DIR}/bin/-windows-x86_64/Agate/Static)
+set(buildDirLib ${PROJECT_SOURCE_DIR}/bin/Agate/Static)
 
 set(LIBRARY_OUTPUT_PATH  ${buildDirLib} CACHE PATH "Build directory" FORCE)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/Agate)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Application)
 
-
-
-
+# Add a custom target to run the Application executable
+add_custom_target(run
+    COMMAND $<TARGET_FILE:Application>
+    DEPENDS Application
+    WORKING_DIRECTORY ${buildDirExecutable}
+    COMMENT "Running the Application executable"
+)
