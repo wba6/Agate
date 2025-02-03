@@ -1,5 +1,6 @@
 
 #include "Agate.h"
+#include <cmath>
 #include <iostream>
 #include <string>
 #include <filesystem>
@@ -48,10 +49,14 @@ public:
         shader->Bind();
         camera->onUpdate();
 
+        static double x = 0;
+        x = (double)(x + 0.1);
+
         glm::mat4 trans_model = glm::mat4(1.0f);
         trans_model = glm::scale(trans_model, glm::vec3(1.0f, 1.0f, 1.0f)*0.01f);    // it's a bit too big for our scene, so scale it down
         trans_model = glm::translate(trans_model, glm::vec3(0.0f, 0.0f, 0.0f));// translate it down so it's at the center of the scene
         shader->SetUniformMat4("model", trans_model);
+        shader->SetUniform3f("lightPosition", 3*cos(x), 3*sin(x), 0.1);
         model->Draw(*shader);
     }
     void OnEvent(Agate::Event &e) override
