@@ -49,9 +49,8 @@ public:
         camera->onUpdate();
 
         glm::mat4 trans_model = glm::mat4(1.0f);
-        trans_model = glm::translate(trans_model, glm::vec3(0.0f, 0.0f, 0.0f));// translate it down so it's at the center of the scene
-        shader->SetUniform3f("pointLight.Position", camera->getCameraPos().x,camera->getCameraPos().y,camera->getCameraPos().z);    // Position: (x, y, z)
         trans_model = glm::scale(trans_model, glm::vec3(1.0f, 1.0f, 1.0f)*0.01f);    // it's a bit too big for our scene, so scale it down
+        trans_model = glm::translate(trans_model, glm::vec3(0.0f, 0.0f, 0.0f));// translate it down so it's at the center of the scene
         shader->SetUniformMat4("model", trans_model);
         model->Draw(*shader);
     }
