@@ -21,6 +21,11 @@ namespace Agate {
             PRINTCRIT("GLFW FAILED INIT-------------------");
         glfwSetErrorCallback(GlfwError);
 
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // MacOS supports up to 4.1, but 3.3 is safer common ground
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // Required on Mac
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);            // Required on Mac
+
         m_Window = glfwCreateWindow(m_windowProps.width, m_windowProps.height, m_windowProps.name.c_str(), nullptr,
                                     nullptr);
         glfwMakeContextCurrent((GLFWwindow *) m_Window);
