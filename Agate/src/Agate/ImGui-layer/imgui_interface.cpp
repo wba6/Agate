@@ -41,7 +41,7 @@ namespace Agate {
         }
 
         ImGui_ImplGlfw_InitForOpenGL((GLFWwindow *) window, true);
-        ImGui_ImplOpenGL3_Init("#version 430");
+        ImGui_ImplOpenGL3_Init("#version 150");
         status = true;
     }
 
