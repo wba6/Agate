@@ -32,11 +32,11 @@ public:
 
     void Attach() override
     {
-        shader = new Agate::Shader("Shaders/model_loading_lighting.vs.glsl", "Shaders/model_loading_lighting.fg.glsl");
+        shader = new Agate::Shader("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
         camera = new Agate::Camera(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
-        model = new Agate::ModelLoader(std::filesystem::path("Shaders\\vokselia_spawn\\vokselia_spawn.obj").generic_string());
+        model = new Agate::ModelLoader(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
     }
 
     void Detach() override
