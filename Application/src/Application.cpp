@@ -1,6 +1,5 @@
 
 #include "Agate.h"
-#include <cmath>
 #include <iostream>
 #include <string>
 #include <filesystem>
@@ -33,11 +32,11 @@ public:
 
     void Attach() override
     {
-        shader = new Agate::Shader("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
+        shader = new Agate::Shader("Shaders/model_loading_lighting.vs.glsl", "Shaders/model_loading_lighting.fg.glsl");
         camera = new Agate::Camera(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
-        model = new Agate::ModelLoader(std::filesystem::path("Shaders/sponza/sponza.obj").generic_string(), false);
+        model = new Agate::ModelLoader(std::filesystem::path("Shaders\\vokselia_spawn\\vokselia_spawn.obj").generic_string());
     }
 
     void Detach() override
@@ -49,14 +48,11 @@ public:
         shader->Bind();
         camera->onUpdate();
 
-        static double x = 0;
-        x = (double)(x + 0.1);
-
         glm::mat4 trans_model = glm::mat4(1.0f);
-        trans_model = glm::scale(trans_model, glm::vec3(1.0f, 1.0f, 1.0f)*0.01f);    // it's a bit too big for our scene, so scale it down
         trans_model = glm::translate(trans_model, glm::vec3(0.0f, 0.0f, 0.0f));// translate it down so it's at the center of the scene
+        shader->SetUniform3f("pointLight.Position", camera->getCameraPos().x,camera->getCameraPos().y,camera->getCameraPos().z);    // Position: (x, y, z)
+        trans_model = glm::scale(trans_model, glm::vec3(0.5f, 0.5f, 0.55f));    // it's a bit too big for our scene, so scale it down
         shader->SetUniformMat4("model", trans_model);
-        shader->SetUniform3f("lightPosition", 3*cos(x), 3*sin(x), 0.1);
         model->Draw(*shader);
     }
     void OnEvent(Agate::Event &e) override
