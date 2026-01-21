@@ -41,7 +41,7 @@ jobs:
       run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
 
     - name: Configure CMake
-      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }} -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
     - name: Build with CMake
       run: cmake --build build --config ${{ matrix.config }}
