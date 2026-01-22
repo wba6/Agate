@@ -4,6 +4,7 @@
 #include "Events/Event.h"
 #include "ImGui-layer/imgui_interface.h"
 #include "RenderContext/CurrentContext.h"
+#include "ImGui-layer/Example_imguiLayer.h"
 #include "imgui.h"
 #include <iostream>
 
@@ -60,8 +61,6 @@ void Agate::EntryPoint::OnEvent(Event &e) {
     EventNotifier notifier(e);
 
     notifier.NotifyEvent<WindowCloseEvent>(BindFn(EntryPoint::OnWindowClose));
-    /*e.PrintEventName();*/
-
 
     for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
         m_layerStack.m_layers.at(i)->OnEvent(e);

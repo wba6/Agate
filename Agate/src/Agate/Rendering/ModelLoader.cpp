@@ -8,7 +8,7 @@
 namespace fs = std::filesystem;
 
 /*
- * Convert an assimp matrix to a glm matrix
+ * Convert an assimp matrix to a glm matrix, this is the best way I can find to do this
  *
  * @param matrix The assimp matrix to convert
  * @return The converted glm matrix
