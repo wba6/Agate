@@ -39,6 +39,7 @@ jobs:
     - name: Install dependencies on macos
       if: runner.os == 'macos'
       run: |
+        brew install --quiet ninja
 
     - name: Install CMake on Windows
       if: runner.os == 'Windows'
@@ -47,7 +48,7 @@ jobs:
         choco install ninja --no-progress
       
     - name: Configure CMake
-      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }} -G Ninja
 
     - name: Build with CMake
       run: cmake --build build --config ${{ matrix.config }}
