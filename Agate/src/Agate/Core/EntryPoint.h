@@ -7,30 +7,90 @@
 #include "LayerStack.h"
 
 namespace Agate {
+
+    /**
+     * @brief Manages the layer stack, windowing and
+     *        event systems while running the core loop
+     *        for the engine
+     */
     class API EntryPoint {
     public:
         EntryPoint();
 
         virtual ~EntryPoint();
 
+        /**
+         * @brief Begins the core render loop
+         */
         void Run();
 
+        /**
+         * @brief Passes an event down the layer stack for
+         *        each layer to respond to, until the event
+         *        is tagged as handled
+         * 
+         * @param e Event to pass
+         */
         void OnEvent(Event &e);
 
+        /**
+         * @brief Special event handler for WindowCloseEvent
+         * 
+         * @param e Triggering event
+         * 
+         * @return True
+         */
         bool OnWindowClose(WindowCloseEvent &e);
 
+        /**
+         * @brief Inserts a layer in front of the first overlay
+         *        layer in the stack
+         * 
+         * @param layer Layer to insert
+         */
         void EmplaceLayer(Layer *layer);
 
+        /**
+         * @brief Removes a layer from the stack
+         * 
+         * @param layer Layer to remove
+         */
         void RemoveLayer(Layer *layer);
 
+        /**
+         * @brief Appends an overlay layer to the end of the
+         *        stack
+         * 
+         * @param overlay Layer to append
+         */
         void EmplaceOverlay(Layer *overlay);
 
+        /**
+         * @brief Removes an overlay layer from the stack
+         * 
+         * @param overlay Layer to remove
+         */
         void RemoveOverlay(Layer *overlay);
 
+        /**
+         * @brief Time elapsed rendering the most recent frame
+         *        in seconds
+         * 
+         * @return Number of seconds that have elapsed
+         */
         float GetDeltaTime();
 
+        /**
+         * @brief Accessor for the main window managed by
+         *        this instance
+         * 
+         * @return Shared pointer to the main window
+         */
         std::shared_ptr<Agate::Window> GetWindow();
 
+        /**
+         * @brief Accessor to the singleton instance
+         */
         static EntryPoint *&GetInstance();
 
     private:
@@ -43,7 +103,15 @@ namespace Agate {
         static EntryPoint *s_instance;
     };
 
-    //to be defined outside of lib
+    /**
+     * @warning Intentionally undefined - Consuming
+     * applications must define this function 
+     * to instantiate an entry for the engine
+     * to run.
+     * 
+     * @brief Instantiates an application for the
+     * engine to run
+     */
     EntryPoint *CreateEntryPoint();
 
 }// namespace Agate
