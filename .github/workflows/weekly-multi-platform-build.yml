@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         config: [Debug, Release]
 
     steps:
@@ -34,14 +34,21 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libwayland-dev libxkbcommon-dev libgl1-mesa-dev xorg-dev
+        sudo apt-get install -y cmake ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libwayland-dev libxkbcommon-dev libgl1-mesa-dev xorg-dev
+
+    - name: Install dependencies on macos
+      if: runner.os == 'macos'
+      run: |
+        brew install --quiet ninja
 
     - name: Install CMake on Windows
       if: runner.os == 'Windows'
-      run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' --no-progress
+      run: |
+        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' --no-progress
+        choco install ninja --no-progress
       
     - name: Configure CMake
-      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }} -G Ninja -DCMAKE_CXX_FLAGS="-Wno-error=array-bounds" -DCMAKE_C_FLAGS="-Wno-error=unknown-pragmas"
 
     - name: Build with CMake
       run: cmake --build build --config ${{ matrix.config }}
