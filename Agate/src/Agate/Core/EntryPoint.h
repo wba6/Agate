@@ -19,13 +19,13 @@ namespace Agate {
 
         bool OnWindowClose(WindowCloseEvent &e);
 
-        void EmplaceLayer(Layer *layer);
+        void EmplaceLayer(std::shared_ptr<Layer> layer);
 
-        void RemoveLayer(Layer *layer);
+        void RemoveLayer(std::shared_ptr<Layer> layer);
 
-        void EmplaceOverlay(Layer *overlay);
+        void EmplaceOverlay(std::shared_ptr<Layer> overlay);
 
-        void RemoveOverlay(Layer *overlay);
+        void RemoveOverlay(std::shared_ptr<Layer> overlay);
 
         float GetDeltaTime();
 
