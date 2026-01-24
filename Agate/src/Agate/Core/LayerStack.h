@@ -3,7 +3,8 @@
  *        core loop to organize layers
  */
 
-#pragma once
+#ifndef AGATE_LAYERSTACK_H
+#define AGATE_LAYERSTACK_H
 
 #include "agpch.h"
 
@@ -59,3 +60,5 @@ namespace Agate {
         unsigned int m_amountOfLayers = 0;
     };
 }// namespace Agate
+
+#endif // AGATE_LAYERSTACK_H
