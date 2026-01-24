@@ -1,8 +1,12 @@
-//
-// Created by william on 11/3/22.
-//
+/**
+ * @brief Provides named symbols that map to keys
+ * 
+ * Created by william on 11/3/22.
+ */
 
-#pragma once
+#ifndef AGATE_KEYCODES_H
+#define AGATE_KEYCODES_H
+
 //from GFLW3.h and modified
 
 #define AGATE_KEY_SPACE 32
@@ -126,3 +130,5 @@
 #define AGATE_KEY_RIGHT_ALT 346
 #define AGATE_KEY_RIGHT_SUPER 347
 #define AGATE_KEY_MENU 348
+
+#endif // AGATE_KEYCODES_H
