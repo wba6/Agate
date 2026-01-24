@@ -1,3 +1,8 @@
+/**
+ * @brief Adds macros based on whether the engine should declare
+ *        dynamic exports as well as a binding macro
+ */
+
 #ifndef AGATE_CORE_H
 #define AGATE_CORE_H
 
