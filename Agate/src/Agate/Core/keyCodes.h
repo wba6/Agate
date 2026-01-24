@@ -1,6 +1,8 @@
-//
-// Created by william on 11/3/22.
-//
+/**
+ * @brief Provides named symbols that map to keys
+ * 
+ * Created by william on 11/3/22.
+ */
 
 #pragma once
 //from GFLW3.h and modified
