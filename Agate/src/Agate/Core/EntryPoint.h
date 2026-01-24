@@ -54,14 +54,14 @@ namespace Agate {
          * 
          * @param layer Layer to insert
          */
-        void EmplaceLayer(Layer *layer);
+        void EmplaceLayer(std::shared_ptr<Layer> layer);
 
         /**
          * @brief Removes a layer from the stack
          * 
          * @param layer Layer to remove
          */
-        void RemoveLayer(Layer *layer);
+        void RemoveLayer(std::shared_ptr<Layer> layer);
 
         /**
          * @brief Appends an overlay layer to the end of the
@@ -69,14 +69,14 @@ namespace Agate {
          * 
          * @param overlay Layer to append
          */
-        void EmplaceOverlay(Layer *overlay);
+        void EmplaceOverlay(std::shared_ptr<Layer> overlay);
 
         /**
          * @brief Removes an overlay layer from the stack
          * 
          * @param overlay Layer to remove
          */
-        void RemoveOverlay(Layer *overlay);
+        void RemoveOverlay(std::shared_ptr<Layer> overlay);
 
         /**
          * @brief Time elapsed rendering the most recent frame
