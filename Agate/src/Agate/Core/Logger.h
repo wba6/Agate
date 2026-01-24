@@ -1,3 +1,9 @@
+/**
+ * @brief Include file for the Logger class and logging macros. The
+ *        Logger class serves to decouple logging macros and the
+ *        rest of the codebase from logging dependencies
+ */
+
 #pragma once
 
 #include "Core.h"
