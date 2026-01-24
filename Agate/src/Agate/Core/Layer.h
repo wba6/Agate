@@ -1,3 +1,9 @@
+/**
+ * @brief Include file for the Layer class. Layers are used to
+ *        separate and order operations and events in the core
+ *        loop
+ */
+
 #pragma once
 
 #include "Agate/Events/Event.h"
