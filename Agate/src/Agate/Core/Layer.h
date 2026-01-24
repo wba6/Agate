@@ -3,14 +3,35 @@
 #include "Agate/Events/Event.h"
 
 namespace Agate {
+
+    /**
+     * @brief Base class for all layers
+     */
     class Layer {
     public:
+
+        /**
+         * @brief Called immediately after being added to the 
+         *        layer stack
+         */
         virtual void Attach() {}
 
+        /**
+         * @brief Called immediately before being removed from
+         *        the layer stack
+         */
         virtual void Detach() {}
 
+        /**
+         * @brief Event handler for this layer
+         * 
+         * @param e Event to handle
+         */
         virtual void OnEvent(Event &e) {}
 
+        /**
+         * @brief Called once every render frame
+         */
         virtual void OnRender() {};
 
     private:
