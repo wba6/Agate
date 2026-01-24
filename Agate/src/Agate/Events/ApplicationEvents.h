@@ -2,7 +2,8 @@
  * @brief Include file for application/window level events
  */
 
-#pragma once
+#ifndef AGATE_APPLICATIONEVENTS_H
+#define AGATE_APPLICATIONEVENTS_H
 
 #include "Agate/Events/Event.h"
 
@@ -55,3 +56,5 @@ namespace Agate {
         }
     };
 }// namespace Agate
+
+#endif // AGATE_APPLICATIONEVENTS_H
