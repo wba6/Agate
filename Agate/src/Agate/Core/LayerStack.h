@@ -1,3 +1,8 @@
+/**
+ * @brief Include file for the LayerStack class. Used by the
+ *        core loop to organize layers
+ */
+
 #pragma once
 
 #include "agpch.h"
