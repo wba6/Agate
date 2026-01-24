@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AGATE_CORE_H
+#define AGATE_CORE_H
 
 #ifdef Agate_STATIC
 #define API
@@ -11,3 +12,5 @@
 #endif
 
 #define BindFn(x) std::bind(&x, this, std::placeholders::_1)
+
+#endif // AGATE_CORE_H
