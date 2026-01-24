@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AGATE_ENTRYPOINT_H
+#define AGATE_ENTRYPOINT_H
 
 #include "Agate/Events/ApplicationEvents.h"
 #include "Agate/Events/Event.h"
@@ -115,3 +116,5 @@ namespace Agate {
     EntryPoint *CreateEntryPoint();
 
 }// namespace Agate
+
+#endif // AGATE_ENTRYPOINT_H
