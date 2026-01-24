@@ -1,7 +1,6 @@
 
 #include "Agate.h"
-#include <iostream>
-#include <string>
+#include <memory>
 #include <filesystem>
 class app : public Agate::EntryPoint {
 
@@ -17,9 +16,13 @@ public:
 
     void Detach() override
     {
+        PRINTMSG("Detach example layer");
     }
-    void OnRender()override {
+
+    void OnRender()override
+    {
     };
+
     void OnEvent(Agate::Event &e) override
     {
     }
@@ -41,6 +44,7 @@ public:
 
     void Detach() override
     {
+
     }
 
     void OnRender() override
@@ -72,8 +76,12 @@ Agate::EntryPoint *Agate::CreateEntryPoint()
 {
     auto Application = new app();
 
-    Application->EmplaceLayer(new layerEx);
-    Application->EmplaceLayer(new TemplayerEx);
+    std::shared_ptr<layerEx> example_layer = std::make_shared<layerEx>();
+
+    Application->EmplaceLayer(example_layer);
+    Application->EmplaceLayer(std::make_shared<TemplayerEx>());
+
+    Application->RemoveLayer(example_layer);
 
     return Application;
 }

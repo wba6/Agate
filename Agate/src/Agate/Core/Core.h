@@ -1,4 +1,10 @@
-#pragma once
+/**
+ * @brief Adds macros based on whether the engine should declare
+ *        dynamic exports as well as a binding macro
+ */
+
+#ifndef AGATE_CORE_H
+#define AGATE_CORE_H
 
 #ifdef Agate_STATIC
 #define API
@@ -11,3 +17,5 @@
 #endif
 
 #define BindFn(x) std::bind(&x, this, std::placeholders::_1)
+
+#endif // AGATE_CORE_H
