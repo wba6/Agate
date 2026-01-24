@@ -1,6 +1,9 @@
-//
-// Created by william on 11/3/22.
-//
+/**
+ * @brief Include file for the InputPulling class. Provides
+ *        read access for keyboard and mouse inputs
+ * 
+ * Created by william on 11/3/22.
+ */
 
 #ifndef AGATE_INPUTPULLING_H
 #define AGATE_INPUTPULLING_H
@@ -41,5 +44,4 @@ private:
     InputPulling();
 };
 
-
-#endif//AGATE_INPUTPULLING_H
+#endif // AGATE_INPUTPULLING_H
