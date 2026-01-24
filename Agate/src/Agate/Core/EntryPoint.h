@@ -1,3 +1,8 @@
+/**
+ * @brief Include file for the EntryPoint class and CreateEntryPoint
+ *        free function stub. Consuming applications should start here
+ */
+
 #ifndef AGATE_ENTRYPOINT_H
 #define AGATE_ENTRYPOINT_H
 
