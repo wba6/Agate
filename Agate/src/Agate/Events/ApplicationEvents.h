@@ -1,3 +1,7 @@
+/**
+ * @brief Include file for application/window level events
+ */
+
 #pragma once
 
 #include "Agate/Events/Event.h"
