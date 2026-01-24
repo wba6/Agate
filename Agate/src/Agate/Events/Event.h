@@ -1,3 +1,7 @@
+/**
+ * @brief Include file for base event classes and types
+ */
+
 #pragma once
 
 #include "agpch.h"
