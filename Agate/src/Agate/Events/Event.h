@@ -2,7 +2,8 @@
  * @brief Include file for base event classes and types
  */
 
-#pragma once
+#ifndef AGATE_EVENT_H
+#define AGATE_EVENT_H
 
 #include "agpch.h"
 
@@ -64,3 +65,5 @@ namespace Agate {
 
 
 }// namespace Agate
+
+#endif // AGATE_EVENT_H
