@@ -4,7 +4,8 @@
  *        by consuming applications) to run Agate
  */
 
-#pragma once
+#ifndef AGATE_MAIN_H
+#define AGATE_MAIN_H
 
 //-----------------------------------------Main Entry -----------------------------------
 extern Agate::EntryPoint *Agate::CreateEntryPoint();
@@ -19,3 +20,5 @@ int main() {
     return 0;
 }
 //--------------------------------------------------------------------------------------
+
+#endif // AGATE_MAIN_H
