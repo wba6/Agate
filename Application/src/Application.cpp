@@ -1,6 +1,7 @@
 
 #include "Agate.h"
 #include <iostream>
+#include <memory>
 #include <string>
 #include <filesystem>
 class app : public Agate::EntryPoint {
@@ -72,8 +73,8 @@ Agate::EntryPoint *Agate::CreateEntryPoint()
 {
     auto Application = new app();
 
-    Application->EmplaceLayer(new layerEx);
-    Application->EmplaceLayer(new TemplayerEx);
+    Application->EmplaceLayer(std::make_unique<layerEx>());
+    Application->EmplaceLayer(std::make_unique<TemplayerEx>());
 
     return Application;
 }
