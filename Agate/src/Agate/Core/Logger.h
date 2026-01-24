@@ -4,7 +4,8 @@
  *        rest of the codebase from logging dependencies
  */
 
-#pragma once
+#ifndef AGATE_LOGGER_H
+#define AGATE_LOGGER_H
 
 #include "Core.h"
 #include <spdlog/logger.h>
@@ -131,3 +132,5 @@ namespace Agate {
  *             markers
  */
 #define PRINTCRIT(format, ...) Agate::Logger::printCrit(__FILE__, __func__, __LINE__, format, ##__VA_ARGS__)
+
+#endif // AGATE_LOGGER_H
