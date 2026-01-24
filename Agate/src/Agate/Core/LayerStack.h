@@ -19,7 +19,7 @@ namespace Agate {
          */
         virtual void AddLayer(std::shared_ptr<Layer> layer);
 
-        virtual void RemoveLayer(const std::shared_ptr<Layer> &layer);
+        virtual void RemoveLayer(std::shared_ptr<Layer> layer);
 
         /**
          * adds an overlay layer, overlay layers are the last to be rendered
@@ -27,7 +27,7 @@ namespace Agate {
          */
         virtual void AddOverlay(std::shared_ptr<Layer> overlay);
 
-        virtual void RemoveOverlay(const std::shared_ptr<Layer> &overlay);
+        virtual void RemoveOverlay(std::shared_ptr<Layer> overlay);
 
     private:
         std::vector<std::shared_ptr<Layer>> m_layers;

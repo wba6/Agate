@@ -21,11 +21,11 @@ namespace Agate {
 
         void EmplaceLayer(std::shared_ptr<Layer> layer);
 
-        void RemoveLayer(const std::shared_ptr<Layer> &layer);
+        void RemoveLayer(std::shared_ptr<Layer> layer);
 
         void EmplaceOverlay(std::shared_ptr<Layer> overlay);
 
-        void RemoveOverlay(const std::shared_ptr<Layer> &overlay);
+        void RemoveOverlay(std::shared_ptr<Layer> overlay);
 
         float GetDeltaTime();
 
