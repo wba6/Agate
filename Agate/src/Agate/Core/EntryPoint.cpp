@@ -75,20 +75,20 @@ bool Agate::EntryPoint::OnWindowClose(WindowCloseEvent &e) {
     return true;
 }
 
-void Agate::EntryPoint::EmplaceLayer(std::unique_ptr<Layer> layer) {
+void Agate::EntryPoint::EmplaceLayer(std::shared_ptr<Layer> layer) {
     m_layerStack.AddLayer(std::move(layer));
 }
 
-void Agate::EntryPoint::RemoveLayer(std::unique_ptr<Layer> layer) {
-    m_layerStack.RemoveLayer(std::move(layer));
+void Agate::EntryPoint::RemoveLayer(const std::shared_ptr<Layer> &layer) {
+    m_layerStack.RemoveLayer(layer);
 }
 
-void Agate::EntryPoint::EmplaceOverlay(std::unique_ptr<Layer> overlay) {
+void Agate::EntryPoint::EmplaceOverlay(std::shared_ptr<Layer> overlay) {
     m_layerStack.AddOverlay(std::move(overlay));
 }
 
-void Agate::EntryPoint::RemoveOverlay(std::unique_ptr<Layer> overlay) {
-    m_layerStack.RemoveOverlay(std::move(overlay));
+void Agate::EntryPoint::RemoveOverlay(const std::shared_ptr<Layer> &overlay) {
+    m_layerStack.RemoveOverlay(overlay);
 }
 
 Agate::EntryPoint *&Agate::EntryPoint::GetInstance() {
