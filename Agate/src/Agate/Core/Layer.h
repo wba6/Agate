@@ -4,7 +4,8 @@
  *        loop
  */
 
-#pragma once
+#ifndef AGATE_LAYER_H
+#define AGATE_LAYER_H
 
 #include "Agate/Events/Event.h"
 
@@ -44,3 +45,5 @@ namespace Agate {
         bool m_Enabled = true;
     };
 }// namespace Agate
+
+#endif // AGATE_LAYER_H
