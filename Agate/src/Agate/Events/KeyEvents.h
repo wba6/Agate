@@ -1,6 +1,9 @@
-//
-// Created by TANK1_41 on 8/23/2022.
-//
+/**
+ * @brief Include file for keyboard input events
+ * 
+ * Created by TANK1_41 on 8/23/2022.
+ */
+
 #include "Event.h"
 
 #pragma once
