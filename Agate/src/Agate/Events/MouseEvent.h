@@ -2,7 +2,8 @@
  * @brief Include file for mouse input events
  */
 
-#pragma once
+#ifndef AGATE_MOUSEEVENT_H
+#define AGATE_MOUSEEVENT_H
 
 #include "Event.h"
 
@@ -94,4 +95,6 @@ namespace Agate {
             return EventTypes::MouseButtonReleased;
         }
     };
-}// namespace Agate
+} // namespace Agate
+
+#endif // AGATE_MOUSEEVENT_H
