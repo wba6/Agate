@@ -6,7 +6,9 @@
 
 #include "Event.h"
 
-#pragma once
+#ifndef AGATE_KEYEVENTS_H
+#define AGATE_KEYEVENTS_H
+
 namespace Agate {
     class KeyPressedEvent : public Event {
     public:
@@ -65,4 +67,6 @@ namespace Agate {
     private:
         unsigned int m_keycode;
     };
-}// namespace Agate
+} // namespace Agate
+
+#endif // AGATE_KEYEVENTS_H
