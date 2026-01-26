@@ -1,3 +1,7 @@
+/**
+ * @brief Include file for mouse input events
+ */
+
 #pragma once
 
 #include "Event.h"
