@@ -4,8 +4,11 @@ cmake_minimum_required(VERSION 3.16)
 project(Agate VERSION 1.0)
 
 #specify the c++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# helps IDE's find files
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(buildDirExecutable ${PROJECT_SOURCE_DIR}/bin/Application/Static)
 

@@ -1,8 +1,10 @@
 #include "agpch.h"
 #include "ModelLoader.h"
 #include "Agate/Core/Logger.h"
+#include "assimp/scene.h"
 #include "glad/glad.h"
 #include "OpenGl/VertexArray.h"
+#include <thread>
 #include <utility>
 
 namespace fs = std::filesystem;
@@ -19,6 +21,7 @@ inline glm::mat4 convertMatrix(const aiMatrix4x4 &matrix) {
                      matrix.a3, matrix.b3, matrix.c3, matrix.d3,
                      matrix.a4, matrix.b4, matrix.c4, matrix.d4);
 }
+
 Agate::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) {
     this->vertices = std::move(vertices);
     this->indices = std::move(indices);
@@ -107,19 +110,27 @@ void Agate::Mesh::setupMesh() {
 Agate::Mesh::~Mesh() = default;
 
 Agate::ModelLoader::ModelLoader(std::string const &path, bool gamma, bool flipUVs)
-    : m_directory(extractDirectory(path)),m_path(path), gammaCorrection(gamma){
-    loadModel(flipUVs);
-    PRINTMSG("model loaded from m_path {}", m_path);
+    : m_directory(extractDirectory(path)),m_path(path), gammaCorrection(gamma), m_modelLoaded(false){
+    m_workerThread = std::jthread(&ModelLoader::loadModel, this, flipUVs);
 }
 
 void Agate::ModelLoader::Draw(Agate::Shader &shader) {
+    if (!m_modelLoaded) return;
+
+    // process ASSIMP's root node recursively
+    static bool nodesProccessed = false;
+    if (!nodesProccessed) {  
+        processNode(m_scene->mRootNode, m_scene, glm::mat4(1.0f));
+        nodesProccessed = true;
+        PRINTMSG("model loaded from m_path {}", m_path);
+    }
+
     for (auto &mesh: m_meshes)
         mesh.Draw(shader);
 }
 
 void Agate::ModelLoader::loadModel(bool flipUVs) {
     // read file via ASSIMP
-    Assimp::Importer importer;
     unsigned int assimpFlags = aiProcess_CalcTangentSpace         |
                                aiProcess_Triangulate             |
                                aiProcess_JoinIdenticalVertices   |
@@ -128,16 +139,14 @@ void Agate::ModelLoader::loadModel(bool flipUVs) {
     if(flipUVs) {
         assimpFlags |= aiProcess_FlipUVs;
     }
-    const aiScene *scene = importer.ReadFile(m_path,assimpFlags);//@TODO some models need | aiProcess_FlipUVs
+    m_scene = const_cast<aiScene*>(m_importer.ReadFile(m_path,assimpFlags));//@TODO some models need | aiProcess_FlipUVs
     // check for errors
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+    if (!m_scene || m_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_scene->mRootNode) // if is Not Zero
     {
-        PRINTERROR("ERROR::Model::loadModel Assimp Error: {}", importer.GetErrorString());
+        PRINTERROR("ERROR::Model::loadModel Assimp Error: {}", m_importer.GetErrorString());
         return;
     }
-
-    // process ASSIMP's root node recursively
-    processNode(scene->mRootNode, scene, glm::mat4(1.0f));
+    m_modelLoaded = true;
 }
 
 void Agate::ModelLoader::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform) {

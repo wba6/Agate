@@ -8,6 +8,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <thread>
+#include <atomic>
 
 
 #define MAX_BONE_INFLUENCE 4
@@ -63,6 +65,13 @@ namespace Agate {
         void Draw(Shader &shader);
 
     private:
+        // this thread is used to load the model independent of the main thread
+        std::jthread m_workerThread;
+        std::atomic<bool> m_modelLoaded;
+        aiScene *m_scene;
+        Assimp::Importer m_importer;
+
+
         // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
         void loadModel(bool flipUVs = false);
 
