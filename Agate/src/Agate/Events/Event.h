@@ -83,7 +83,9 @@ namespace Agate {
          * @param ev Handler for the event, given it is of the
          *           appropriate type
          * 
-         * @return True if the event has been handled by this invocation
+         * @return Whether the event has been handled by this invocation
+         * @retval true The event has been handled
+         * @retval false The event has not been handled
          */
         template<typename T>
         bool NotifyEvent(EventFn<T> ev) {
