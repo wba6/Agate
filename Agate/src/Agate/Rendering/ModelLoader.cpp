@@ -4,6 +4,7 @@
 #include "assimp/scene.h"
 #include "glad/glad.h"
 #include "OpenGl/VertexArray.h"
+#include <sys/types.h>
 #include <thread>
 #include <utility>
 
@@ -110,26 +111,45 @@ void Agate::Mesh::setupMesh() {
 Agate::Mesh::~Mesh() = default;
 
 Agate::ModelLoader::ModelLoader(std::string const &path, bool gamma, bool flipUVs)
-    : m_directory(extractDirectory(path)),m_path(path), gammaCorrection(gamma), m_modelLoaded(false){
-    m_workerThread = std::jthread(&ModelLoader::loadModel, this, flipUVs);
+    : m_directory(extractDirectory(path)),m_path(path), m_gammaCorrection(gamma){
+    // read file via ASSIMP
+    unsigned int assimpFlags = this->getAssimpFlags(flipUVs);
+
+    // This future is used to async load the data of the model file
+    m_futureScene = std::async(std::launch::async, [this, assimpFlags]() {
+                    return m_importer.ReadFile(m_path, assimpFlags);}); 
+
 }
 
 void Agate::ModelLoader::Draw(Agate::Shader &shader) {
-    if (!m_modelLoaded) return;
 
-    // process ASSIMP's root node recursively
-    static bool nodesProccessed = false;
-    if (!nodesProccessed) {  
-        processNode(m_scene->mRootNode, m_scene, glm::mat4(1.0f));
-        nodesProccessed = true;
-        PRINTMSG("model loaded from m_path {}", m_path);
+    // Once we get the scene we prepare it, i.e once we get the futures value we use it 
+    // once used it is no longer valid i.e this if is skipped
+    if (m_futureScene.valid()) {
+        auto status = m_futureScene.wait_for(std::chrono::seconds(0));
+        if (status == std::future_status::ready) {
+            // Once this is done the future scene will no longer be valid
+            prepareScene(m_futureScene.get());
+        }
     }
 
     for (auto &mesh: m_meshes)
         mesh.Draw(shader);
 }
 
-void Agate::ModelLoader::loadModel(bool flipUVs) {
+void Agate::ModelLoader::prepareScene(const aiScene *scene) {
+            // Is the scene valid?
+            if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+                PRINTERROR("ASSIMP ERROR: {}", m_importer.GetErrorString());
+                return;
+            }
+
+            // Proccess the nodes once (Note this can be very expensive)
+            processNode(scene->mRootNode, scene, glm::mat4(1.0f));
+            PRINTMSG("Model loaded from path: {}", m_path);
+}
+
+uint Agate::ModelLoader::getAssimpFlags(bool flipUVs) {
     // read file via ASSIMP
     unsigned int assimpFlags = aiProcess_CalcTangentSpace         |
                                aiProcess_Triangulate             |
@@ -139,14 +159,7 @@ void Agate::ModelLoader::loadModel(bool flipUVs) {
     if(flipUVs) {
         assimpFlags |= aiProcess_FlipUVs;
     }
-    m_scene = const_cast<aiScene*>(m_importer.ReadFile(m_path,assimpFlags));//@TODO some models need | aiProcess_FlipUVs
-    // check for errors
-    if (!m_scene || m_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_scene->mRootNode) // if is Not Zero
-    {
-        PRINTERROR("ERROR::Model::loadModel Assimp Error: {}", m_importer.GetErrorString());
-        return;
-    }
-    m_modelLoaded = true;
+    return assimpFlags;
 }
 
 void Agate::ModelLoader::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform) {
@@ -245,7 +258,7 @@ std::vector<Agate::Texture> Agate::ModelLoader::loadMaterialTextures(aiMaterial 
             }
         }
         if (!skip) {
-            Texture texture(str.C_Str(), this->m_directory, gammaCorrection);
+            Texture texture(str.C_Str(), this->m_directory, m_gammaCorrection);
             texture.setType(typeName);
             textures.push_back(texture);
             textures_loaded.push_back(texture);
