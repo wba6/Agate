@@ -100,7 +100,7 @@ namespace Agate {
         * @param flipUVs If true, include aiProcess_FlipUVs.
         * @return Bitmask of Assimp aiProcess_* flags passed to ReadFile().
         */
-        uint getAssimpFlags(bool flipUVs = false);
+        unsigned int getAssimpFlags(bool flipUVs = false);
 
         /**
         * @brief Convert a loaded Assimp scene into engine-ready mesh data.

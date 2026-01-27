@@ -127,7 +127,7 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
         auto status = m_futureScene.wait_for(std::chrono::seconds(0));
         if (status == std::future_status::ready) {
             // Once this is done the future scene will no longer be valid
-            prepareScene(std::move(m_futureScene.get()));
+            prepareScene(m_futureScene.get());
         }
     }
 
@@ -147,7 +147,7 @@ void Agate::ModelLoader::prepareScene(const aiScene *scene) {
             PRINTMSG("Model loaded from path: {}", m_path);
 }
 
-uint Agate::ModelLoader::getAssimpFlags(bool flipUVs) {
+unsigned int Agate::ModelLoader::getAssimpFlags(bool flipUVs) {
     // read file via ASSIMP
     unsigned int assimpFlags = aiProcess_CalcTangentSpace         |
                                aiProcess_Triangulate             |
