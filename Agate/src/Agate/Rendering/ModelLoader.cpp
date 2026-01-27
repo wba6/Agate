@@ -4,8 +4,6 @@
 #include "assimp/scene.h"
 #include "glad/glad.h"
 #include "OpenGl/VertexArray.h"
-#include <sys/types.h>
-#include <thread>
 #include <utility>
 
 namespace fs = std::filesystem;

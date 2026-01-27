@@ -8,10 +8,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include <thread>
 #include <future>
-#include <atomic>
-
 
 #define MAX_BONE_INFLUENCE 4
 
