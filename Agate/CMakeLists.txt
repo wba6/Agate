@@ -40,10 +40,10 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glm)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/assimp)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/SOIL2)
 
-# KTX does not build with C++ 23 and I'm lazy, so we build just it with 17
+# KTX does not build with C++ 20+ and I'm lazy, so we build just it with 17
 set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/KTX)
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 
