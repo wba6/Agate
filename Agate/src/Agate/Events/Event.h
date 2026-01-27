@@ -59,7 +59,8 @@ namespace Agate {
     /**
      * @brief Wrapper for event handlers. Consumes a generic
      *        `Event` and narrows it to a specialization of
-     *        `Event` if it can handle the event
+     *        `Event` if possible to bind it to a callback
+     *        that is then invoked
      */
     class API EventNotifier {
         template<typename T>
