@@ -3,10 +3,6 @@ cmake_minimum_required(VERSION 3.16)
 #set the project name and version
 project(Agate-lib VERSION 1.0)
 
-#specify the c++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 # Source files
 file(GLOB_RECURSE libSrc
         ${PROJECT_SOURCE_DIR}/src/*.c
@@ -38,12 +34,16 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
 set(KTX_FEATURE_STATIC_LIBRARY ON CACHE BOOL "Build libktx as a static library" FORCE)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glfw)
-add_subdirectory(${PROJECT_SOURCE_DIR}/vender/spdlog)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/imgui)
+add_subdirectory(${PROJECT_SOURCE_DIR}/vender/spdlog)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glm)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/assimp)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/SOIL2)
+
+# KTX does not build with C++ 20+ and I'm lazy, so we build just it with 17
+set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/KTX)
+set(CMAKE_CXX_STANDARD 20)
 
 add_compile_definitions(Agate_STATIC GLFW_INCLUDE_NONE)
 

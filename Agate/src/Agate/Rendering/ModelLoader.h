@@ -8,7 +8,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
+#include <future>
 
 #define MAX_BONE_INFLUENCE 4
 
@@ -54,17 +54,67 @@ namespace Agate {
         std::vector<Mesh> m_meshes;
         std::string m_directory;
         std::string m_path;
-        bool gammaCorrection;
+        bool m_gammaCorrection;
 
-        // constructor, expects a filepath to a 3D model.
+        /**
+         * @brief Construct a ModelLoader and start loading a model on a background task.
+         *
+         * Initializes model metadata and launches an asynchronous Assimp import using
+         * std::async. The returned aiScene* is stored in a std::future so the caller
+         * can continue without blocking.
+         *
+         * @param path     Filesystem path to the model file.
+         * @param gamma    Enable/disable gamma correction for textures.
+         * @param flipUVs  If true, flip UV coordinates vertically during import.
+         *
+         * @note The actual GPU/engine-side preparation is deferred until Draw() observes
+         *       the future is ready and calls prepareScene().
+         */ 
         ModelLoader(std::string const &path, bool gamma = false, bool flipUVs = false);
 
-        // draws the model, and thus all its meshes
+        /**
+        * @brief Render the model; finalize loading when the async import completes.
+        *
+        * Each frame, this function polls the async import future. When the import
+        * completes, it performs one-time scene preparation (node traversal, mesh
+        * extraction, and any associated buffer creation) by calling prepareScene().
+        * After preparation, it draws all loaded meshes.
+        *
+        * @param shader Shader program used to render the meshes.
+        *
+        * @note Non-blocking: if the import is not ready yet, this function only draws
+        *       meshes that have already been prepared (often none).
+        */
         void Draw(Shader &shader);
 
+
     private:
-        // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
-        void loadModel(bool flipUVs = false);
+        // this future is used to load the model independent of the main thread
+        Assimp::Importer m_importer;
+        std::future<const aiScene*> m_futureScene;
+
+    private:
+        /**
+        * @brief Build the Assimp post-processing flags for import.
+        *
+        * @param flipUVs If true, include aiProcess_FlipUVs.
+        * @return Bitmask of Assimp aiProcess_* flags passed to ReadFile().
+        */
+        unsigned int getAssimpFlags(bool flipUVs = false);
+
+        /**
+        * @brief Convert a loaded Assimp scene into engine-ready mesh data.
+        *
+        * Validates the imported scene and recursively processes the node hierarchy to
+        * populate this loader's mesh list.
+        *
+        * @param scene Scene produced by Assimp::Importer::ReadFile().
+        *
+        * @warning Potentially expensive: performs vertex/index extraction and may
+        *          trigger GPU buffer uploads depending on your Mesh implementation.
+        *          Intended to be called once, after the async import completes.
+        */
+        void prepareScene(const aiScene *scene);
 
         // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
         void processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform);
