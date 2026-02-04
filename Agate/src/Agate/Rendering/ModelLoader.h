@@ -7,7 +7,6 @@
 #include <glm/glm.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <future>
 
 #define MAX_BONE_INFLUENCE 4
@@ -94,13 +93,6 @@ namespace Agate {
         std::future<const aiScene*> m_futureScene;
 
     private:
-        /**
-        * @brief Build the Assimp post-processing flags for import.
-        *
-        * @param flipUVs If true, include aiProcess_FlipUVs.
-        * @return Bitmask of Assimp aiProcess_* flags passed to ReadFile().
-        */
-        unsigned int getAssimpFlags(bool flipUVs = false);
 
         /**
         * @brief Convert a loaded Assimp scene into engine-ready mesh data.

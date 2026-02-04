@@ -22,6 +22,14 @@ public:
      * @brief Default constructor
      */
     AssimpLoader() = default;
+
+    /**
+     * @brief Builds flags for import post-processing options
+     * 
+     * @param flipUVs If true, include aiProcess_FlipUVs. Default false
+     * @return Bitmask representing the post-processing flags
+     */
+    unsigned int getFlags(bool flipUVs = false) const;
 };
 
 } // namespace Agate

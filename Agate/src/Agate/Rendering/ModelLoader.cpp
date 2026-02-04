@@ -1,5 +1,6 @@
 #include "agpch.h"
 #include "ModelLoader.h"
+#include "AssimpLoader.h"
 #include "Agate/Core/Logger.h"
 #include "assimp/scene.h"
 #include "glad/glad.h"
@@ -111,7 +112,8 @@ Agate::Mesh::~Mesh() = default;
 Agate::ModelLoader::ModelLoader(std::string const &path, bool gamma, bool flipUVs)
     : m_directory(extractDirectory(path)),m_path(path), m_gammaCorrection(gamma){
     // read file via ASSIMP
-    unsigned int assimpFlags = this->getAssimpFlags(flipUVs);
+    Agate::AssimpLoader assimp{};
+    unsigned int assimpFlags = assimp.getFlags(flipUVs);
 
     // This future is used to async load the data of the model file
     m_futureScene = std::async(std::launch::async, [this, assimpFlags]() {
@@ -145,19 +147,6 @@ void Agate::ModelLoader::prepareScene(const aiScene *scene) {
             // Proccess the nodes once (Note this can be very expensive)
             processNode(scene->mRootNode, scene, glm::mat4(1.0f));
             PRINTMSG("Model loaded from path: {}", m_path);
-}
-
-unsigned int Agate::ModelLoader::getAssimpFlags(bool flipUVs) {
-    // read file via ASSIMP
-    unsigned int assimpFlags = aiProcess_CalcTangentSpace         |
-                               aiProcess_Triangulate             |
-                               aiProcess_JoinIdenticalVertices   |
-                               aiProcess_SortByPType;
-
-    if(flipUVs) {
-        assimpFlags |= aiProcess_FlipUVs;
-    }
-    return assimpFlags;
 }
 
 void Agate::ModelLoader::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform) {
