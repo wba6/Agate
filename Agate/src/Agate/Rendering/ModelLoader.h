@@ -1,11 +1,11 @@
 #ifndef AGATE_MODELLOADER_H
 #define AGATE_MODELLOADER_H
 
+#include "AssimpLoader.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/VertexArray.h"
 #include "OpenGl/Texture.h"
 #include <glm/glm.hpp>
-#include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <future>
 
@@ -89,7 +89,7 @@ namespace Agate {
 
     private:
         // this future is used to load the model independent of the main thread
-        Assimp::Importer m_importer;
+        AssimpLoader assimp;
         std::future<const aiScene*> m_futureScene;
 
     private:

@@ -1,6 +1,5 @@
 #include "agpch.h"
 #include "ModelLoader.h"
-#include "AssimpLoader.h"
 #include "Agate/Core/Logger.h"
 #include "assimp/scene.h"
 #include "glad/glad.h"
@@ -112,12 +111,10 @@ Agate::Mesh::~Mesh() = default;
 Agate::ModelLoader::ModelLoader(std::string const &path, bool gamma, bool flipUVs)
     : m_directory(extractDirectory(path)),m_path(path), m_gammaCorrection(gamma){
     // read file via ASSIMP
-    Agate::AssimpLoader assimp{};
     unsigned int assimpFlags = assimp.getFlags(flipUVs);
 
     // This future is used to async load the data of the model file
-    m_futureScene = std::async(std::launch::async, [this, assimpFlags]() {
-                    return m_importer.ReadFile(m_path, assimpFlags);}); 
+    m_futureScene = assimp.readFile(m_path, assimpFlags); 
 
 }
 
@@ -139,8 +136,8 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
 
 void Agate::ModelLoader::prepareScene(const aiScene *scene) {
             // Is the scene valid?
-            if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-                PRINTERROR("ASSIMP ERROR: {}", m_importer.GetErrorString());
+            if (!scene) {
+                PRINTERROR("No scene to prepare");
                 return;
             }
 
