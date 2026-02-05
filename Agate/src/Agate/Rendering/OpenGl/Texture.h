@@ -16,7 +16,7 @@ namespace Agate {
         *
         * @return A Texture object
         */
-        Texture(const char *file, std::string &directory, int pixelFormat);
+        Texture(const char *file, std::string &directory);
 
         /*
         * Bind the texture to a texture unit
