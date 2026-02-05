@@ -88,8 +88,17 @@ namespace Agate {
 
 
     private:
-        // this future is used to load the model independent of the main thread
+        
+        /**
+         * @brief The AssimpLoader is kept as a class member in order to preserve the
+         *        lifetimes of objects managed by assimp
+         */
         AssimpLoader assimp;
+
+        /**
+         * @brief A future for the loaded model is kept as a class member to preserve
+         *        access to the result of the asynchronous load task
+         */
         std::future<const aiScene*> m_futureScene;
 
     private:
