@@ -54,7 +54,6 @@ namespace Agate {
         std::vector<Mesh> m_meshes;
         std::string m_directory;
         std::string m_path;
-        bool m_gammaCorrection;
 
         /**
          * @brief Construct a ModelLoader and start loading a model on a background task.
@@ -70,7 +69,7 @@ namespace Agate {
          * @note The actual GPU/engine-side preparation is deferred until Draw() observes
          *       the future is ready and calls prepareScene().
          */ 
-        ModelLoader(std::string const &path, bool gamma = false, bool flipUVs = false);
+        ModelLoader(std::string const &path, bool flipUVs = false);
 
         /**
         * @brief Render the model; finalize loading when the async import completes.
