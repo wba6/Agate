@@ -108,8 +108,8 @@ void Agate::Mesh::setupMesh() {
 
 Agate::Mesh::~Mesh() = default;
 
-Agate::ModelLoader::ModelLoader(std::string const &path, bool gamma, bool flipUVs)
-    : m_directory(extractDirectory(path)),m_path(path), m_gammaCorrection(gamma){
+Agate::ModelLoader::ModelLoader(std::string const &path, bool flipUVs)
+    : m_directory(extractDirectory(path)),m_path(path) {
     // read file via ASSIMP
     unsigned int assimpFlags = assimp.getFlags(flipUVs);
 
@@ -242,7 +242,7 @@ std::vector<Agate::Texture> Agate::ModelLoader::loadMaterialTextures(aiMaterial 
             }
         }
         if (!skip) {
-            Texture texture(str.C_Str(), this->m_directory, m_gammaCorrection);
+            Texture texture(str.C_Str(), this->m_directory);
             texture.setType(typeName);
             textures.push_back(texture);
             textures_loaded.push_back(texture);
