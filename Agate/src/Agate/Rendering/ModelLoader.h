@@ -5,8 +5,6 @@
 #include "Mesh.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/Texture.h"
-#include <glm/glm.hpp>
-#include <assimp/scene.h>
 #include <future>
 
 #define MAX_BONE_INFLUENCE 4
@@ -64,7 +62,7 @@ namespace Agate {
          * @brief A future for the loaded model is kept as a class member to preserve
          *        access to the result of the asynchronous load task
          */
-        std::future<const aiScene*> m_futureScene;
+        std::future<bool> m_futureScene;
 
     private:
 

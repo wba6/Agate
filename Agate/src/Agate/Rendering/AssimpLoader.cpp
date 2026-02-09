@@ -27,26 +27,26 @@ inline glm::mat4 convertMatrix(const aiMatrix4x4& matrix) {
 namespace Agate {
 
 AssimpLoader::AssimpLoader(std::string directory, std::string path, bool flipUVs):
-    directory(directory), path(path), flipUVs(flipUVs) {}
+    directory(directory), path(path), flipUVs(flipUVs), scene(nullptr) {}
 
-std::future<const aiScene*> AssimpLoader::readFile() {
+std::future<bool> AssimpLoader::readFile() {
 
     unsigned int flags = getFlags();
 
     return std::async(std::launch::async, [this, flags]() {
 
-        const aiScene* scene = importer.ReadFile(this->path, flags);
+        this->scene = importer.ReadFile(this->path, flags);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             PRINTERROR("ASSIMP ERROR: {}", importer.GetErrorString());
-            return static_cast<const aiScene*>(nullptr);
+            return false;
         }
 
-        return scene;
+        return true;
     });
 }
 
-std::vector<Mesh> AssimpLoader::prepareScene(const aiScene *scene, std::vector<Texture>& textureCache) {
+std::vector<Mesh> AssimpLoader::prepareScene(std::vector<Texture>& textureCache) {
 
     if (!scene) {
         PRINTERROR("No scene to prepare");
