@@ -2,8 +2,8 @@
 #define AGATE_MODELLOADER_H
 
 #include "AssimpLoader.h"
+#include "Mesh.h"
 #include "OpenGl/Shader.h"
-#include "OpenGl/VertexArray.h"
 #include "OpenGl/Texture.h"
 #include <glm/glm.hpp>
 #include <assimp/scene.h>
@@ -12,39 +12,6 @@
 #define MAX_BONE_INFLUENCE 4
 
 namespace Agate {
-    struct Vertex {
-        // position
-        glm::vec3 Position;
-        // normal
-        glm::vec3 Normal;
-        // texCoords
-        glm::vec2 TexCoords;
-        // tangent
-        glm::vec3 Tangent;
-        // bitangent
-        glm::vec3 Bitangent;
-    };
-
-    class Mesh {
-    public:
-        // mesh data
-        std::vector<Vertex> vertices;
-        std::vector<unsigned int> indices;
-        std::vector<Texture> textures;
-
-        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-
-
-        void Draw(Shader &shader);
-
-        virtual ~Mesh();
-
-    private:
-        //  render data
-        std::shared_ptr<VertexArray> VA;
-
-        void setupMesh();
-    };
 
     class ModelLoader {
     public:
