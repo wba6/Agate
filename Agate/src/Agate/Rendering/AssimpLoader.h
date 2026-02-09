@@ -31,24 +31,17 @@ public:
      * 
      * @param directory Directory where the model is located
      * @param path Path to the model file
+     * @param flipUVs If true, include aiProcess_FlipUVs for postprocessing.
+     *                Default false
      */
-    AssimpLoader(std::string directory, std::string path);
-
-    /**
-     * @brief Builds flags for import post-processing options
-     * 
-     * @param flipUVs If true, include aiProcess_FlipUVs. Default false
-     * @return Bitmask representing the post-processing flags
-     */
-    unsigned int getFlags(bool flipUVs = false) const;
+    AssimpLoader(std::string directory, std::string path, bool flipUVs = false);
 
     /**
      * @brief Imports a model from a file as an assimp scene
      * 
-     * @param flags Post-processing flags for Assimp::Importer::ReadFile
      * @return Assimp scene with model data
      */
-    std::future<const aiScene*> readFile(unsigned int flags);
+    std::future<const aiScene*> readFile();
 
     /**
     * @brief Convert a loaded Assimp scene into engine-ready mesh data.
@@ -64,6 +57,14 @@ public:
     *          Intended to be called once, after the async import completes.
     */
     std::vector<Mesh> prepareScene(const aiScene *scene, std::vector<Texture>& textureCache);
+
+
+
+private:
+    Assimp::Importer importer;
+    std::string directory;
+    std::string path;
+    bool flipUVs;
 
     /**
      * @brief Recursively processes a node and its children, parsing out
@@ -103,10 +104,12 @@ public:
      */
     std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName, std::vector<Texture>& textureCache);
 
-private:
-    Assimp::Importer importer;
-    std::string directory;
-    std::string path;
+    /**
+     * @brief Builds flags for import post-processing options
+     * 
+     * @return Bitmask representing the post-processing flags
+     */
+    unsigned int getFlags() const;
 };
 
 } // namespace Agate

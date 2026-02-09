@@ -9,12 +9,10 @@
 namespace fs = std::filesystem;
 
 Agate::ModelLoader::ModelLoader(std::string const &path, bool flipUVs)
-    : m_directory(extractDirectory(path)), m_path(path), assimp(extractDirectory(path), path) {
-    // read file via ASSIMP
-    unsigned int assimpFlags = assimp.getFlags(flipUVs);
+    : m_directory(extractDirectory(path)), m_path(path), assimp(extractDirectory(path), path, flipUVs) {
 
     // This future is used to async load the data of the model file
-    m_futureScene = assimp.readFile(assimpFlags); 
+    m_futureScene = assimp.readFile(); 
 
 }
 

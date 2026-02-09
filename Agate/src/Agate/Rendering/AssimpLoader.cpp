@@ -26,27 +26,12 @@ inline glm::mat4 convertMatrix(const aiMatrix4x4& matrix) {
 
 namespace Agate {
 
-AssimpLoader::AssimpLoader(std::string directory, std::string path):
-    directory(directory), path(path) {}
+AssimpLoader::AssimpLoader(std::string directory, std::string path, bool flipUVs):
+    directory(directory), path(path), flipUVs(flipUVs) {}
 
+std::future<const aiScene*> AssimpLoader::readFile() {
 
-unsigned int AssimpLoader::getFlags(bool flipUVs) const {
-
-    // default flags
-    unsigned int assimpFlags = aiProcess_CalcTangentSpace     |
-                            aiProcess_Triangulate             |
-                            aiProcess_JoinIdenticalVertices   |
-                            aiProcess_SortByPType;
-
-    // option flipUVs
-    if(flipUVs) {
-        assimpFlags |= aiProcess_FlipUVs;
-    }
-
-    return assimpFlags;
-}
-
-std::future<const aiScene*> AssimpLoader::readFile(unsigned int flags) {
+    unsigned int flags = getFlags();
 
     return std::async(std::launch::async, [this, flags]() {
 
@@ -185,6 +170,22 @@ std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, ai
         }
     }
     return std::move(textures);
+}
+
+unsigned int AssimpLoader::getFlags() const {
+
+    // default flags
+    unsigned int assimpFlags = aiProcess_CalcTangentSpace     |
+                            aiProcess_Triangulate             |
+                            aiProcess_JoinIdenticalVertices   |
+                            aiProcess_SortByPType;
+
+    // option flipUVs
+    if(flipUVs) {
+        assimpFlags |= aiProcess_FlipUVs;
+    }
+
+    return assimpFlags;
 }
 
 } // namespace Agate
