@@ -1,5 +1,6 @@
 #include "AssimpLoader.h"
 #include "Agate/Core/Logger.h"
+#include "Mesh.h"
 #include "OpenGl/Texture.h"
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -40,6 +41,75 @@ std::future<const aiScene*> AssimpLoader::readFile(const std::string& path, unsi
 
         return scene;
     });
+}
+
+Mesh AssimpLoader::processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform,
+                               std::vector<Texture>& textureCache) {
+    // data to fill
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture> textures;
+
+    // walk through each of the mesh's vertices
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+        Vertex vertex;
+        glm::vec3 vector;
+        // positions
+        vector.x = mesh->mVertices[i].x;
+        vector.y = mesh->mVertices[i].y;
+        vector.z = mesh->mVertices[i].z;
+        vertex.Position = glm::vec3(transform * glm::vec4(vector, 1.0f));
+        // normals
+        if (mesh->HasNormals()) {
+            vector.x = mesh->mNormals[i].x;
+            vector.y = mesh->mNormals[i].y;
+            vector.z = mesh->mNormals[i].z;
+            vertex.Normal = glm::mat3(transform) * vector;
+        }
+        // texture coordinates
+        if (mesh->mTextureCoords[0]) {
+            glm::vec2 vec;
+            vec.x = mesh->mTextureCoords[0][i].x;
+            vec.y = mesh->mTextureCoords[0][i].y;
+            vertex.TexCoords = vec;
+            // tangent
+            vector.x = mesh->mTangents[i].x;
+            vector.y = mesh->mTangents[i].y;
+            vector.z = mesh->mTangents[i].z;
+            vertex.Tangent = glm::mat3(transform) * vector;
+            // bitangent
+            vector.x = mesh->mBitangents[i].x;
+            vector.y = mesh->mBitangents[i].y;
+            vector.z = mesh->mBitangents[i].z;
+            vertex.Bitangent = glm::mat3(transform) * vector;
+        } else {
+            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+        }
+
+        vertices.push_back(vertex);
+    }
+    // now walk through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+        aiFace face = mesh->mFaces[i];
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
+            indices.push_back(face.mIndices[j]);
+    }
+    // process materials
+    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+
+    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", textureCache);
+    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular", textureCache);
+    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal", textureCache);
+    textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+
+    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height", textureCache);
+    textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+
+    return Mesh{vertices, indices, textures};
 }
 
 std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName,

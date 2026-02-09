@@ -9,11 +9,13 @@
 #ifndef AGATE_ASSIMPLOADER_H
 #define AGATE_ASSIMPLOADER_H
 
+#include "Mesh.h"
 #include "OpenGl/Texture.h"
 #include <future>
 #include <string>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
+#include <glm/glm.hpp>
 
 namespace Agate {
 
@@ -47,6 +49,16 @@ public:
      * @return Assimp scene with model data
      */
     std::future<const aiScene*> readFile(const std::string& path, unsigned int flags);
+
+    /**
+     * @brief Parses a Mesh out of an assimp scene
+     * 
+     * @param mesh Assimp representation of the mesh
+     * @param scene Assimp scene containing the mesh
+     * @param transform Local transformation of the mesh within the scene
+     * @param textureCache Cache of previously loaded textures
+     */
+    Mesh processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform, std::vector<Texture>& textureCache);
 
     /**
      * @brief Loads textures required for this material
