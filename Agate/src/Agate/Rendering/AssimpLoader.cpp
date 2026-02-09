@@ -7,10 +7,28 @@
 #include <future>
 #include <string>
 
+namespace {
+
+/**
+ * Convert an assimp matrix to a glm matrix
+ *
+ * @param matrix The assimp matrix to convert
+ * @return Converted glm matrix
+ */
+inline glm::mat4 convertMatrix(const aiMatrix4x4& matrix) {
+    return glm::mat4(matrix.a1, matrix.b1, matrix.c1, matrix.d1,
+                     matrix.a2, matrix.b2, matrix.c2, matrix.d2,
+                     matrix.a3, matrix.b3, matrix.c3, matrix.d3,
+                     matrix.a4, matrix.b4, matrix.c4, matrix.d4);
+}
+
+} // anonymouse namespace
+
 namespace Agate {
 
 AssimpLoader::AssimpLoader(std::string directory):
     directory(directory) {}
+
 
 unsigned int AssimpLoader::getFlags(bool flipUVs) const {
 
@@ -41,6 +59,25 @@ std::future<const aiScene*> AssimpLoader::readFile(const std::string& path, unsi
 
         return scene;
     });
+}
+
+std::vector<Mesh> Agate::AssimpLoader::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform, std::vector<Texture>& textureCache) {
+
+    glm::mat4 nodeTransform = parentTransform * convertMatrix(node->mTransformation);
+    std::vector<Mesh> meshes;
+
+    // Parse meshes in current node
+    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+        aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
+        meshes.push_back(processMesh(mesh, scene, nodeTransform, textureCache));
+    }
+
+    // Process child nodes
+    for (unsigned int i = 0; i < node->mNumChildren; i++) {
+        processNode(node->mChildren[i], scene, nodeTransform, textureCache);
+    }
+
+    return std::move(meshes);
 }
 
 Mesh AssimpLoader::processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform,

@@ -82,9 +82,6 @@ namespace Agate {
         */
         void prepareScene(const aiScene *scene);
 
-        // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-        void processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform);
-
         //helper function
         std::string extractDirectory(const std::string& path);
     };
