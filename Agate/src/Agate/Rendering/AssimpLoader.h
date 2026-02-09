@@ -30,8 +30,9 @@ public:
      * @brief Constructor
      * 
      * @param directory Directory where the model is located
+     * @param path Path to the model file
      */
-    AssimpLoader(std::string directory);
+    AssimpLoader(std::string directory, std::string path);
 
     /**
      * @brief Builds flags for import post-processing options
@@ -44,11 +45,10 @@ public:
     /**
      * @brief Imports a model from a file as an assimp scene
      * 
-     * @param path Path to the model file
      * @param flags Post-processing flags for Assimp::Importer::ReadFile
      * @return Assimp scene with model data
      */
-    std::future<const aiScene*> readFile(const std::string& path, unsigned int flags);
+    std::future<const aiScene*> readFile(unsigned int flags);
 
     /**
     * @brief Convert a loaded Assimp scene into engine-ready mesh data.
@@ -57,14 +57,13 @@ public:
     * populate this loader's mesh list.
     *
     * @param scene Scene produced by Assimp::Importer::ReadFile()
-    * @param path
     * @param textureCache
     *
     * @warning Potentially expensive: performs vertex/index extraction and may
     *          trigger GPU buffer uploads depending on your Mesh implementation.
     *          Intended to be called once, after the async import completes.
     */
-    std::vector<Mesh> prepareScene(const aiScene *scene, std::string path, std::vector<Texture>& textureCache);
+    std::vector<Mesh> prepareScene(const aiScene *scene, std::vector<Texture>& textureCache);
 
     /**
      * @brief Recursively processes a node and its children, parsing out
@@ -107,6 +106,7 @@ public:
 private:
     Assimp::Importer importer;
     std::string directory;
+    std::string path;
 };
 
 } // namespace Agate

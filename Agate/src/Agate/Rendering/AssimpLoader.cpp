@@ -26,8 +26,8 @@ inline glm::mat4 convertMatrix(const aiMatrix4x4& matrix) {
 
 namespace Agate {
 
-AssimpLoader::AssimpLoader(std::string directory):
-    directory(directory) {}
+AssimpLoader::AssimpLoader(std::string directory, std::string path):
+    directory(directory), path(path) {}
 
 
 unsigned int AssimpLoader::getFlags(bool flipUVs) const {
@@ -46,11 +46,11 @@ unsigned int AssimpLoader::getFlags(bool flipUVs) const {
     return assimpFlags;
 }
 
-std::future<const aiScene*> AssimpLoader::readFile(const std::string& path, unsigned int flags) {
+std::future<const aiScene*> AssimpLoader::readFile(unsigned int flags) {
 
-    return std::async(std::launch::async, [this, path, flags]() {
+    return std::async(std::launch::async, [this, flags]() {
 
-        const aiScene* scene = importer.ReadFile(path, flags);
+        const aiScene* scene = importer.ReadFile(this->path, flags);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             PRINTERROR("ASSIMP ERROR: {}", importer.GetErrorString());
@@ -61,7 +61,7 @@ std::future<const aiScene*> AssimpLoader::readFile(const std::string& path, unsi
     });
 }
 
-std::vector<Mesh> AssimpLoader::prepareScene(const aiScene *scene, std::string path, std::vector<Texture>& textureCache) {
+std::vector<Mesh> AssimpLoader::prepareScene(const aiScene *scene, std::vector<Texture>& textureCache) {
 
     if (!scene) {
         PRINTERROR("No scene to prepare");
