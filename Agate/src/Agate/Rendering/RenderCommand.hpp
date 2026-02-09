@@ -1,6 +1,6 @@
 #include <memory.h>
 #include <queue>
-#include "OpenGL/Shader.h"
+#include "OpenGl/Shader.h"
 #include "Rendering/OpenGl/VertexArray.h"
 
 #ifndef RENDERCOMMAND_HPP

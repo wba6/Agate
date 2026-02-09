@@ -1,8 +1,6 @@
 #include "RenderCommand.hpp"
-#include <queue>
 
 namespace Agate {
-
-    void Renderer::Submit(const RenderCommand &cmd) {};
-    void Renderer::Flush(){};
+    void Renderer::Submit(const RenderCommand &cmd) {return;};
+    void Renderer::Flush(){return;};
 }
