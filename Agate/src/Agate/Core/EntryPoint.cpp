@@ -4,6 +4,7 @@
 #include "Events/Event.h"
 #include "ImGui-layer/imgui_interface.h"
 #include "RenderContext/CurrentContext.h"
+#include "Rendering/RenderCommand.hpp"
 #include "ImGui-layer/Example_imguiLayer.h"
 #include "imgui.h"
 #include <iostream>
@@ -50,6 +51,7 @@ void Agate::EntryPoint::Run() {
         imgui_interface::EndFrame();
 
         m_window->OnUpdate();
+        Renderer::Flush();
 
         if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1) {
             deltaTime = m_window->WindowOpenTime() - FrameTime;
