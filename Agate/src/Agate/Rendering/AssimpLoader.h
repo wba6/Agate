@@ -58,8 +58,6 @@ public:
     */
     std::vector<Mesh> prepareScene(const aiScene *scene, std::vector<Texture>& textureCache);
 
-
-
 private:
     Assimp::Importer importer;
     std::string directory;
