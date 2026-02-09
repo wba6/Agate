@@ -68,20 +68,6 @@ namespace Agate {
 
     private:
 
-        /**
-        * @brief Convert a loaded Assimp scene into engine-ready mesh data.
-        *
-        * Validates the imported scene and recursively processes the node hierarchy to
-        * populate this loader's mesh list.
-        *
-        * @param scene Scene produced by Assimp::Importer::ReadFile().
-        *
-        * @warning Potentially expensive: performs vertex/index extraction and may
-        *          trigger GPU buffer uploads depending on your Mesh implementation.
-        *          Intended to be called once, after the async import completes.
-        */
-        void prepareScene(const aiScene *scene);
-
         //helper function
         std::string extractDirectory(const std::string& path);
     };

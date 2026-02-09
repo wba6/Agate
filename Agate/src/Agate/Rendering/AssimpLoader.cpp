@@ -61,6 +61,19 @@ std::future<const aiScene*> AssimpLoader::readFile(const std::string& path, unsi
     });
 }
 
+std::vector<Mesh> AssimpLoader::prepareScene(const aiScene *scene, std::string path, std::vector<Texture>& textureCache) {
+
+    if (!scene) {
+        PRINTERROR("No scene to prepare");
+        return std::vector<Mesh>();
+    }
+
+    std::vector<Mesh> nodeMeshes = processNode(scene->mRootNode, scene, glm::mat4(1.0f), textureCache);
+    PRINTMSG("Model loaded from path: {}", path);
+
+    return std::move(nodeMeshes);
+}
+
 std::vector<Mesh> Agate::AssimpLoader::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform, std::vector<Texture>& textureCache) {
 
     glm::mat4 nodeTransform = parentTransform * convertMatrix(node->mTransformation);

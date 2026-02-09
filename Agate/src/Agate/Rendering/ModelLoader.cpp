@@ -26,25 +26,12 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
         auto status = m_futureScene.wait_for(std::chrono::seconds(0));
         if (status == std::future_status::ready) {
             // Once this is done the future scene will no longer be valid
-            prepareScene(m_futureScene.get());
+            assimp.prepareScene(m_futureScene.get(), m_path, textures_loaded);
         }
     }
 
     for (auto &mesh: m_meshes)
         mesh.Draw(shader);
-}
-
-void Agate::ModelLoader::prepareScene(const aiScene *scene) {
-            // Is the scene valid?
-            if (!scene) {
-                PRINTERROR("No scene to prepare");
-                return;
-            }
-
-            // Proccess the nodes once (Note this can be very expensive)
-            std::vector<Mesh> nodeMeshes = assimp.processNode(scene->mRootNode, scene, glm::mat4(1.0f), textures_loaded);
-            m_meshes.insert(m_meshes.end(), nodeMeshes.begin(), nodeMeshes.end());
-            PRINTMSG("Model loaded from path: {}", m_path);
 }
 
 std::string Agate::ModelLoader::extractDirectory(const std::string &path) {
