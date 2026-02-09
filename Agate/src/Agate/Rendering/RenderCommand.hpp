@@ -19,7 +19,11 @@ namespace Agate {
 
     class Renderer {
         public:
+
+            // Adds a render command to the queue
             static void Submit(const RenderCommand& cmd);
+
+            // Iterates queue and executes opengl commands
             static void Flush();
         private:
             std::queue<RenderCommand> s_CommandQueue;
