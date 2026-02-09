@@ -9,14 +9,13 @@
 #ifndef AGATE_ASSIMPLOADER_H
 #define AGATE_ASSIMPLOADER_H
 
+#include "OpenGl/Texture.h"
 #include <future>
 #include <string>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 
 namespace Agate {
-
-struct AssimpLoaderImpl;
 
 /**
  * @brief Wraps calls to assimp and decouples assimp implementation
@@ -46,6 +45,19 @@ public:
      * @return Assimp scene with model data
      */
     std::future<const aiScene*> readFile(const std::string& path, unsigned int flags);
+
+    /**
+     * @brief Loads textures required for this material
+     * 
+     * @param material Material to load textures for
+     * @param type Type of textures to load
+     * @param typeName Name for the type of textures to load
+     * @param directory Directory of source model file
+     * @param textureCache Cache of previously loaded textures
+     * 
+     * @return Textures required by this material
+     */
+    std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName, std::string directory, std::vector<Texture>& textureCache);
 
 private:
     Assimp::Importer importer;

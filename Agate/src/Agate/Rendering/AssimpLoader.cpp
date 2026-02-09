@@ -1,6 +1,10 @@
 #include "AssimpLoader.h"
 #include "Agate/Core/Logger.h"
+#include "OpenGl/Texture.h"
 #include <assimp/postprocess.h>
+#include <assimp/scene.h>
+#include <future>
+#include <string>
 
 namespace Agate {
 
@@ -33,6 +37,31 @@ std::future<const aiScene*> AssimpLoader::readFile(const std::string& path, unsi
 
         return scene;
     });
+}
+
+std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName,
+                                                        std::string directory, std::vector<Texture>& textureCache) {
+
+    std::vector<Texture> textures;
+    for (unsigned int i = 0; i < material->GetTextureCount(type); i++) {
+        aiString str;
+        material->GetTexture(type, i, &str);
+        bool skip = false;
+        for (auto &j: textureCache) {
+            if (std::strcmp(j.getPath().data(), str.C_Str()) == 0) {
+                textures.push_back(j);
+                skip = true;
+                break;
+            }
+        }
+        if (!skip) {
+            Texture texture(str.C_Str(), directory);
+            texture.setType(typeName);
+            textures.push_back(texture);
+            textureCache.push_back(texture);
+        }
+    }
+    return std::move(textures);
 }
 
 } // namespace Agate
