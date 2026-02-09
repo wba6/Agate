@@ -109,7 +109,7 @@ void Agate::Mesh::setupMesh() {
 Agate::Mesh::~Mesh() = default;
 
 Agate::ModelLoader::ModelLoader(std::string const &path, bool flipUVs)
-    : m_directory(extractDirectory(path)),m_path(path) {
+    : m_directory(extractDirectory(path)), m_path(path), assimp(extractDirectory(path)) {
     // read file via ASSIMP
     unsigned int assimpFlags = assimp.getFlags(flipUVs);
 
@@ -213,16 +213,16 @@ Agate::Mesh Agate::ModelLoader::processMesh(aiMesh *mesh, const aiScene *scene, 
     // process materials
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-    std::vector<Texture> diffuseMaps = assimp.loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", m_directory, textures_loaded);
+    std::vector<Texture> diffuseMaps = assimp.loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", textures_loaded);
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    std::vector<Texture> specularMaps = assimp.loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular", m_directory, textures_loaded);
+    std::vector<Texture> specularMaps = assimp.loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular", textures_loaded);
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-    std::vector<Texture> normalMaps = assimp.loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal", m_directory, textures_loaded);
+    std::vector<Texture> normalMaps = assimp.loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal", textures_loaded);
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-    std::vector<Texture> heightMaps = assimp.loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height", m_directory, textures_loaded);
+    std::vector<Texture> heightMaps = assimp.loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height", textures_loaded);
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     return Mesh{vertices, indices, textures};

@@ -8,6 +8,9 @@
 
 namespace Agate {
 
+AssimpLoader::AssimpLoader(std::string directory):
+    directory(directory) {}
+
 unsigned int AssimpLoader::getFlags(bool flipUVs) const {
 
     // default flags
@@ -40,7 +43,7 @@ std::future<const aiScene*> AssimpLoader::readFile(const std::string& path, unsi
 }
 
 std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName,
-                                                        std::string directory, std::vector<Texture>& textureCache) {
+                                                        std::vector<Texture>& textureCache) {
 
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < material->GetTextureCount(type); i++) {

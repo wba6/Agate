@@ -25,9 +25,11 @@ class AssimpLoader {
 public:
 
     /**
-     * @brief Default constructor
+     * @brief Constructor
+     * 
+     * @param directory Directory where the model is located
      */
-    AssimpLoader() = default;
+    AssimpLoader(std::string directory);
 
     /**
      * @brief Builds flags for import post-processing options
@@ -52,15 +54,15 @@ public:
      * @param material Material to load textures for
      * @param type Type of textures to load
      * @param typeName Name for the type of textures to load
-     * @param directory Directory of source model file
      * @param textureCache Cache of previously loaded textures
      * 
      * @return Textures required by this material
      */
-    std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName, std::string directory, std::vector<Texture>& textureCache);
+    std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName, std::vector<Texture>& textureCache);
 
 private:
     Assimp::Importer importer;
+    std::string directory;
 };
 
 } // namespace Agate
