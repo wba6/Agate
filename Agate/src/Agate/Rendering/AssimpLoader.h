@@ -64,27 +64,6 @@ private:
     const aiScene* scene;
 
     /**
-     * @brief Imports a model from a file as an assimp scene
-     * 
-     * @return Status
-     * @retval true Success
-     * @retval false Error
-     */
-    std::future<bool> readFile();
-
-    /**
-    * @brief Convert a loaded Assimp scene into engine-ready mesh data.
-    *
-    * Validates the imported scene and recursively processes the node hierarchy to
-    * populate this loader's mesh list.
-    *
-    * @warning Potentially expensive: performs vertex/index extraction and may
-    *          trigger GPU buffer uploads depending on your Mesh implementation.
-    *          Intended to be called once, after the async import completes.
-    */
-    std::vector<Mesh> prepareScene();
-
-    /**
      * @brief Recursively processes a node and its children, parsing out
      *        all contained meshes
      * 

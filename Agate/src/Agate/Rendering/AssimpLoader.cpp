@@ -30,14 +30,6 @@ AssimpLoader::AssimpLoader(std::string path, bool flipUVs):
         ModelLoader(path), flipUVs(flipUVs), scene(nullptr) {}
 
 std::future<bool> AssimpLoader::loadModel() {
-    return readFile();
-}
-
-std::vector<Mesh> AssimpLoader::parseModel() {
-    return std::move(prepareScene());
-}
-
-std::future<bool> AssimpLoader::readFile() {
 
     unsigned int flags = getFlags();
 
@@ -54,7 +46,7 @@ std::future<bool> AssimpLoader::readFile() {
     });
 }
 
-std::vector<Mesh> AssimpLoader::prepareScene() {
+std::vector<Mesh> AssimpLoader::parseModel() {
 
     if (!scene) {
         PRINTERROR("No scene to prepare");
