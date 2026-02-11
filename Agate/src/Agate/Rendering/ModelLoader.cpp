@@ -21,6 +21,7 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
         auto status = m_futureScene.wait_for(std::chrono::seconds(0));
         if (status == std::future_status::ready) {
             // Once this is done the future scene will no longer be valid
+            m_futureScene.get();
             m_meshes = assimp.prepareScene(textures_loaded);
         }
     }

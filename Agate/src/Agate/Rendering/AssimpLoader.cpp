@@ -54,7 +54,7 @@ std::vector<Mesh> AssimpLoader::prepareScene(std::vector<Texture>& textureCache)
     }
 
     std::vector<Mesh> nodeMeshes = processNode(scene->mRootNode, scene, glm::mat4(1.0f), textureCache);
-    PRINTMSG("Model loaded from path: {}", path);
+    PRINTMSG("Model loaded from path \"{}\" with {} meshes", path, nodeMeshes.size());
 
     return std::move(nodeMeshes);
 }
@@ -72,7 +72,8 @@ std::vector<Mesh> Agate::AssimpLoader::processNode(aiNode *node, const aiScene *
 
     // Process child nodes
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
-        processNode(node->mChildren[i], scene, nodeTransform, textureCache);
+        std::vector<Mesh> childMeshes = processNode(node->mChildren[i], scene, nodeTransform, textureCache);
+        meshes.insert(meshes.end(), childMeshes.begin(), childMeshes.end());
     }
 
     return std::move(meshes);
