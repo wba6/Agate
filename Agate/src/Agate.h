@@ -24,6 +24,7 @@
 #include <../vender/glm/glm/gtc/type_ptr.hpp>
 
 //-----------Rendering---------
+#include "Agate/Rendering/AssimpLoader.h"
 #include "Agate/Rendering/OpenGl/IndexBuffer.h"
 #include "Agate/Rendering/OpenGl/Render.h"
 #include "Agate/Rendering/OpenGl/VertexArray.h"

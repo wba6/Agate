@@ -26,8 +26,16 @@ inline glm::mat4 convertMatrix(const aiMatrix4x4& matrix) {
 
 namespace Agate {
 
-AssimpLoader::AssimpLoader(std::string directory, std::string path, bool flipUVs):
-    directory(directory), path(path), flipUVs(flipUVs), scene(nullptr) {}
+AssimpLoader::AssimpLoader(std::string path, bool flipUVs):
+        ModelLoader(path), flipUVs(flipUVs), scene(nullptr) {}
+
+std::future<bool> AssimpLoader::loadModel() {
+    return readFile();
+}
+
+std::vector<Mesh> AssimpLoader::parseModel() {
+    return std::move(prepareScene());
+}
 
 std::future<bool> AssimpLoader::readFile() {
 
@@ -35,7 +43,7 @@ std::future<bool> AssimpLoader::readFile() {
 
     return std::async(std::launch::async, [this, flags]() {
 
-        this->scene = importer.ReadFile(this->path, flags);
+        this->scene = importer.ReadFile(this->m_path, flags);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             PRINTERROR("ASSIMP ERROR: {}", importer.GetErrorString());
@@ -46,20 +54,20 @@ std::future<bool> AssimpLoader::readFile() {
     });
 }
 
-std::vector<Mesh> AssimpLoader::prepareScene(std::vector<Texture>& textureCache) {
+std::vector<Mesh> AssimpLoader::prepareScene() {
 
     if (!scene) {
         PRINTERROR("No scene to prepare");
         return std::vector<Mesh>();
     }
 
-    std::vector<Mesh> nodeMeshes = processNode(scene->mRootNode, scene, glm::mat4(1.0f), textureCache);
-    PRINTMSG("Model loaded from path \"{}\" with {} meshes", path, nodeMeshes.size());
+    std::vector<Mesh> nodeMeshes = processNode(scene->mRootNode, scene, glm::mat4(1.0f));
+    PRINTMSG("Model loaded from path \"{}\" with {} meshes", m_path, nodeMeshes.size());
 
     return std::move(nodeMeshes);
 }
 
-std::vector<Mesh> Agate::AssimpLoader::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform, std::vector<Texture>& textureCache) {
+std::vector<Mesh> Agate::AssimpLoader::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform) {
 
     glm::mat4 nodeTransform = parentTransform * convertMatrix(node->mTransformation);
     std::vector<Mesh> meshes;
@@ -67,20 +75,19 @@ std::vector<Mesh> Agate::AssimpLoader::processNode(aiNode *node, const aiScene *
     // Parse meshes in current node
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene, nodeTransform, textureCache));
+        meshes.push_back(processMesh(mesh, scene, nodeTransform));
     }
 
     // Process child nodes
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
-        std::vector<Mesh> childMeshes = processNode(node->mChildren[i], scene, nodeTransform, textureCache);
+        std::vector<Mesh> childMeshes = processNode(node->mChildren[i], scene, nodeTransform);
         meshes.insert(meshes.end(), childMeshes.begin(), childMeshes.end());
     }
 
     return std::move(meshes);
 }
 
-Mesh AssimpLoader::processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform,
-                               std::vector<Texture>& textureCache) {
+Mesh AssimpLoader::processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform) {
     // data to fill
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -133,30 +140,29 @@ Mesh AssimpLoader::processMesh(aiMesh *mesh, const aiScene *scene, const glm::ma
     // process materials
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", textureCache);
+    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular", textureCache);
+    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal", textureCache);
+    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height", textureCache);
+    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     return Mesh{vertices, indices, textures};
 }
 
-std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName,
-                                                        std::vector<Texture>& textureCache) {
+std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName) {
 
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < material->GetTextureCount(type); i++) {
         aiString str;
         material->GetTexture(type, i, &str);
         bool skip = false;
-        for (auto &j: textureCache) {
+        for (auto &j: textures_loaded) {
             if (std::strcmp(j.getPath().data(), str.C_Str()) == 0) {
                 textures.push_back(j);
                 skip = true;
@@ -164,10 +170,10 @@ std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, ai
             }
         }
         if (!skip) {
-            Texture texture(str.C_Str(), directory);
+            Texture texture(str.C_Str(), m_directory);
             texture.setType(typeName);
             textures.push_back(texture);
-            textureCache.push_back(texture);
+            textures_loaded.push_back(texture);
         }
     }
     return std::move(textures);

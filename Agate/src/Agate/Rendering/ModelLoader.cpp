@@ -5,13 +5,8 @@
 
 namespace fs = std::filesystem;
 
-Agate::ModelLoader::ModelLoader(std::string const &path, bool flipUVs)
-    : m_directory(extractDirectory(path)), m_path(path), assimp(extractDirectory(path), path, flipUVs) {
-
-    // This future is used to async load the data of the model file
-    m_futureScene = assimp.readFile(); 
-
-}
+Agate::ModelLoader::ModelLoader(std::string const &path)
+    : m_directory(extractDirectory(path)), m_path(path) {}
 
 void Agate::ModelLoader::Draw(Agate::Shader &shader) {
 
@@ -22,12 +17,16 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
         if (status == std::future_status::ready) {
             // Once this is done the future scene will no longer be valid
             m_futureScene.get();
-            m_meshes = assimp.prepareScene(textures_loaded);
+            m_meshes = parseModel();
         }
     }
 
     for (auto &mesh: m_meshes)
         mesh.Draw(shader);
+}
+
+void Agate::ModelLoader::LoadModel() {
+    m_futureScene = loadModel();
 }
 
 std::string Agate::ModelLoader::extractDirectory(const std::string &path) {

@@ -1,7 +1,6 @@
 #ifndef AGATE_MODELLOADER_H
 #define AGATE_MODELLOADER_H
 
-#include "AssimpLoader.h"
 #include "Mesh.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/Texture.h"
@@ -27,13 +26,11 @@ namespace Agate {
          * can continue without blocking.
          *
          * @param path     Filesystem path to the model file.
-         * @param gamma    Enable/disable gamma correction for textures.
-         * @param flipUVs  If true, flip UV coordinates vertically during import.
          *
          * @note The actual GPU/engine-side preparation is deferred until Draw() observes
          *       the future is ready and calls prepareScene().
          */ 
-        ModelLoader(std::string const &path, bool flipUVs = false);
+        ModelLoader(std::string const &path);
 
         /**
         * @brief Render the model; finalize loading when the async import completes.
@@ -47,16 +44,42 @@ namespace Agate {
         *
         * @note Non-blocking: if the import is not ready yet, this function only draws
         *       meshes that have already been prepared (often none).
+        * 
+        * @warning If `ModelLoader::LoadModel` has not been invoked, this method will
+        *          never do anything
         */
         void Draw(Shader &shader);
 
-    private:
-        
         /**
-         * @brief The AssimpLoader is kept as a class member in order to preserve the
-         *        lifetimes of objects managed by assimp
+         * @brief Instructs the loader to start internally loading its model
+         * 
+         * @note Must be called in order for `ModelLoader::Draw` to ever do anything
          */
-        AssimpLoader assimp;
+        void LoadModel();
+
+protected:
+
+        /**
+         * @brief Starts loading the model this loader was given
+         * 
+         * @return Future that becomes valid upon completion of loading the model
+         *         and indicates operation status
+         * @retval true Success
+         * @retval false Error
+         * 
+         * @note Implementations are encouraged to define this in a non-blocking
+         *       manner
+         */
+        virtual std::future<bool> loadModel() = 0;
+
+        /**
+         * @brief Parses the loaded model into a form that the engine can render
+         * 
+         * @return Parsed meshes
+         */
+        virtual std::vector<Mesh> parseModel() = 0;
+
+    private:
 
         /**
          * @brief A future for the loaded model is kept as a class member to preserve

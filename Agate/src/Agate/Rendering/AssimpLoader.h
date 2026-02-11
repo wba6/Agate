@@ -10,6 +10,7 @@
 #define AGATE_ASSIMPLOADER_H
 
 #include "Mesh.h"
+#include "ModelLoader.h"
 #include "OpenGl/Texture.h"
 #include <future>
 #include <string>
@@ -23,18 +24,44 @@ namespace Agate {
  * @brief Wraps calls to assimp and decouples assimp implementation
  *        details from the engine
  */
-class AssimpLoader {
+class AssimpLoader : public ModelLoader {
 public:
 
     /**
      * @brief Constructor
      * 
-     * @param directory Directory where the model is located
      * @param path Path to the model file
      * @param flipUVs If true, include aiProcess_FlipUVs for postprocessing.
      *                Default false
      */
-    AssimpLoader(std::string directory, std::string path, bool flipUVs = false);
+    AssimpLoader(std::string path, bool flipUVs = false);
+
+protected:
+
+    /**
+     * @brief Starts loading the model this loader was given
+     * 
+     * @return Future that becomes valid upon completion of loading the model
+     *         and indicates operation status
+     * @retval true Success
+     * @retval false Error
+     * 
+     * @note Implementations are encouraged to define this in a non-blocking
+     *       manner
+     */
+    virtual std::future<bool> loadModel() final override;
+
+    /**
+     * @brief Parses the loaded model into a form that the engine can render
+     * 
+     * @return Parsed meshes
+     */
+    virtual std::vector<Mesh> parseModel() final override;
+
+private:
+    Assimp::Importer importer;
+    bool flipUVs;
+    const aiScene* scene;
 
     /**
      * @brief Imports a model from a file as an assimp scene
@@ -51,20 +78,11 @@ public:
     * Validates the imported scene and recursively processes the node hierarchy to
     * populate this loader's mesh list.
     *
-    * @param textureCache
-    *
     * @warning Potentially expensive: performs vertex/index extraction and may
     *          trigger GPU buffer uploads depending on your Mesh implementation.
     *          Intended to be called once, after the async import completes.
     */
-    std::vector<Mesh> prepareScene(std::vector<Texture>& textureCache);
-
-private:
-    Assimp::Importer importer;
-    std::string directory;
-    std::string path;
-    bool flipUVs;
-    const aiScene* scene;
+    std::vector<Mesh> prepareScene();
 
     /**
      * @brief Recursively processes a node and its children, parsing out
@@ -74,11 +92,10 @@ private:
      * @param scene Scene containing the node
      * @param transform Transformation matrix of the current node relative to
      *                  the scene origin
-     * @param textureCache Cache of previously loaded textures
      * 
      * @return Parsed meshes
      */
-    std::vector<Mesh> processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform, std::vector<Texture>& textureCache);
+    std::vector<Mesh> processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform);
 
     /**
      * @brief Parses a Mesh out of an assimp scene
@@ -86,11 +103,10 @@ private:
      * @param mesh Assimp representation of the mesh
      * @param scene Assimp scene containing the mesh
      * @param transform Local transformation of the mesh within the scene
-     * @param textureCache Cache of previously loaded textures
      * 
      * @return Parsed mesh
      */
-    Mesh processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform, std::vector<Texture>& textureCache);
+    Mesh processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform);
 
     /**
      * @brief Loads textures required for this material
@@ -98,11 +114,10 @@ private:
      * @param material Material to load textures for
      * @param type Type of textures to load
      * @param typeName Name for the type of textures to load
-     * @param textureCache Cache of previously loaded textures
      * 
      * @return Textures required by this material
      */
-    std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName, std::vector<Texture>& textureCache);
+    std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
 
     /**
      * @brief Builds flags for import post-processing options
