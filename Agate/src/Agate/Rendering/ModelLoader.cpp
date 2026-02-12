@@ -1,7 +1,9 @@
 #include "agpch.h"
 #include "ModelLoader.h"
+#include "AssimpLoader.h"
 #include "Mesh.h"
 #include <utility>
+#include <memory>
 
 namespace fs = std::filesystem;
 
@@ -25,8 +27,12 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
         mesh.Draw(shader);
 }
 
-void Agate::ModelLoader::LoadModel() {
-    m_futureScene = loadModel();
+std::unique_ptr<Agate::ModelLoader> Agate::ModelLoader::LoadModel(const std::string &path) {
+
+    std::unique_ptr<Agate::ModelLoader> loader{ new AssimpLoader(path) };
+    loader->m_futureScene = loader->loadModel();
+
+    return loader;
 }
 
 std::string Agate::ModelLoader::extractDirectory(const std::string &path) {

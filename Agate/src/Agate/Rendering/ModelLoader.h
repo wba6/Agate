@@ -5,6 +5,7 @@
 #include "OpenGl/Shader.h"
 #include "OpenGl/Texture.h"
 #include <future>
+#include <memory>
 
 #define MAX_BONE_INFLUENCE 4
 
@@ -17,20 +18,6 @@ namespace Agate {
         std::vector<Mesh> m_meshes;
         std::string m_directory;
         std::string m_path;
-
-        /**
-         * @brief Construct a ModelLoader and start loading a model on a background task.
-         *
-         * Initializes model metadata and launches an asynchronous Assimp import using
-         * std::async. The returned aiScene* is stored in a std::future so the caller
-         * can continue without blocking.
-         *
-         * @param path     Filesystem path to the model file.
-         *
-         * @note The actual GPU/engine-side preparation is deferred until Draw() observes
-         *       the future is ready and calls prepareScene().
-         */ 
-        ModelLoader(std::string const &path);
 
         /**
         * @brief Render the model; finalize loading when the async import completes.
@@ -53,11 +40,25 @@ namespace Agate {
         /**
          * @brief Instructs the loader to start internally loading its model
          * 
-         * @note Must be called in order for `ModelLoader::Draw` to ever do anything
+         * @param path Path to the model file
          */
-        void LoadModel();
+        static std::unique_ptr<ModelLoader> LoadModel(std::string const &path);
 
 protected:
+
+        /**
+         * @brief Construct a ModelLoader and start loading a model on a background task.
+         *
+         * Initializes model metadata and launches an asynchronous Assimp import using
+         * std::async. The returned aiScene* is stored in a std::future so the caller
+         * can continue without blocking.
+         *
+         * @param path     Filesystem path to the model file.
+         *
+         * @note The actual GPU/engine-side preparation is deferred until Draw() observes
+         *       the future is ready and calls prepareScene().
+         */ 
+        ModelLoader(std::string const &path);
 
         /**
          * @brief Starts loading the model this loader was given
