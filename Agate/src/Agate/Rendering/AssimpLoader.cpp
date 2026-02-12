@@ -27,7 +27,7 @@ inline glm::mat4 convertMatrix(const aiMatrix4x4& matrix) {
 namespace Agate {
 
 AssimpLoader::AssimpLoader(std::string path, bool flipUVs):
-        ModelLoader(path), flipUVs(flipUVs), scene(nullptr) {}
+        ModelLoader(path), m_flipUVs(flipUVs), m_scene(nullptr) {}
 
 std::future<bool> AssimpLoader::loadModel() {
 
@@ -35,10 +35,10 @@ std::future<bool> AssimpLoader::loadModel() {
 
     return std::async(std::launch::async, [this, flags]() {
 
-        this->scene = importer.ReadFile(this->m_path, flags);
+        this->m_scene = m_importer.ReadFile(this->m_path, flags);
 
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            PRINTERROR("ASSIMP ERROR: {}", importer.GetErrorString());
+        if (!m_scene || m_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_scene->mRootNode) {
+            PRINTERROR("ASSIMP ERROR: {}", m_importer.GetErrorString());
             return false;
         }
 
@@ -48,12 +48,12 @@ std::future<bool> AssimpLoader::loadModel() {
 
 std::vector<Mesh> AssimpLoader::parseModel() {
 
-    if (!scene) {
+    if (!m_scene) {
         PRINTERROR("No scene to prepare");
         return std::vector<Mesh>();
     }
 
-    std::vector<Mesh> nodeMeshes = processNode(scene->mRootNode, scene, glm::mat4(1.0f));
+    std::vector<Mesh> nodeMeshes = processNode(m_scene->mRootNode, m_scene, glm::mat4(1.0f));
     PRINTMSG("Model loaded from path \"{}\" with {} meshes", m_path, nodeMeshes.size());
 
     return std::move(nodeMeshes);
@@ -154,7 +154,7 @@ std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, ai
         aiString str;
         material->GetTexture(type, i, &str);
         bool skip = false;
-        for (auto &j: textures_loaded) {
+        for (auto &j: m_texturesLoaded) {
             if (std::strcmp(j.getPath().data(), str.C_Str()) == 0) {
                 textures.push_back(j);
                 skip = true;
@@ -165,7 +165,7 @@ std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, ai
             Texture texture(str.C_Str(), m_directory);
             texture.setType(typeName);
             textures.push_back(texture);
-            textures_loaded.push_back(texture);
+            m_texturesLoaded.push_back(texture);
         }
     }
     return std::move(textures);
@@ -180,7 +180,7 @@ unsigned int AssimpLoader::getFlags() const {
                             aiProcess_SortByPType;
 
     // option flipUVs
-    if(flipUVs) {
+    if(m_flipUVs) {
         assimpFlags |= aiProcess_FlipUVs;
     }
 

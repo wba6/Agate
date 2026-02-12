@@ -5,9 +5,9 @@
 namespace Agate {
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) {
-    this->vertices = std::move(vertices);
-    this->indices = std::move(indices);
-    this->textures = std::move(textures);
+    this->m_vertices = std::move(vertices);
+    this->m_indices = std::move(indices);
+    this->m_textures = std::move(textures);
 
     setupMesh();
 }
@@ -23,11 +23,11 @@ void Mesh::Draw(Agate::Shader &shader) {
 
     shader.Bind();
     // Activate and bind each texture, assign to the shader
-    for (unsigned int i = 0; i < textures.size(); i++) {
+    for (unsigned int i = 0; i < m_textures.size(); i++) {
         glActiveTexture(GL_TEXTURE0 + i); // Activate texture unit
-        textures[i].bind(i); // Bind texture to unit i
+        m_textures[i].bind(i); // Bind texture to unit i
 
-        std::string type = textures[i].getType();
+        std::string type = m_textures[i].getType();
         std::string name;
         if (type == "texture_diffuse") {
             name = "material.texture_diffuse[" + std::to_string(diffuseCount) + "]";
@@ -68,9 +68,9 @@ void Mesh::Draw(Agate::Shader &shader) {
     glActiveTexture(GL_TEXTURE0);
 
     // draw mesh
-    VA->Bind();
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    VA->UnBind();
+    m_VA->Bind();
+    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+    m_VA->UnBind();
 }
 
 void Mesh::setupMesh() {
@@ -83,10 +83,10 @@ void Mesh::setupMesh() {
             {"BiTangent",             vertexType::Float3},
     };
 
-    IndexBuffer IB(indices);
+    IndexBuffer IB(m_indices);
 
-    VA = std::make_shared<VertexArray>(layout, &vertices[0], vertices.size() * sizeof(Vertex));
-    VA->addIndexBuffer(IB);
+    m_VA = std::make_shared<VertexArray>(layout, &m_vertices[0], m_vertices.size() * sizeof(Vertex));
+    m_VA->addIndexBuffer(IB);
 }
 
 Mesh::~Mesh() = default;

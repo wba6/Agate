@@ -59,9 +59,9 @@ protected:
     virtual std::vector<Mesh> parseModel() final override;
 
 private:
-    Assimp::Importer importer;
-    bool flipUVs;
-    const aiScene* scene;
+    Assimp::Importer m_importer;
+    bool m_flipUVs;
+    const aiScene* m_scene;
 
     /**
      * @brief Recursively processes a node and its children, parsing out

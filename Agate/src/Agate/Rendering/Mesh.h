@@ -32,9 +32,9 @@ struct Vertex {
 class Mesh {
 public:
 
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+    std::vector<Vertex> m_vertices;
+    std::vector<unsigned int> m_indices;
+    std::vector<Texture> m_textures;
 
     /**
      * @brief Constructor from mesh data
@@ -56,7 +56,7 @@ public:
 
 private:
     //  render data
-    std::shared_ptr<VertexArray> VA;
+    std::shared_ptr<VertexArray> m_VA;
 
     void setupMesh();
 };
