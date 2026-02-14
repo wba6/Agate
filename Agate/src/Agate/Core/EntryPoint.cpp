@@ -4,10 +4,13 @@
 #include "Events/Event.h"
 #include "ImGui-layer/imgui_interface.h"
 #include "RenderContext/CurrentContext.h"
-#include "Rendering/RenderCommand.hpp"
+#include "Rendering/Renderer.hpp"
+#include "Events/RenderCommand.hpp"
 #include "ImGui-layer/Example_imguiLayer.h"
 #include "imgui.h"
+#include <algorithm>
 #include <iostream>
+#include <memory>
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
@@ -24,6 +27,9 @@ Agate::EntryPoint::EntryPoint()
     //m_layerStack.AddOverlay(new Example_imguiLayer());
 
     CurrentContext::OpenGL = true;
+
+    std::unique_ptr<DrawMesh> mesh = std::make_unique<DrawMesh>(1);
+    Renderer::Submit(std::move(mesh));
 }
 
 Agate::EntryPoint::~EntryPoint() {
