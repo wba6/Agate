@@ -29,7 +29,7 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
 
 std::unique_ptr<Agate::ModelLoader> Agate::ModelLoader::LoadModel(const std::string &path) {
 
-    std::unique_ptr<Agate::ModelLoader> loader{ new AssimpLoader(path) };
+    std::unique_ptr<Agate::ModelLoader> loader = std::make_unique<AssimpLoader>(path);
     loader->m_futureScene = loader->loadModel();
 
     return loader;
