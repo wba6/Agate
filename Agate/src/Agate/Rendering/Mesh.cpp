@@ -75,6 +75,10 @@ void Mesh::Draw(Agate::Shader &shader) {
 
 void Mesh::setupMesh() {
 
+    if (m_vertices.empty()) {
+        return;
+    }
+
     BufferDataLayout layout{
             {"vertex positions",      vertexType::Float3},
             {"vertex normals",        vertexType::Float3},
