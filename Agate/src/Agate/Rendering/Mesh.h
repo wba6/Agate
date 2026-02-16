@@ -19,7 +19,7 @@ namespace Agate {
 
 /**
  * @brief A vertex with a position, normal, texture coordinate,
- *        tanget, and bitangent
+ *        tangent, and bitangent
  */
 struct Vertex {
     glm::vec3 Position;

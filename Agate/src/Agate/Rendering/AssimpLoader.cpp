@@ -22,7 +22,7 @@ inline glm::mat4 convertMatrix(const aiMatrix4x4& matrix) {
                      matrix.a4, matrix.b4, matrix.c4, matrix.d4);
 }
 
-} // anonymouse namespace
+} // anonymous namespace
 
 namespace Agate {
 
