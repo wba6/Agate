@@ -56,7 +56,7 @@ std::vector<Mesh> AssimpLoader::parseModel() {
     std::vector<Mesh> nodeMeshes = processNode(m_scene->mRootNode, m_scene, glm::mat4(1.0f));
     PRINTMSG("Model loaded from path \"{}\" with {} meshes", m_path, nodeMeshes.size());
 
-    return std::move(nodeMeshes);
+    return nodeMeshes;
 }
 
 std::vector<Mesh> Agate::AssimpLoader::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform) {
@@ -76,7 +76,7 @@ std::vector<Mesh> Agate::AssimpLoader::processNode(aiNode *node, const aiScene *
         meshes.insert(meshes.end(), childMeshes.begin(), childMeshes.end());
     }
 
-    return std::move(meshes);
+    return meshes;
 }
 
 Mesh AssimpLoader::processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform) {
@@ -168,7 +168,7 @@ std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, ai
             m_texturesLoaded.push_back(texture);
         }
     }
-    return std::move(textures);
+    return textures;
 }
 
 unsigned int AssimpLoader::getFlags() const {
