@@ -33,6 +33,9 @@ namespace Agate {
 
         void *GetInstanceWindow();
 
+        void DetachContext();
+        void AttachContext();
+
     private:
         void InitWindow();
 

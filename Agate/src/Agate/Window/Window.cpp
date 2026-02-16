@@ -135,5 +135,13 @@ namespace Agate {
         }
     }
 
+    void Window::AttachContext() {
+        glfwMakeContextCurrent((GLFWwindow *)m_Window);
+    }
+
+    void Window::DetachContext() {
+        glfwMakeContextCurrent(NULL);
+    }
+
 
 }// namespace Agate
