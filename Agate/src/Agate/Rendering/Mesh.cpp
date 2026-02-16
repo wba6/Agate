@@ -89,7 +89,7 @@ void Mesh::setupMesh() {
 
     IndexBuffer IB(m_indices);
 
-    m_VA = std::make_shared<VertexArray>(layout, &m_vertices[0], m_vertices.size() * sizeof(Vertex));
+    m_VA = std::make_shared<VertexArray>(layout, m_vertices.data(), m_vertices.size() * sizeof(Vertex));
     m_VA->addIndexBuffer(IB);
 }
 
