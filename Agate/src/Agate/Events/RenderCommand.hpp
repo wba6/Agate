@@ -9,9 +9,20 @@
 
 namespace Agate {
 
+    /**
+     * @brief a pure virtual class for all render commands to derive from
+     *
+     * */
     class RenderCommand {
     public:
+         /**
+         * @brief Execute the render operation.
+         *
+         * Implementations should perform the necessary rendering work without
+         * modifying the command object itself.
+         */
         virtual void Execute() const = 0;
+        virtual ~RenderCommand() = default;
     };
 
     /**
@@ -21,15 +32,21 @@ namespace Agate {
     class DrawMesh: public RenderCommand{
     public:
         /**
-         * @brief Constructor - takes the new dimensions of
-         *        the window
-         * 
-         * @param x New width of the window
-         * @param y New height of the window
+         * @brief Constructor - takes in the mesh to cummicate to the render
+         *  
+         * @param mesh : currently an int for testing purposes a real mesh in future 
          */
         DrawMesh(int mesh): m_mesh(mesh) {};
 
+         /**
+         * @brief Execute the render operation.
+         *
+         * Implementations should perform the necessary rendering work without
+         * modifying the command object itself.
+         */
         virtual void Execute() const override { PRINTWARN("Excute in draw mesh not implimented");}
+
+        virtual ~DrawMesh() = default;
 
     private:
         int m_mesh;
