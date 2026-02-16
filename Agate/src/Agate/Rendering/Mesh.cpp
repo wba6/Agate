@@ -69,7 +69,7 @@ void Mesh::Draw(Agate::Shader &shader) {
 
     // draw mesh
     m_VA->Bind();
-    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
     m_VA->UnBind();
 }
 
