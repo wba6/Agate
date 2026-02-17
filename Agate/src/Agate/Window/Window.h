@@ -1,9 +1,9 @@
-#pragma once
-
 #include "Agate/Events/Event.h"
 
 //TODO: Use a bridge and a factor to create this window so that there is only one instance so the api can be exposed to client
 
+#ifndef AGATE_WINDOW_H
+#define AGATE_WINDOW_H
 
 namespace Agate {
     class Context;
@@ -69,3 +69,5 @@ namespace Agate {
         WindowProperies m_windowProps;
     };
 }// namespace Agate
+
+#endif // AGATE_WINDOW_H
