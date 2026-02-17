@@ -20,6 +20,11 @@ namespace Agate {
         std::string m_path;
 
         /**
+         * @brief Destructor - Blocks and waits for future completion if necessary
+         */
+        virtual ~ModelLoader();
+
+        /**
         * @brief Render the model; finalize loading when the async import completes.
         *
         * Each frame, this function polls the async import future. When the import
@@ -87,6 +92,11 @@ protected:
          *        access to the result of the asynchronous load task
          */
         std::future<bool> m_futureScene;
+
+        /**
+         * @brief Flag to determine if a load has been started
+         */
+        bool m_startedLoad = false;
 
     private:
 

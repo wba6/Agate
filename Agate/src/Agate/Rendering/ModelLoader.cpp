@@ -7,6 +7,14 @@
 
 namespace fs = std::filesystem;
 
+Agate::ModelLoader::~ModelLoader() {
+
+    // Block until asynchronous load is finished, if applicable
+    if (m_startedLoad && m_futureScene.valid()) {
+        m_futureScene.wait();
+    }
+}
+
 Agate::ModelLoader::ModelLoader(std::string const &path)
     : m_directory(extractDirectory(path)), m_path(path) {}
 
@@ -33,6 +41,7 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
 std::unique_ptr<Agate::ModelLoader> Agate::ModelLoader::LoadModel(const std::string &path) {
 
     std::unique_ptr<Agate::ModelLoader> loader = std::make_unique<AssimpLoader>(path);
+    loader->m_startedLoad = true;
     loader->m_futureScene = loader->loadModel();
 
     return loader;
