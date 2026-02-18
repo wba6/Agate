@@ -93,11 +93,6 @@ protected:
          */
         std::future<bool> m_futureScene;
 
-        /**
-         * @brief Flag to determine if a load has been started
-         */
-        bool m_startedLoad = false;
-
     private:
 
         //helper function
