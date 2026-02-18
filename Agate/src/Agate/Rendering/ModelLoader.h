@@ -1,75 +1,28 @@
 #ifndef AGATE_MODELLOADER_H
 #define AGATE_MODELLOADER_H
 
+#include "Mesh.h"
 #include "OpenGl/Shader.h"
-#include "OpenGl/VertexArray.h"
 #include "OpenGl/Texture.h"
-#include <glm/glm.hpp>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <future>
+#include <memory>
 
 #define MAX_BONE_INFLUENCE 4
 
 namespace Agate {
-    struct Vertex {
-        // position
-        glm::vec3 Position;
-        // normal
-        glm::vec3 Normal;
-        // texCoords
-        glm::vec2 TexCoords;
-        // tangent
-        glm::vec3 Tangent;
-        // bitangent
-        glm::vec3 Bitangent;
-    };
-
-    class Mesh {
-    public:
-        // mesh data
-        std::vector<Vertex> vertices;
-        std::vector<unsigned int> indices;
-        std::vector<Texture> textures;
-
-        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-
-
-        void Draw(Shader &shader);
-
-        virtual ~Mesh();
-
-    private:
-        //  render data
-        std::shared_ptr<VertexArray> VA;
-
-        void setupMesh();
-    };
 
     class ModelLoader {
     public:
         // model data
-        std::vector<Texture> textures_loaded;    // stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+        std::vector<Texture> m_texturesLoaded;    // stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
         std::vector<Mesh> m_meshes;
         std::string m_directory;
         std::string m_path;
 
         /**
-         * @brief Construct a ModelLoader and start loading a model on a background task.
-         *
-         * Initializes model metadata and launches an asynchronous Assimp import using
-         * std::async. The returned aiScene* is stored in a std::future so the caller
-         * can continue without blocking.
-         *
-         * @param path     Filesystem path to the model file.
-         * @param gamma    Enable/disable gamma correction for textures.
-         * @param flipUVs  If true, flip UV coordinates vertically during import.
-         *
-         * @note The actual GPU/engine-side preparation is deferred until Draw() observes
-         *       the future is ready and calls prepareScene().
-         */ 
-        ModelLoader(std::string const &path, bool flipUVs = false);
+         * @brief Destructor - Blocks and waits for future completion if necessary
+         */
+        virtual ~ModelLoader();
 
         /**
         * @brief Render the model; finalize loading when the async import completes.
@@ -83,49 +36,67 @@ namespace Agate {
         *
         * @note Non-blocking: if the import is not ready yet, this function only draws
         *       meshes that have already been prepared (often none).
+        * 
+        * @warning If `ModelLoader::LoadModel` has not been invoked, this method will
+        *          never do anything
         */
         void Draw(Shader &shader);
 
-
-    private:
-        // this future is used to load the model independent of the main thread
-        Assimp::Importer m_importer;
-        std::future<const aiScene*> m_futureScene;
-
-    private:
         /**
-        * @brief Build the Assimp post-processing flags for import.
-        *
-        * @param flipUVs If true, include aiProcess_FlipUVs.
-        * @return Bitmask of Assimp aiProcess_* flags passed to ReadFile().
-        */
-        unsigned int getAssimpFlags(bool flipUVs = false);
+         * @brief Instructs the loader to start internally loading its model
+         * 
+         * @param path Path to the model file
+         */
+        static std::unique_ptr<ModelLoader> LoadModel(std::string const &path);
+
+protected:
 
         /**
-        * @brief Convert a loaded Assimp scene into engine-ready mesh data.
-        *
-        * Validates the imported scene and recursively processes the node hierarchy to
-        * populate this loader's mesh list.
-        *
-        * @param scene Scene produced by Assimp::Importer::ReadFile().
-        *
-        * @warning Potentially expensive: performs vertex/index extraction and may
-        *          trigger GPU buffer uploads depending on your Mesh implementation.
-        *          Intended to be called once, after the async import completes.
-        */
-        void prepareScene(const aiScene *scene);
+         * @brief Construct a ModelLoader and start loading a model on a background task.
+         *
+         * Initializes model metadata and launches an asynchronous Assimp import using
+         * std::async. The returned aiScene* is stored in a std::future so the caller
+         * can continue without blocking.
+         *
+         * @param path     Filesystem path to the model file.
+         *
+         * @note The actual GPU/engine-side preparation is deferred until Draw() observes
+         *       the future is ready and calls prepareScene().
+         */ 
+        ModelLoader(std::string const &path);
 
-        // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-        void processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform);
+        /**
+         * @brief Starts loading the model this loader was given
+         * 
+         * @return Future that becomes valid upon completion of loading the model
+         *         and indicates operation status
+         * @retval true Success
+         * @retval false Error
+         * 
+         * @note Implementations are encouraged to define this in a non-blocking
+         *       manner
+         */
+        virtual std::future<bool> loadModel() = 0;
 
-        Mesh processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4 &transform);
+        /**
+         * @brief Parses the loaded model into a form that the engine can render
+         * 
+         * @return Parsed meshes
+         */
+        virtual std::vector<Mesh> parseModel() = 0;
+
+    private:
+
+        /**
+         * @brief A future for the loaded model is kept as a class member to preserve
+         *        access to the result of the asynchronous load task
+         */
+        std::future<bool> m_futureScene;
+
+    private:
 
         //helper function
         std::string extractDirectory(const std::string& path);
-
-        // checks all material textures of a given type and loads the textures if they're not loaded yet.
-        // the required info is returned as a Texture struct.
-        std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
     };
 }
 
