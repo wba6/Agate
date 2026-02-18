@@ -1,10 +1,11 @@
+
+#ifndef AGATE_RENDERER_HPP
+#define AGATE_RENDERER_HPP
+
 #include <memory.h>
 #include <queue>
 #include "Event.h"
 #include "RenderCommand.hpp"
-
-#ifndef AGATE_RENDERER_HPP
-#define AGATE_RENDERER_HPP
 
 namespace Agate {
 
