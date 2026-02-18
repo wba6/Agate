@@ -34,21 +34,21 @@ namespace Agate {
         void *GetInstanceWindow();
 
         /**
+         * @brief Detaches any currently-bound OpenGL context from the calling thread.
+         *
+         * After calling this, there will be no current OpenGL context on the thread, so OpenGL calls
+         * that require a current context will fail/produce undefined behavior until another context
+         * is attached.
+         */
+        void DetachContext();
+
+        /**
          * @brief Makes this window's OpenGL context the current context for the calling thread.
          *
          * After calling this, OpenGL commands issued on the current thread will affect this window's
          * context (until another context is made current or the context is detached).
          *
          * @note GLFW contexts are thread-local: a context can only be current on one thread at a time.
-         */
-        void DetachContext();
-
-        /**
-         * @brief Detaches any currently-bound OpenGL context from the calling thread.
-         *
-         * After calling this, there will be no current OpenGL context on the thread, so OpenGL calls
-         * that require a current context will fail/produce undefined behavior until another context
-         * is attached.
          */
         void AttachContext();
 
