@@ -1,6 +1,5 @@
 
 #include "Agate.h"
-#include <algorithm>
 #include <memory>
 #include <filesystem>
 class app : public Agate::EntryPoint {
