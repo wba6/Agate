@@ -1,5 +1,6 @@
 
 #include "Agate.h"
+#include <algorithm>
 #include <memory>
 #include <filesystem>
 class app : public Agate::EntryPoint {
@@ -35,11 +36,11 @@ public:
 
     void Attach() override
     {
-        shader = new Agate::Shader("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
-        camera = new Agate::Camera(*shader);
+        shader = std::make_unique<Agate::Shader>("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
+        camera = std::make_unique<Agate::Camera>(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
-        model = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string()).release();
+        model = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
     }
 
     void Detach() override
@@ -67,9 +68,9 @@ public:
     {
     }
 
-    Agate::Shader *shader;
-    Agate::Camera *camera;
-    Agate::ModelLoader *model;
+    std::unique_ptr<Agate::Shader> shader;
+    std::unique_ptr<Agate::Camera> camera;
+    std::unique_ptr<Agate::ModelLoader> model;
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()
