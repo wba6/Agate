@@ -39,12 +39,24 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
     m_model.Draw(shader);
 }
 
-std::unique_ptr<Agate::ModelLoader> Agate::ModelLoader::LoadModel(const std::string &path) {
+std::future<std::unique_ptr<Agate::ModelLoader>> Agate::ModelLoader::LoadModel(const std::string &path) {
 
-    std::unique_ptr<Agate::ModelLoader> loader = std::make_unique<AssimpLoader>(path);
-    loader->m_futureScene = loader->loadModel();
+    return std::async(std::launch::async, [path]() {
 
-    return loader;
+        std::unique_ptr<Agate::ModelLoader> loader = std::make_unique<AssimpLoader>(path);
+        loader->m_futureScene = loader->loadModel();
+
+        loader->m_futureScene.wait();
+        if (loader->m_futureScene.get()) {
+            loader->m_meshes = loader->parseModel();
+            loader->m_model = Agate::ModelEditor(loader->m_path, loader->m_meshes);
+        } else {
+            PRINTWARN("ModelLoader: Model load failed");
+        }
+
+        return loader;
+    });
+
 }
 
 std::string Agate::ModelLoader::extractDirectory(const std::string &path) {

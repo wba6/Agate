@@ -49,7 +49,7 @@ namespace Agate {
          * 
          * @param path Path to the model file
          */
-        static std::unique_ptr<ModelLoader> LoadModel(std::string const &path);
+        static std::future<std::unique_ptr<ModelLoader>> LoadModel(std::string const &path);
 
 protected:
 
