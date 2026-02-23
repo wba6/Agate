@@ -2,6 +2,7 @@
 #define AGATE_MODELLOADER_H
 
 #include "Mesh.h"
+#include "ModelEditor.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/Texture.h"
 #include <future>
@@ -18,6 +19,7 @@ namespace Agate {
         std::vector<Mesh> m_meshes;
         std::string m_directory;
         std::string m_path;
+        ModelEditor m_model;
 
         /**
          * @brief Destructor - Blocks and waits for future completion if necessary

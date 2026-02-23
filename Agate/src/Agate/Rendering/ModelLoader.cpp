@@ -2,6 +2,7 @@
 #include "ModelLoader.h"
 #include "AssimpLoader.h"
 #include "Mesh.h"
+#include "ModelEditor.h"
 #include <utility>
 #include <memory>
 
@@ -28,14 +29,14 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
             // Once this is done the future scene will no longer be valid
             if (m_futureScene.get()) {
                 m_meshes = parseModel();
+                m_model = Agate::ModelEditor(m_path, m_meshes);
             } else {
                 PRINTWARN("ModelLoader: Model load failed");
             }
         }
     }
 
-    for (auto &mesh: m_meshes)
-        mesh.Draw(shader);
+    m_model.Draw(shader);
 }
 
 std::unique_ptr<Agate::ModelLoader> Agate::ModelLoader::LoadModel(const std::string &path) {

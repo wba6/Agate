@@ -22,6 +22,11 @@ private:
 public:
 
     /**
+     * @brief Default constructor
+     */
+    ModelEditor() = default;
+
+    /**
      * @brief Constructor - initializes with given meshes and path
      * 
      * @param path Path to the source file of this model
