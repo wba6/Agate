@@ -8,8 +8,7 @@
 #include "Events/RenderCommand.hpp"
 #include "ImGui-layer/Example_imguiLayer.h"
 #include "imgui.h"
-#include <algorithm>
-#include <iostream>
+#include <thread>
 #include <memory>
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
@@ -37,31 +36,51 @@ Agate::EntryPoint::~EntryPoint() {
 }
 
 void Agate::EntryPoint::Run() {
-    int frameCount = 0;
-    while (m_running) {
-        frameCount++;
-        double FrameTime = m_window->WindowOpenTime();
-        Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
-        imgui_interface::BeginFrame();
+    m_window->DetachContext();
+    // Start Render Thread
+    std::jthread renderThread([&]() {
+        // Get context
+        m_window->AttachContext();        
+        int frameCount = 0;
+        while (m_running) {
+            frameCount++;
+            double FrameTime = m_window->WindowOpenTime();
+            Agate::CurrentContext::GetCurrentContex()->NewFrame();
+
+            imgui_interface::BeginFrame();
+            ImGui::Begin("Frame");
+            ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
+            ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
+            ImGui::End();
+            imgui_interface::EndFrame();
+
+            // Execute all commands submitted by the main thread
+            Renderer::Flush(); 
+            
+            // Swap buffers
+            m_window->OnUpdate(); 
+
+            if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1) {
+                deltaTime = m_window->WindowOpenTime() - FrameTime;
+            }
+
+        }
+    });
+
+    while (m_running) {
+        
+        // Update operation
+        for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
+            m_layerStack.m_layers.at(i)->OnUpdate();
+        }
+
+        // Render operation
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
             m_layerStack.m_layers.at(i)->OnRender();
         }
 
-        ImGui::Begin("Frame");
-        ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
-        ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
-
-        ImGui::End();
-
-        imgui_interface::EndFrame();
-
         m_window->OnUpdate();
-        Renderer::Flush();
-
-        if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1) {
-            deltaTime = m_window->WindowOpenTime() - FrameTime;
-        }
     };
 }
 

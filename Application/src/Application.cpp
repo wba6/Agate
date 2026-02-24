@@ -23,6 +23,10 @@ public:
     {
     };
 
+    void OnUpdate()override
+    {
+    };
+
     void OnEvent(Agate::Event &e) override
     {
     }
@@ -35,6 +39,7 @@ public:
 
     void Attach() override
     {
+        return;
         shader = new Agate::Shader("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
         camera = new Agate::Camera(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
@@ -49,6 +54,7 @@ public:
 
     void OnRender() override
     {
+        return;
         shader->Bind();
         camera->onUpdate();
 
@@ -59,6 +65,11 @@ public:
         shader->SetUniformMat4("model", trans_model);
         model->Draw(*shader);
     }
+
+    void OnUpdate() override
+    {
+    };
+
     void OnEvent(Agate::Event &e) override
     {
         camera->onEvent(e);
