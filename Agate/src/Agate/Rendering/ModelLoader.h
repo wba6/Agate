@@ -19,30 +19,11 @@ namespace Agate {
         std::vector<Mesh> m_meshes;
         std::string m_directory;
         std::string m_path;
-        ModelEditor m_model;
 
         /**
          * @brief Destructor - Blocks and waits for future completion if necessary
          */
         virtual ~ModelLoader();
-
-        /**
-        * @brief Render the model; finalize loading when the async import completes.
-        *
-        * Each frame, this function polls the async import future. When the import
-        * completes, it performs one-time scene preparation (node traversal, mesh
-        * extraction, and any associated buffer creation) by calling prepareScene().
-        * After preparation, it draws all loaded meshes.
-        *
-        * @param shader Shader program used to render the meshes.
-        *
-        * @note Non-blocking: if the import is not ready yet, this function only draws
-        *       meshes that have already been prepared (often none).
-        * 
-        * @warning If `ModelLoader::LoadModel` has not been invoked, this method will
-        *          never do anything
-        */
-        void Draw(Shader &shader);
 
         /**
          * @brief Instructs the loader to start internally loading its model
