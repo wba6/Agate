@@ -26,24 +26,18 @@ inline glm::mat4 convertMatrix(const aiMatrix4x4& matrix) {
 
 namespace Agate {
 
-AssimpLoader::AssimpLoader(std::string path, bool flipUVs):
+AssimpLoader::AssimpLoader(const std::string& path, bool flipUVs):
         ModelLoader(path), m_flipUVs(flipUVs), m_scene(nullptr) {}
 
-std::future<bool> AssimpLoader::loadModel() {
+AssimpLoader::~AssimpLoader() = default;
+
+void AssimpLoader::loadModel() {
 
     unsigned int flags = getFlags();
-
-    return std::async(std::launch::async, [this, flags]() {
-
-        this->m_scene = m_importer.ReadFile(this->m_path, flags);
-
-        if (!m_scene || m_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_scene->mRootNode) {
-            PRINTERROR("ASSIMP ERROR: {}", m_importer.GetErrorString());
-            return false;
-        }
-
-        return true;
-    });
+    this->m_scene = m_importer.ReadFile(this->m_path, flags);
+    if (!m_scene || m_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_scene->mRootNode) {
+        PRINTERROR("ASSIMP ERROR: {}", m_importer.GetErrorString());
+    }
 }
 
 std::vector<Mesh> AssimpLoader::parseModel() {

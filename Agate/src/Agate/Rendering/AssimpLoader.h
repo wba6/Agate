@@ -34,7 +34,9 @@ public:
      * @param flipUVs If true, include aiProcess_FlipUVs for postprocessing.
      *                Default false
      */
-    AssimpLoader(std::string path, bool flipUVs = false);
+    AssimpLoader(const std::string& path, bool flipUVs = false);
+
+    virtual ~AssimpLoader() override;
 
 protected:
 
@@ -49,7 +51,7 @@ protected:
      * @note Implementations are encouraged to define this in a non-blocking
      *       manner
      */
-    virtual std::future<bool> loadModel() final override;
+    virtual void loadModel() final override;
 
     /**
      * @brief Parses the loaded model into a form that the engine can render

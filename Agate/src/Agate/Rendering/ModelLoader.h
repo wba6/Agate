@@ -68,17 +68,9 @@ protected:
         ModelLoader(std::string const &path);
 
         /**
-         * @brief Starts loading the model this loader was given
-         * 
-         * @return Future that becomes valid upon completion of loading the model
-         *         and indicates operation status
-         * @retval true Success
-         * @retval false Error
-         * 
-         * @note Implementations are encouraged to define this in a non-blocking
-         *       manner
+         * @brief Performs the I/O part of loading the model
          */
-        virtual std::future<bool> loadModel() = 0;
+        virtual void loadModel() = 0;
 
         /**
          * @brief Parses the loaded model into a form that the engine can render
@@ -89,13 +81,7 @@ protected:
 
     private:
 
-        /**
-         * @brief A future for the loaded model is kept as a class member to preserve
-         *        access to the result of the asynchronous load task
-         */
-        std::future<bool> m_futureScene;
-
-    private:
+        std::future<void> m_loading;
 
         //helper function
         std::string extractDirectory(const std::string& path);
