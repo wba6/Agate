@@ -59,7 +59,7 @@ void Agate::EntryPoint::Run() {
             Renderer::Flush(); 
             
             // Swap buffers
-            m_window->OnUpdate(); 
+            m_window->SwapBuffers(); 
 
             if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1) {
                 deltaTime = m_window->WindowOpenTime() - FrameTime;
@@ -79,8 +79,7 @@ void Agate::EntryPoint::Run() {
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
             m_layerStack.m_layers.at(i)->OnRender();
         }
-
-        m_window->OnUpdate();
+        m_window->PoolEvents();
     };
 }
 

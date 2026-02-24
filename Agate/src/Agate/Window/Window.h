@@ -17,7 +17,9 @@ namespace Agate {
 
         ~Window();
 
-        void OnUpdate();
+        void SwapBuffers(); 
+
+        void PoolEvents();
 
         double WindowOpenTime();
 
