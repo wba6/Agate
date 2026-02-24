@@ -87,9 +87,12 @@ namespace Agate {
         PRINTCRIT("GLFW ERROR---CODE: {} : {}", error_code, description);
     }
 
-    void Window::OnUpdate() {
-        glfwPollEvents();
+    void Window::SwapBuffers() {
         glfwSwapBuffers((GLFWwindow *) m_Window);
+    }
+
+    void Window::PoolEvents() {
+        glfwPollEvents();
     }
 
     int Window::GetWidth() {

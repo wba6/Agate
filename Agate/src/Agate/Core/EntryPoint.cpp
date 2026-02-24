@@ -48,12 +48,12 @@ void Agate::EntryPoint::Run() {
             double FrameTime = m_window->WindowOpenTime();
             Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
-            imgui_interface::BeginFrame();
-            ImGui::Begin("Frame");
-            ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
-            ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
-            ImGui::End();
-            imgui_interface::EndFrame();
+            // imgui_interface::BeginFrame();
+            // ImGui::Begin("Frame");
+            // ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
+            // ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
+            // ImGui::End();
+            // imgui_interface::EndFrame();
 
             // Execute all commands submitted by the main thread
             Renderer::Flush(); 
