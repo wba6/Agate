@@ -17,7 +17,7 @@ void Agate::ModelLoader::Draw(Agate::Shader &shader) {
     m_model.Draw(shader);
 }
 
-std::future<std::unique_ptr<Agate::ModelLoader>> Agate::ModelLoader::LoadModel(const std::string &path) {
+std::future<std::unique_ptr<Agate::ModelEditor>> Agate::ModelLoader::LoadModel(const std::string &path) {
 
     return std::async(std::launch::async, [path]() {
 
@@ -26,7 +26,7 @@ std::future<std::unique_ptr<Agate::ModelLoader>> Agate::ModelLoader::LoadModel(c
         loader->m_meshes = loader->parseModel();
         loader->m_model = Agate::ModelEditor(loader->m_path, loader->m_meshes);
 
-        return loader;
+        return std::make_unique<ModelEditor>(std::move(loader->m_model));
     });
 }
 

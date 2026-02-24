@@ -49,7 +49,7 @@ namespace Agate {
          * 
          * @param path Path to the model file
          */
-        static std::future<std::unique_ptr<ModelLoader>> LoadModel(std::string const &path);
+        static std::future<std::unique_ptr<ModelEditor>> LoadModel(std::string const &path);
 
 protected:
 
@@ -80,8 +80,6 @@ protected:
         virtual std::vector<Mesh> parseModel() = 0;
 
     private:
-
-        std::future<void> m_loading;
 
         //helper function
         std::string extractDirectory(const std::string& path);

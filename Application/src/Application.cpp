@@ -97,8 +97,8 @@ public:
 
     Agate::Shader *shader;
     Agate::Camera *camera;
-    Agate::ModelLoader *model;
-    std::future<std::unique_ptr<Agate::ModelLoader>> pendingModel;
+    Agate::ModelEditor *model;
+    std::future<std::unique_ptr<Agate::ModelEditor>> pendingModel;
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()
