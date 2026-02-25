@@ -42,7 +42,7 @@ void ModelEditor::SetScale(const glm::vec3& scalar) {
     m_transform.scale = scalar;
 }
 
-glm::mat4 ModelEditor::ModelMatrix() {
+glm::mat4 ModelEditor::ModelMatrix() const {
 
     const glm::mat4 translation{
         1, 0, 0, 0,
@@ -59,6 +59,10 @@ glm::mat4 ModelEditor::ModelMatrix() {
     const glm::mat4 rotation = glm::mat4_cast(m_transform.rotation);
 
     return translation * rotation * scale;
+}
+
+glm::vec3 ModelEditor::EulerAngles() const {
+    return glm::eulerAngles(m_transform.rotation);
 }
 
 } // namespace Agate

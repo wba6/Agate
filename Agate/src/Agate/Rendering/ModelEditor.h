@@ -106,8 +106,18 @@ public:
      * 
      * @note The model matrix is fully computed from the transform every
      *       time this method is called
+     * 
+     * @return 4x4 model matrix for this model
      */
-    glm::mat4 ModelMatrix();
+    glm::mat4 ModelMatrix() const;
+
+    /**
+     * @brief Rotation of the model as 3 angles corresponding to rotations
+     *        about the X, Y, and Z axes respectively
+     * 
+     * @return Vector with rotations about the X, Y, and Z axes
+     */
+    glm::vec3 EulerAngles() const;
 };
 } // namespace Agate
 
