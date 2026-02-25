@@ -18,12 +18,12 @@ void ModelEditor::Draw(Shader& shader) {
     }
 }
 
-void ModelEditor::Rotate(double radians, glm::vec3 axis) {
-    PRINTWARN("Rotate() Not Yet Implemented");
+void ModelEditor::Rotate(glm::f32 radians, glm::vec3 axis) {
+    m_transform.rotation = glm::angleAxis(radians, axis) * m_transform.rotation;
 }
 
-void ModelEditor::SetRotation(double radians, glm::vec3 axis) {
-    PRINTWARN("SetRotation() Not Yet Implemented");
+void ModelEditor::SetRotation(glm::f32 radians, glm::vec3 axis) {
+    m_transform.rotation = glm::angleAxis(radians, axis);
 }
 
 void ModelEditor::Translate(glm::vec3 translation) {

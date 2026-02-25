@@ -56,7 +56,7 @@ public:
      * @param radians Amount to rotate by, in radians
      * @param axis Normalized vector along the axis to rotate about
      */
-    void Rotate(double radians, glm::vec3 axis);
+    void Rotate(glm::f32 radians, glm::vec3 axis);
 
     /**
      * @brief Sets the models rotation, ignoring current rotation
@@ -64,7 +64,7 @@ public:
      * @param radians Amount model should be rotated, in radians
      * @param axis Normalized vector along the axis to rotate about
      */
-    void SetRotation(double radians, glm::vec3 axis);
+    void SetRotation(glm::f32 radians, glm::vec3 axis);
 
     /**
      * @brief Moves the position of the model
