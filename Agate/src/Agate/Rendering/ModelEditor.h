@@ -12,13 +12,22 @@
 #include "OpenGl/Shader.h"
 #include <string>
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace Agate {
+
+struct Transform {
+    Transform();
+    glm::vec3 position;
+    glm::vec3 scale;
+    glm::quat rotation;
+};
 
 class ModelEditor {
 private:
     std::string m_path;
     std::vector<Mesh> m_meshes;
+    Transform m_transform;
 public:
 
     /**
