@@ -18,20 +18,20 @@ void ModelEditor::Draw(Shader& shader) {
     }
 }
 
-void ModelEditor::Rotate(glm::f32 radians, glm::vec3 axis) {
+void ModelEditor::Rotate(glm::f32 radians, const glm::vec3& axis) {
     m_transform.rotation = glm::angleAxis(radians, axis) * m_transform.rotation;
 }
 
-void ModelEditor::SetRotation(glm::f32 radians, glm::vec3 axis) {
+void ModelEditor::SetRotation(glm::f32 radians, const glm::vec3& axis) {
     m_transform.rotation = glm::angleAxis(radians, axis);
 }
 
-void ModelEditor::Translate(glm::vec3 translation) {
-    PRINTWARN("Translate() Not Yet Implemented");
+void ModelEditor::Translate(const glm::vec3& translation) {
+    m_transform.position += translation;
 }
 
-void ModelEditor::SetPosition(glm::vec3 position) {
-    PRINTWARN("SetPosition() Not Yet Implemented");
+void ModelEditor::SetPosition(const glm::vec3& position) {
+    m_transform.position = position;
 }
 
 void ModelEditor::Scale(glm::vec3 scalar) {
