@@ -49,6 +49,51 @@ public:
      * @param shader Shader to use when drawing
      */
     void Draw(Shader& shader);
+
+    /**
+     * @brief Rotates the model about an axis
+     * 
+     * @param radians Amount to rotate by, in radians
+     * @param axis Normalized vector along the axis to rotate about
+     */
+    void Rotate(double radians, glm::vec3 axis);
+
+    /**
+     * @brief Sets the models rotation, ignoring current rotation
+     * 
+     * @param radians Amount model should be rotated, in radians
+     * @param axis Normalized vector along the axis to rotate about
+     */
+    void SetRotation(double radians, glm::vec3 axis);
+
+    /**
+     * @brief Moves the position of the model
+     * 
+     * @param translation Vector to add to the model's current position
+     */
+    void Translate(glm::vec3 translation);
+
+    /**
+     * @brief Sets the position of the model relative to its local
+     *        origin
+     * 
+     * @param position Position vector for the model
+     */
+    void SetPosition(glm::vec3 position);
+
+    /**
+     * @brief Resizes the model by a scalar vector
+     * 
+     * @param scalar Scalar vector with a multiplier for each axis
+     */
+    void Scale(glm::vec3 scalar);
+
+    /**
+     * @brief Sets the model's size to a scalar of its original size
+     * 
+     * @param scalar Scalar vector with a multiplier for each axis
+     */
+    void SetScale(glm::vec3 scalar);
 };
 } // namespace Agate
 

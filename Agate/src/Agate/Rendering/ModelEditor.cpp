@@ -18,4 +18,29 @@ void ModelEditor::Draw(Shader& shader) {
     }
 }
 
+void ModelEditor::Rotate(double radians, glm::vec3 axis) {
+    PRINTWARN("Rotate() Not Yet Implemented");
+}
+
+void ModelEditor::SetRotation(double radians, glm::vec3 axis) {
+    PRINTWARN("SetRotation() Not Yet Implemented");
+}
+
+void ModelEditor::Translate(glm::vec3 translation) {
+    PRINTWARN("Translate() Not Yet Implemented");
+}
+
+void ModelEditor::SetPosition(glm::vec3 position) {
+    PRINTWARN("SetPosition() Not Yet Implemented");
+}
+
+void ModelEditor::Scale(glm::vec3 scalar) {
+    PRINTWARN("Scale() Not Yet Implemented");
+}
+
+void ModelEditor::SetScale(glm::vec3 scalar) {
+    PRINTWARN("SetScale() Not Yet Implemented");
+}
+
+
 } // namespace Agate
