@@ -94,6 +94,20 @@ public:
      * @param scalar Scalar vector with a multiplier for each axis
      */
     void SetScale(const glm::vec3& scalar);
+
+    /**
+     * @brief Computes the model matrix for this model using its current
+     *        transform
+     * 
+     * The model matrix is the third component of the model-view-projection
+     * rendering model and is used to convert a point from its local position
+     * to its world position as defined by a translation, rotation, and
+     * rescale.
+     * 
+     * @note The model matrix is fully computed from the transform every
+     *       time this method is called
+     */
+    glm::mat4 ModelMatrix();
 };
 } // namespace Agate
 
