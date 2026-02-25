@@ -86,14 +86,14 @@ public:
      * 
      * @param scalar Scalar vector with a multiplier for each axis
      */
-    void Scale(glm::vec3 scalar);
+    void Scale(const glm::vec3& scalar);
 
     /**
      * @brief Sets the model's size to a scalar of its original size
      * 
      * @param scalar Scalar vector with a multiplier for each axis
      */
-    void SetScale(glm::vec3 scalar);
+    void SetScale(const glm::vec3& scalar);
 };
 } // namespace Agate
 

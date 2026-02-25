@@ -34,13 +34,12 @@ void ModelEditor::SetPosition(const glm::vec3& position) {
     m_transform.position = position;
 }
 
-void ModelEditor::Scale(glm::vec3 scalar) {
-    PRINTWARN("Scale() Not Yet Implemented");
+void ModelEditor::Scale(const glm::vec3& scalar) {
+    m_transform.scale *= scalar;
 }
 
-void ModelEditor::SetScale(glm::vec3 scalar) {
-    PRINTWARN("SetScale() Not Yet Implemented");
+void ModelEditor::SetScale(const glm::vec3& scalar) {
+    m_transform.scale = scalar;
 }
-
 
 } // namespace Agate
