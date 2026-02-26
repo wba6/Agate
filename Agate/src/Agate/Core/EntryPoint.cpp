@@ -36,49 +36,78 @@ Agate::EntryPoint::~EntryPoint() {
 }
 
 void Agate::EntryPoint::Run() {
-
     m_window->DetachContext();
+    
+    // Create an atomic variable to safely pass the true render time between threads
+    std::atomic<double> renderThreadFrameTime{0.0};
+    
     // Start Render Thread
     std::jthread renderThread([&]() {
-        // Get context
         m_window->AttachContext();        
-        int frameCount = 0;
+        double lastRenderTime = m_window->WindowOpenTime();
+
         while (m_running) {
-            frameCount++;
-            double FrameTime = m_window->WindowOpenTime();
             Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
-            // imgui_interface::BeginFrame();
-            // ImGui::Begin("Frame");
-            // ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
-            // ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
-            // ImGui::End();
-            // imgui_interface::EndFrame();
-
-            // Execute all commands submitted by the main thread
+            // Execute game render commands
             Renderer::Flush(); 
             
-            // Swap buffers
+            // Execute ImGui OpenGL calls
+            imgui_interface::Render_GPU();
+            
+            // Swap buffers (This is what usually blocks on VSync or GPU limits)
             m_window->SwapBuffers(); 
 
-            if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1) {
-                deltaTime = m_window->WindowOpenTime() - FrameTime;
-            }
-
+            // Calculate True Render Frame Time
+            double currentRenderTime = m_window->WindowOpenTime();
+            renderThreadFrameTime.store(currentRenderTime - lastRenderTime, std::memory_order_relaxed);
+            lastRenderTime = currentRenderTime;
         }
     });
 
+    int frameCount = 0;
+    double lastLogicTime = m_window->WindowOpenTime();
+
+    // Main Thread Game Loop
     while (m_running) {
+        frameCount++;
         
-        // Update operation
+        // Calculate Main Thread (Logic) Time
+        double currentLogicTime = m_window->WindowOpenTime();
+        deltaTime = currentLogicTime - lastLogicTime;
+        lastLogicTime = currentLogicTime;
+
+        // Start ImGui CPU Frame
+        imgui_interface::BeginFrame();
+
+        // Build your UI - Show BOTH times
+        ImGui::Begin("Performance");
+        
+        // Logic Time (How fast the Main Thread runs)
+        ImGui::Text("Logic (Main Thread): %.3f ms", deltaTime * 1000.0);
+        
+        // True Frame Time (How fast the screen updates)
+        double trueRenderTimeMs = renderThreadFrameTime.load(std::memory_order_relaxed) * 1000.0;
+        ImGui::Text("Render (True Frame Time): %.3f ms", trueRenderTimeMs);
+        ImGui::Text("True FPS: %.1f", 1000.0 / trueRenderTimeMs);
+        
+        ImGui::Text("Total Frames: %d", frameCount);
+        ImGui::End();
+
+        // Update operation (Logic)
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
             m_layerStack.m_layers.at(i)->OnUpdate();
         }
 
-        // Render operation
+        // Render operation (Submits commands to Queue)
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
             m_layerStack.m_layers.at(i)->OnRender();
         }
+
+        // Finalize ImGui CPU Frame
+        imgui_interface::EndFrame();
+
+        // Poll events
         m_window->PoolEvents();
     };
 }

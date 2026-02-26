@@ -17,6 +17,8 @@ namespace Agate {
 
         static void EndFrame();
 
+        static void Render_GPU();
+
     private:
         imgui_interface() {};
     };
