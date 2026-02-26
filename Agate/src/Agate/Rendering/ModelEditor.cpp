@@ -65,4 +65,20 @@ glm::vec3 ModelEditor::EulerAngles() const {
     return glm::eulerAngles(m_transform.rotation);
 }
 
+void ModelEditor::LoadTextures() {
+
+    /*
+        This seems to block for quite a while after the model
+        loads, but I think a fix should be deferred until this
+        is running on the render thread
+    */
+    PRINTMSG("Loading textures - This may take a minute");
+    for (auto& mesh: m_meshes) {
+        for (auto& texture: mesh.m_textures) {
+            texture.initialize();
+        }
+        mesh.setupMesh();
+    }
+}
+
 } // namespace Agate

@@ -56,6 +56,7 @@ public:
             const auto status = pendingModel.wait_for(std::chrono::seconds(0));
             if (status == std::future_status::ready) {
                 model = pendingModel.get().release();
+                model->LoadTextures();
             }
         }
 

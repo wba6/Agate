@@ -118,6 +118,11 @@ public:
      * @return Vector with rotations about the X, Y, and Z axes
      */
     glm::vec3 EulerAngles() const;
+
+    /**
+     * @brief Loads this model's textures into the OpenGL context
+     */
+    void LoadTextures();
 };
 } // namespace Agate
 

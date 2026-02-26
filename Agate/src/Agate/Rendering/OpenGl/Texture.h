@@ -57,6 +57,12 @@ namespace Agate {
         */
         const std::string &getType();
 
+        /**
+         * @brief Makes OpenGL calls required to prepare
+         *        the rendering context to handle this
+         */
+        void initialize();
+
     private:
         /*
         * Helper function to load standard images using SOIL2
@@ -87,7 +93,7 @@ namespace Agate {
     private:
         unsigned int m_textureID, m_target;
         int m_width, m_height;
-        std::string m_path, m_type;
+        std::string m_path, m_type, m_directory;
     };
 }
 

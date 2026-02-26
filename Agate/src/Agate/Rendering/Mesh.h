@@ -54,11 +54,13 @@ public:
 
     virtual ~Mesh();
 
+    void setupMesh();
+
 private:
     //  render data
     std::shared_ptr<VertexArray> m_VA;
 
-    void setupMesh();
+
 };
 
 }
