@@ -16,6 +16,10 @@
 
 namespace Agate {
 
+/**
+ * @brief Plain data struct with transformation data used to
+ *        create a model matrix
+ */
 struct Transform {
     Transform();
     glm::vec3 position;
@@ -23,6 +27,10 @@ struct Transform {
     glm::quat rotation;
 };
 
+/**
+ * @brief Wraps a renderable model and provides mutators to
+ *        edit the transformation of the model
+ */
 class ModelEditor {
 private:
     std::string m_path;
