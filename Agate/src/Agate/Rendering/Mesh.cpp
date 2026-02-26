@@ -8,8 +8,6 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
     this->m_vertices = std::move(vertices);
     this->m_indices = std::move(indices);
     this->m_textures = std::move(textures);
-
-    setupMesh();
 }
 
 //@todo we should not really render here
