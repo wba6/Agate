@@ -36,8 +36,8 @@ public:
 
     void Attach() override
     {
-        shader = new Agate::Shader("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
-        camera = new Agate::Camera(*shader);
+        shader = std::make_unique<Agate::Shader>("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
+        camera = std::make_unique<Agate::Camera>(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
         model = nullptr;
@@ -55,7 +55,7 @@ public:
         if (pendingModel.valid()) {
             const auto status = pendingModel.wait_for(std::chrono::seconds(0));
             if (status == std::future_status::ready) {
-                model = pendingModel.get().release();
+                model = pendingModel.get();
                 model->LoadTextures();
             }
         }
@@ -83,22 +83,13 @@ public:
         if (pendingModel.valid()) {
             PRINTMSG("[TemplateLayer]: Waiting for pending model");
             pendingModel.wait();
-            pendingModel.get();
-        }
-        delete shader;
-        shader = nullptr;
-        delete camera;
-        camera = nullptr;
-
-        if (model) {
-            delete model;
-            model = nullptr;
+            model = pendingModel.get();
         }
     }
 
-    Agate::Shader *shader;
-    Agate::Camera *camera;
-    Agate::ModelEditor *model;
+    std::unique_ptr<Agate::Shader> shader;
+    std::unique_ptr<Agate::Camera> camera;
+    std::unique_ptr<Agate::ModelEditor> model;
     std::future<std::unique_ptr<Agate::ModelEditor>> pendingModel;
 };
 
