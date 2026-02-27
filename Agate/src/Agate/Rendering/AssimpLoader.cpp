@@ -31,13 +31,17 @@ AssimpLoader::AssimpLoader(const std::string& path, bool flipUVs):
 
 AssimpLoader::~AssimpLoader() = default;
 
-void AssimpLoader::loadModel() {
+bool AssimpLoader::loadModel() {
 
     unsigned int flags = getFlags();
     this->m_scene = m_importer.ReadFile(this->m_path, flags);
     if (!m_scene || m_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_scene->mRootNode) {
         PRINTERROR("ASSIMP ERROR: {}", m_importer.GetErrorString());
+
+        return false;
     }
+
+    return true;
 }
 
 std::vector<Mesh> AssimpLoader::parseModel() {
