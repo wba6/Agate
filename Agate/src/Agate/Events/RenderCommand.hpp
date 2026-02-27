@@ -6,6 +6,8 @@
 #define AGATE_RENDERCOMMAND_HPP
 
 #include "Core/Logger.h"
+#include "ImGui-layer/imgui_interface.h"
+#include  "imgui.h"
 
 namespace Agate {
 
@@ -21,7 +23,7 @@ namespace Agate {
          * Implementations should perform the necessary rendering work without
          * modifying the command object itself.
          */
-        virtual void Execute() const = 0;
+        virtual void Execute() = 0;
         virtual ~RenderCommand() = default;
     };
 
@@ -44,12 +46,39 @@ namespace Agate {
          * Implementations should perform the necessary rendering work without
          * modifying the command object itself.
          */
-        virtual void Execute() const override { PRINTWARN("Excute in draw mesh not implimented");}
+        virtual void Execute() override { PRINTWARN("Excute in draw mesh not implimented");}
 
         virtual ~DrawMesh() = default;
 
     private:
         int m_mesh;
+    };
+
+    /**
+     * @brief Emitted when the application window is resized.
+     *        Has the new window size
+     */
+    class DrawUI: public RenderCommand{
+    public:
+        /**
+         * @brief Constructor - takes in the mesh to cummicate to the render
+         *  
+         * @param mesh : currently an int for testing purposes a real mesh in future 
+         */
+        DrawUI(ImDrawData data): m_data(data) {};
+
+         /**
+         * @brief Execute the render operation.
+         *
+         * Implementations should perform the necessary rendering work without
+         * modifying the command object itself.
+         */
+        virtual void Execute() override { imgui_interface::DrawFrame(&m_data);}
+
+        virtual ~DrawUI() = default;
+
+    private:
+        ImDrawData m_data;
     };
 
 } // Namespace Agate

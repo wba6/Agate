@@ -48,13 +48,6 @@ void Agate::EntryPoint::Run() {
             double FrameTime = m_window->WindowOpenTime();
             Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
-            // imgui_interface::BeginFrame();
-            // ImGui::Begin("Frame");
-            // ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
-            // ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
-            // ImGui::End();
-            // imgui_interface::EndFrame();
-
             // Execute all commands submitted by the main thread
             Renderer::Flush(); 
             
@@ -79,6 +72,17 @@ void Agate::EntryPoint::Run() {
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
             m_layerStack.m_layers.at(i)->OnRender();
         }
+
+        imgui_interface::BeginFrame();
+        ImGui::Begin("Frame");
+        //ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
+        // ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
+        ImGui::End();
+        ImDrawData data = *imgui_interface::EndFrame();
+
+        Renderer::Submit(std::make_unique<DrawUI>(data));
+
+
         m_window->PoolEvents();
     };
 }
