@@ -131,28 +131,8 @@ namespace Agate {
      * @return A Texture object
      */
     Texture::Texture(const char *file, std::string &directory)
-            : m_width(0), m_height(0), m_path(file), m_type("texture"), m_target(GL_TEXTURE_2D), m_textureID(0) {
-        std::string normalizedPath = create_normalized_path(directory, m_path);
-        std::filesystem::path filepath(normalizedPath);
+            : m_width(0), m_height(0), m_path(file), m_type("texture"), m_target(GL_TEXTURE_2D), m_textureID(0), m_directory(directory) {
 
-        // Convert extension to lowercase
-        std::string extension = filepath.extension().string();
-        std::transform(extension.begin(), extension.end(), extension.begin(),
-                                              [](unsigned char c){ return std::tolower(c); });
-
-        if (extension == ".ktx" || extension == ".ktx2") {
-            // Load KTX file using libktx
-            if (!load_ktx_with_libktx(normalizedPath, m_textureID, m_target, m_width, m_height)) {
-                PRINTERROR("Failed to load KTX texture at path: {}", normalizedPath);
-                // Optionally, set a default texture or handle the error gracefully @TODO
-            }
-        } else {
-            // Load standard image using SOIL2
-            if (!load_standard_texture_with_soil2(normalizedPath, m_textureID, m_target, m_width, m_height)) {
-                PRINTERROR("Failed to load standard texture at path: {}", normalizedPath);
-                // Optionally, set a default texture or handle the error gracefully @TODO
-            }
-        }
     }
 
     /*
@@ -203,6 +183,29 @@ namespace Agate {
      */
     void Texture::setType(std::string &typeName) {
         m_type = typeName;
+    }
+
+    void Texture::initialize() {
+        std::string normalizedPath = create_normalized_path(m_directory, m_path);
+        std::filesystem::path filepath(normalizedPath);
+
+        // Convert extension to lowercase
+        std::string extension = filepath.extension().string();
+        std::transform(extension.begin(), extension.end(), extension.begin(),
+                                              [](unsigned char c){ return std::tolower(c); });
+        if (extension == ".ktx" || extension == ".ktx2") {
+            // Load KTX file using libktx
+            if (!load_ktx_with_libktx(normalizedPath, m_textureID, m_target, m_width, m_height)) {
+                PRINTERROR("Failed to load KTX texture at path: {}", normalizedPath);
+                // Optionally, set a default texture or handle the error gracefully @TODO
+            }
+        } else {
+            // Load standard image using SOIL2
+            if (!load_standard_texture_with_soil2(normalizedPath, m_textureID, m_target, m_width, m_height)) {
+                PRINTERROR("Failed to load standard texture at path: {}", normalizedPath);
+                // Optionally, set a default texture or handle the error gracefully @TODO
+            }
+        }
     }
 
 } // namespace Agate

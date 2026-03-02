@@ -2,6 +2,7 @@
 #define AGATE_MODELLOADER_H
 
 #include "Mesh.h"
+#include "ModelEditor.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/Texture.h"
 #include <future>
@@ -25,29 +26,11 @@ namespace Agate {
         virtual ~ModelLoader();
 
         /**
-        * @brief Render the model; finalize loading when the async import completes.
-        *
-        * Each frame, this function polls the async import future. When the import
-        * completes, it performs one-time scene preparation (node traversal, mesh
-        * extraction, and any associated buffer creation) by calling prepareScene().
-        * After preparation, it draws all loaded meshes.
-        *
-        * @param shader Shader program used to render the meshes.
-        *
-        * @note Non-blocking: if the import is not ready yet, this function only draws
-        *       meshes that have already been prepared (often none).
-        * 
-        * @warning If `ModelLoader::LoadModel` has not been invoked, this method will
-        *          never do anything
-        */
-        void Draw(Shader &shader);
-
-        /**
          * @brief Instructs the loader to start internally loading its model
          * 
          * @param path Path to the model file
          */
-        static std::unique_ptr<ModelLoader> LoadModel(std::string const &path);
+        static std::future<std::unique_ptr<ModelEditor>> LoadModel(std::string const &path);
 
 protected:
 
@@ -66,17 +49,13 @@ protected:
         ModelLoader(std::string const &path);
 
         /**
-         * @brief Starts loading the model this loader was given
+         * @brief Performs the I/O part of loading the model
          * 
-         * @return Future that becomes valid upon completion of loading the model
-         *         and indicates operation status
+         * @return Operation status
          * @retval true Success
-         * @retval false Error
-         * 
-         * @note Implementations are encouraged to define this in a non-blocking
-         *       manner
+         * @retval false Failure
          */
-        virtual std::future<bool> loadModel() = 0;
+        virtual bool loadModel() = 0;
 
         /**
          * @brief Parses the loaded model into a form that the engine can render
@@ -84,14 +63,6 @@ protected:
          * @return Parsed meshes
          */
         virtual std::vector<Mesh> parseModel() = 0;
-
-    private:
-
-        /**
-         * @brief A future for the loaded model is kept as a class member to preserve
-         *        access to the result of the asynchronous load task
-         */
-        std::future<bool> m_futureScene;
 
     private:
 

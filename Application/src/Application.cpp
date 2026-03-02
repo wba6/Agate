@@ -1,7 +1,9 @@
 
 #include "Agate.h"
+#include <chrono>
 #include <memory>
 #include <filesystem>
+#include <future>
 class app : public Agate::EntryPoint {
 
 };
@@ -39,16 +41,26 @@ public:
         camera = std::make_unique<Agate::Camera>(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
-        model = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
+        model = nullptr;
+        pendingModel = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
     }
 
     void Detach() override
     {
-
     }
 
     void OnRender() override
     {
+
+        // Poll for model completion until model is retrieved
+        if (pendingModel.valid()) {
+            const auto status = pendingModel.wait_for(std::chrono::seconds(0));
+            if (status == std::future_status::ready) {
+                model = pendingModel.get();
+                model->LoadTextures();
+            }
+        }
+
         shader->Bind();
         camera->onUpdate();
 
@@ -57,7 +69,11 @@ public:
         shader->SetUniform3f("pointLight.Position", camera->getCameraPos().x,camera->getCameraPos().y,camera->getCameraPos().z);    // Position: (x, y, z)
         trans_model = glm::scale(trans_model, glm::vec3(1.0f, 1.5f, 0.55f));    // it's a bit too big for our scene, so scale it down
         shader->SetUniformMat4("model", trans_model);
-        model->Draw(*shader);
+
+        // Only attempt to draw if model has been retrieved
+        if (model) {
+            model->Draw(*shader);
+        }
     }
     void OnEvent(Agate::Event &e) override
     {
@@ -65,11 +81,17 @@ public:
     }
     virtual ~TemplayerEx()
     {
+        if (pendingModel.valid()) {
+            PRINTMSG("[TemplateLayer]: Waiting for pending model");
+            pendingModel.wait();
+            model = pendingModel.get();
+        }
     }
 
     std::unique_ptr<Agate::Shader> shader;
     std::unique_ptr<Agate::Camera> camera;
-    std::unique_ptr<Agate::ModelLoader> model;
+    std::unique_ptr<Agate::ModelEditor> model;
+    std::future<std::unique_ptr<Agate::ModelEditor>> pendingModel;
 };
 
 Agate::EntryPoint *Agate::CreateEntryPoint()
