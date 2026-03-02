@@ -43,7 +43,9 @@ namespace Agate {
             static void Flush();
         private:
             Renderer() = delete;
-            static std::queue<std::unique_ptr<RenderCommand>> s_CommandQueue;
+            static std::queue<std::unique_ptr<RenderCommand>> s_CommandQueue; // write buffer
+            static std::queue<std::unique_ptr<RenderCommand>> s_ExecuteQueue; // read buffer
+            static std::mutex s_CommandMutex;
     };
 }
 #endif // AGATE_RENDERER_HPP
