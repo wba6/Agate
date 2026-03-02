@@ -77,6 +77,7 @@ namespace Agate {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(backup_current_context);
         }
+
         return ImGui::GetDrawData();
     }
 

@@ -20,8 +20,8 @@ Agate::EntryPoint::EntryPoint()
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
     m_running = true;
-
     imgui_interface::Init(m_window->GetInstanceWindow());
+
     //m_layerStack.AddOverlay(new GameObjectsUI);
     //m_layerStack.AddOverlay(new Example_imguiLayer());
 
@@ -68,17 +68,17 @@ void Agate::EntryPoint::Run() {
             m_layerStack.m_layers.at(i)->OnUpdate();
         }
 
+        imgui_interface::BeginFrame();
         // Render operation
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
             m_layerStack.m_layers.at(i)->OnRender();
         }
 
-        imgui_interface::BeginFrame();
         ImGui::Begin("Frame");
         //ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
-        // ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
+        //ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
         ImGui::End();
-        ImDrawData data = *imgui_interface::EndFrame();
+        ImDrawData* data = imgui_interface::EndFrame();
 
         Renderer::Submit(std::make_unique<DrawUI>(data));
 

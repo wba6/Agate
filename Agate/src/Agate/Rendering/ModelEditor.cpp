@@ -1,5 +1,9 @@
 #include "ModelEditor.h"
+#include <algorithm>
 #include <glm/glm.hpp>
+#include <memory>
+#include "RenderCommand.hpp"
+#include "Renderer.hpp"
 
 namespace Agate {
 
@@ -73,11 +77,10 @@ void ModelEditor::LoadTextures() {
         is running on the render thread
     */
     PRINTMSG("Loading textures - This may take a minute");
+    
     for (auto& mesh: m_meshes) {
-        for (auto& texture: mesh.m_textures) {
-            texture.initialize();
-        }
-        mesh.setupMesh();
+        std::unique_ptr<PrepareMesh> meshEvent = std::make_unique<PrepareMesh>(mesh); 
+        Renderer::Submit(std::move(meshEvent));
     }
 }
 
