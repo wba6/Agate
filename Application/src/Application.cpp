@@ -1,5 +1,6 @@
 
 #include "Agate.h"
+#include <chrono>
 #include <memory>
 #include <filesystem>
 #include <future>
@@ -54,6 +55,7 @@ public:
 
     void OnRender() override
     {
+
         // Poll for model completion until model is retrieved
         if (pendingModel.valid()) {
             const auto status = pendingModel.wait_for(std::chrono::seconds(0));

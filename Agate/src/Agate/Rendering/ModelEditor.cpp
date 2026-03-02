@@ -1,16 +1,12 @@
 #include "ModelEditor.h"
-#include <algorithm>
 #include <glm/glm.hpp>
-#include <memory>
-#include "RenderCommand.hpp"
-#include "Renderer.hpp"
 
 namespace Agate {
 
 Transform::Transform()
         : position(glm::vec3(0, 0, 0)),
           scale(glm::vec3(1, 1, 1)),
-          rotation(glm::quat(0, 1, 0, 0))  {}
+          rotation(glm::quat(1, 0, 0, 0))  {}
 
 ModelEditor::ModelEditor(std::string path, std::vector<Mesh> meshes)
         : m_path(path), m_meshes(meshes) {}
@@ -48,21 +44,11 @@ void ModelEditor::SetScale(const glm::vec3& scalar) {
 
 glm::mat4 ModelEditor::ModelMatrix() const {
 
-    const glm::mat4 translation{
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        m_transform.position.x, m_transform.position.y, m_transform.position.z, 1
-    };
-    const glm::mat4 scale{
-        m_transform.scale.x, 0, 0, 0,
-        0, m_transform.scale.y, 0, 0,
-        0, 0, m_transform.scale.z, 0,
-        0, 0, 0, 1
-    };
-    const glm::mat4 rotation = glm::mat4_cast(m_transform.rotation);
+    glm::mat4 model{ 1.0f };
+    const glm::mat4 translation = glm::translate(model, m_transform.position);
+    model = model * glm::mat4_cast(m_transform.rotation);
 
-    return translation * rotation * scale;
+    return glm::scale(model, m_transform.scale);
 }
 
 glm::vec3 ModelEditor::EulerAngles() const {
@@ -77,10 +63,11 @@ void ModelEditor::LoadTextures() {
         is running on the render thread
     */
     PRINTMSG("Loading textures - This may take a minute");
-    
     for (auto& mesh: m_meshes) {
-        std::unique_ptr<PrepareMesh> meshEvent = std::make_unique<PrepareMesh>(mesh); 
-        Renderer::Submit(std::move(meshEvent));
+        for (auto& texture: mesh.m_textures) {
+            texture.initialize();
+        }
+        mesh.setupMesh();
     }
 }
 

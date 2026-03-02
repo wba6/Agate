@@ -18,10 +18,15 @@ std::future<std::unique_ptr<Agate::ModelEditor>> Agate::ModelLoader::LoadModel(c
     return std::async(std::launch::async, [path]() {
 
         std::unique_ptr<Agate::ModelLoader> loader = std::make_unique<Agate::AssimpLoader>(path);
-        loader->loadModel();
+        
+        if (!loader->loadModel()) {
+            PRINTWARN("Failed to load model from {}", path);
+
+            return std::unique_ptr<Agate::ModelEditor>(nullptr);
+        }
         loader->m_meshes = loader->parseModel();
 
-        return std::make_unique<Agate::ModelEditor>(Agate::ModelEditor(loader->m_path, loader->m_meshes));
+        return std::make_unique<Agate::ModelEditor>(std::move(loader->m_path), std::move(loader->m_meshes));
     });
 }
 

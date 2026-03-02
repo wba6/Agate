@@ -50,8 +50,12 @@ protected:
 
         /**
          * @brief Performs the I/O part of loading the model
+         * 
+         * @return Operation status
+         * @retval true Success
+         * @retval false Failure
          */
-        virtual void loadModel() = 0;
+        virtual bool loadModel() = 0;
 
         /**
          * @brief Parses the loaded model into a form that the engine can render
