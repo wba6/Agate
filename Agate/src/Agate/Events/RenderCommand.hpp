@@ -93,32 +93,6 @@ namespace Agate {
         ImDrawData m_data{};
     }; 
 
-    /**
-    * @brief Render command for drawing UI data across threads.
-    */
-    class PrepareMesh : public RenderCommand {
-    public:
-        PrepareMesh(const Mesh data): m_data(data) {}
-
-        void Execute() override {
-            /*
-                This seems to block for quite a while after the model
-                loads, but I think a fix should be deferred until this
-                is running on the render thread
-            */
-            PRINTMSG("Loading textures - This may take a minute");
-            for (auto& texture: m_data.m_textures) {
-                texture.initialize();
-            }
-            m_data.setupMesh();
-        }
-
-
-        ~PrepareMesh() override {}
-
-    private:
-        Mesh m_data;
-    };
 } // Namespace Agate
 
 #endif // AGATE_RENDEREVENT_HPP
