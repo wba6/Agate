@@ -19,7 +19,7 @@ namespace Agate {
 
         void SwapBuffers(); 
 
-        void PoolEvents();
+        void PollEvents();
 
         double WindowOpenTime();
 

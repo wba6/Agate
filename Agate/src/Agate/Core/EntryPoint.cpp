@@ -83,7 +83,7 @@ void Agate::EntryPoint::Run() {
         Renderer::Submit(std::make_unique<DrawUI>(data));
 
 
-        m_window->PoolEvents();
+        m_window->PollEvents();
     };
 }
 

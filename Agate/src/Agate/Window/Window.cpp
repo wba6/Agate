@@ -91,7 +91,7 @@ namespace Agate {
         glfwSwapBuffers((GLFWwindow *) m_Window);
     }
 
-    void Window::PoolEvents() {
+    void Window::PollEvents() {
         glfwPollEvents();
     }
 
