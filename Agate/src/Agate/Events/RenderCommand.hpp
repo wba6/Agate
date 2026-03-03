@@ -8,9 +8,21 @@
 #include "Core/Logger.h"
 #include "ImGui-layer/imgui_interface.h"
 #include "Rendering/Mesh.h"
+#include "Rendering/mock/IndexBufferUser.hpp"
+#include "Rendering/mock/VertexArrayUser.hpp"
 #include  "imgui.h"
 
 namespace Agate {
+
+    /**
+     * @brief Built-in command types for the engine
+     */
+    enum class API CommandTypes {
+        DrawMesh,
+        DrawUI,
+        CreateVertexArray,
+        CreateIndexBuffer
+    };
 
     /**
      * @brief a pure virtual class for all render commands to derive from
@@ -26,6 +38,56 @@ namespace Agate {
          */
         virtual void Execute() = 0;
         virtual ~RenderCommand() = default;
+        /**
+         * @brief Command Type of this event
+         */
+        virtual CommandTypes GetCommandType() = 0;
+    };
+
+
+    /**
+     * @brief Wrapper for event handlers. Consumes a generic
+     *        `Event` and narrows it to a specialization of
+     *        `Event` if possible to bind it to a callback
+     *        that is then invoked
+     */
+    class CommandNotifier {
+        template<typename T>
+        using EventFn = std::function<void(T &)>;
+
+    public:
+
+        /**
+         * @brief Constructor; Creates a notifier for an event
+         * 
+         * @param e Event to handle
+         */
+        explicit CommandNotifier(RenderCommand &e)
+                : m_RenderCommand(e) {};
+
+        /**
+         * @brief Template that conditionally handles the underlying
+         *        event if its event type matches that of the template
+         *        argument
+         * 
+         * @param ev Handler for the event, given it is of the
+         *           appropriate type
+         * 
+         * @return Whether the event has been handled by this invocation
+         * @retval true The event has been handled
+         * @retval false The event has not been handled
+         */
+        template<typename T>
+        bool NotifyCommand(EventFn<T> ev) {
+            if (m_RenderCommand.GetCommandType() == T::s_GetCommandType()) {
+                ev(*(T *) &m_RenderCommand);
+                return true;
+            }
+            return false;
+        }
+
+    private:
+        RenderCommand &m_RenderCommand;
     };
 
     /**
@@ -48,6 +110,22 @@ namespace Agate {
          * modifying the command object itself.
          */
         virtual void Execute() override { PRINTWARN("Excute in draw mesh not implimented");}
+
+        /**
+         * @brief Command Type of this event
+         */
+        virtual CommandTypes GetCommandType() override {
+            return CommandTypes::DrawMesh;
+        };
+
+        /**
+         * @brief Type of this command
+         */
+        static CommandTypes s_GetCommandType() {
+            return CommandTypes::DrawMesh;
+        }
+
+
 
         virtual ~DrawMesh() = default;
 
@@ -80,6 +158,20 @@ namespace Agate {
             imgui_interface::DrawFrame(&m_data);
         }
 
+        /**
+        * @brief Command Type of this event
+        */
+        virtual CommandTypes GetCommandType() override {
+            return CommandTypes::DrawUI;
+        };
+
+        /**
+         * @brief Type of this command
+         */
+        static CommandTypes s_GetCommandType() {
+            return CommandTypes::DrawUI;
+        }
+
         ~DrawUI() override {
             // Free cloned lists
             for (int i = 0; i < m_data.CmdLists.Size; i++) {
@@ -92,6 +184,59 @@ namespace Agate {
     private:
         ImDrawData m_data{};
     }; 
+
+    class CreateVertexArray : public RenderCommand {
+    public:
+        CreateVertexArray(VertexArrayUser VAU)
+        : m_VAU(std::move(VAU)){}
+
+        void Execute() override {PRINTMSG("Creating Vertex Array");};
+
+        /**
+        * @brief Command Type of this event
+        */
+        virtual CommandTypes GetCommandType() override {
+            return CommandTypes::CreateVertexArray;
+        };
+
+        /**
+         * @brief Type of this command
+         */
+        static CommandTypes s_GetCommandType() {
+            return CommandTypes::CreateVertexArray;
+        }
+
+        virtual ~CreateVertexArray() = default;
+    public:
+        VertexArrayUser m_VAU;
+    };
+
+    class CreateIndexBuffer : public RenderCommand {
+    public:
+        CreateIndexBuffer(IndexBufferUser IBU, UUID VAUUID)
+        : m_IBU(std::move(IBU)), m_VAUUID(std::move(VAUUID)){}
+
+        void Execute() override {PRINTMSG("Createing Index Buffer"); };
+
+        /**
+        * @brief Command Type of this event
+        */
+        virtual CommandTypes GetCommandType() override {
+            return CommandTypes::CreateIndexBuffer;
+        };
+
+        /**
+         * @brief Type of this command
+         */
+        static CommandTypes s_GetCommandType() {
+            return CommandTypes::CreateIndexBuffer;
+        }
+
+        virtual ~CreateIndexBuffer() = default;
+    public:
+        IndexBufferUser m_IBU;
+        UUID m_VAUUID;
+    };
 
 } // Namespace Agate
 

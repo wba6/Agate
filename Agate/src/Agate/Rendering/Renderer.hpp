@@ -4,8 +4,12 @@
 
 #include <memory.h>
 #include <queue>
+#include <unordered_map>
 #include "Event.h"
 #include "RenderCommand.hpp"
+#include "Rendering/OpenGl/IndexBuffer.h"
+#include "Rendering/OpenGl/Texture.h"
+#include "Rendering/OpenGl/VertexArray.h"
 
 namespace Agate {
 
@@ -41,11 +45,33 @@ namespace Agate {
              * (typically issuing OpenGL calls), and empties the queue.
              */
             static void Flush();
+
+            /**
+             */
+            static void CreateVAO(CreateVertexArray e);
+
+            /**
+             */
+            static void CreateIB(CreateIndexBuffer e);
+
+            
+            /**
+             */
+            static void CreateShader();
+
+            /**
+             */
+            static void CreateTexture();
+
         private:
             Renderer() = delete;
             static std::queue<std::unique_ptr<RenderCommand>> s_CommandQueue; // write buffer
             static std::queue<std::unique_ptr<RenderCommand>> s_ExecuteQueue; // read buffer
             static std::mutex s_CommandMutex;
+            static std::unordered_map<UUID, std::shared_ptr<VertexArray>> s_VaoMap;
+            static std::unordered_map<UUID, std::shared_ptr<IndexBuffer>> s_IndexBufferMap;
+            static std::unordered_map<UUID, Texture> s_TextureMap;
+            static std::unordered_map<UUID, Shader> s_ShaderMap;
     };
 }
 #endif // AGATE_RENDERER_HPP
