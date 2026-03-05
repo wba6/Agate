@@ -57,8 +57,8 @@ void Agate::EntryPoint::Run() {
 
             // Calculate and store stats for the UI to read
             if (frameDelta > 0) {
-                a_RenderThreadFPS = 1.0f / frameDelta;
-                a_RenderThreadMS = frameDelta * 1000.0f;
+                a_RenderThreadFPS.store(1.0f / frameDelta);
+                a_RenderThreadMS.store(frameDelta * 1000.0f);
             }
             Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
