@@ -19,6 +19,8 @@ public:
 
     void Detach() override
     {
+
+        // Test making a task
         {
             auto taskFn = []() -> int {
                 PRINTMSG("Hello from Task Land");
@@ -28,6 +30,24 @@ public:
             using CleanType = std::decay_t<FnType>;
             std::unique_ptr<Agate::Task> task = std::make_unique<Agate::QualifiedTask<CleanType>>(std::forward<FnType>(taskFn));
             task->Run();
+        }
+
+        // Test making a task's callback and state
+        {
+            auto integerCallback = [](int result) -> void {
+                PRINTMSG("Callback land reports a result of {}", result);
+            };
+            using FnType = decltype(integerCallback);
+            using CleanType = std::decay_t<FnType>;
+            std::unique_ptr<Agate::TaskCallback<int>> callback 
+                    = std::make_unique<Agate::QualifiedCallback<int, CleanType>>(
+                std::forward<FnType>(integerCallback)
+            );
+            std::unique_ptr<Agate::QualifiedTaskState<int>> state
+                    = std::make_unique<Agate::QualifiedTaskState<int>>();
+            state->callback = std::move(callback);
+            state->result.emplace(1);
+            state->callback->Run(*(state->result));
         }
 
         PRINTMSG("Detach example layer");
