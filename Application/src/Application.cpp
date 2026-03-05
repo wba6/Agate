@@ -19,6 +19,17 @@ public:
 
     void Detach() override
     {
+        {
+            auto taskFn = []() -> int {
+                PRINTMSG("Hello from Task Land");
+                return 0;
+            };
+            using FnType = decltype(taskFn);
+            using CleanType = std::decay_t<FnType>;
+            std::unique_ptr<Agate::Task> task = std::make_unique<Agate::QualifiedTask<CleanType>>(std::forward<FnType>(taskFn));
+            task->Run();
+        }
+
         PRINTMSG("Detach example layer");
     }
 
