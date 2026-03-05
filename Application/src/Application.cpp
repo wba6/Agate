@@ -14,6 +14,7 @@ public:
     void Attach() override
     {
         PRINTMSG("Attached example layer");
+        PRINTMSG("Detected Process Concurrency: {}", Agate::ProcessConcurrency());
     }
 
     void Detach() override
