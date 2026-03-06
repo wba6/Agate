@@ -14,42 +14,10 @@ public:
     void Attach() override
     {
         PRINTMSG("Attached example layer");
-        PRINTMSG("Detected Process Concurrency: {}", Agate::ProcessConcurrency());
     }
 
     void Detach() override
     {
-
-        // Test making a task
-        {
-            auto taskFn = []() -> int {
-                PRINTMSG("Hello from Task Land");
-                return 0;
-            };
-            using FnType = decltype(taskFn);
-            using CleanType = std::decay_t<FnType>;
-            std::unique_ptr<Agate::Task> task = std::make_unique<Agate::QualifiedTask<CleanType>>(std::forward<FnType>(taskFn));
-            task->Run();
-        }
-
-        // Test making a task's callback and state
-        {
-            auto integerCallback = [](int result) -> void {
-                PRINTMSG("Callback land reports a result of {}", result);
-            };
-            using FnType = decltype(integerCallback);
-            using CleanType = std::decay_t<FnType>;
-            std::unique_ptr<Agate::TaskCallback<int>> callback 
-                    = std::make_unique<Agate::QualifiedCallback<int, CleanType>>(
-                std::forward<FnType>(integerCallback)
-            );
-            std::unique_ptr<Agate::QualifiedTaskState<int>> state
-                    = std::make_unique<Agate::QualifiedTaskState<int>>();
-            state->callback = std::move(callback);
-            state->result.emplace(1);
-            state->callback->Run(*(state->result));
-        }
-
         PRINTMSG("Detach example layer");
     }
 
@@ -126,16 +94,58 @@ public:
     std::future<std::unique_ptr<Agate::ModelEditor>> pendingModel;
 };
 
-Agate::EntryPoint *Agate::CreateEntryPoint()
+class TaskTestLayer : public Agate::Layer {
+private:;
+    std::atomic<int> taskCounter{ 0 };
+    std::array<Agate::TaskHandle<std::size_t>, 5> taskHandles;
+    Agate::TaskHandle<std::string> messageHandle;
+public:
+
+    void Attach() override
+    {
+        Agate::TaskPool::Initialize();
+        messageHandle = Agate::TaskPool::Enqueue([]() -> std::string {
+            return "Hello from Task Land";
+        });
+        for (std::size_t i = 0; i < 5; ++i) {
+            taskHandles[i] = Agate::TaskPool::Enqueue([this, i]() -> std::size_t {
+                std::this_thread::sleep_for(std::chrono::seconds(5 - i));
+                this->taskCounter++;
+                return this->taskCounter.load();
+            });
+        }
+    }
+
+    void Detach() override
+    {
+        for (std::size_t i = 0; i < 5; ++i) {
+            PRINTMSG("Task {} finished in position {}", i, taskHandles[i].Wait().Get());
+        }
+        PRINTMSG("{}", messageHandle.Get());
+    }
+
+    void OnRender()override
+    {
+    };
+
+    void OnEvent(Agate::Event &e) override
+    {
+    }
+};
+
+Agate::EntryPoint* Agate::CreateEntryPoint()
 {
     auto Application = new app();
 
     std::shared_ptr<layerEx> example_layer = std::make_shared<layerEx>();
+    std::shared_ptr<TaskTestLayer> taskTestLayer = std::make_shared<TaskTestLayer>();
 
     Application->EmplaceLayer(example_layer);
     Application->EmplaceLayer(std::make_shared<TemplayerEx>());
+    Application->EmplaceLayer(taskTestLayer);
 
     Application->RemoveLayer(example_layer);
+    Application->RemoveLayer(taskTestLayer);
 
     return Application;
 }

@@ -27,6 +27,7 @@ enum class TaskStatus : std::uint32_t {
     CancelRequested     = 1 << 2,                   /*!< Task has received a cancellation request */
     Cancelled           = 1 << 3,                   /*!< Task has stopped running due to being cancelled */
     Error               = 1 << 4,                   /*!< Task has stopped running due encountering an error state */
+    InCallback          = 1 << 5,                   /*!< Task has finished, but is executing a callback */
     Terminal            = Error | Cancelled | Done  /*!< Task is in a terminal state - The task pool has discarded it */
 };
 
