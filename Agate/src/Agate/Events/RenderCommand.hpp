@@ -6,6 +6,9 @@
 #define AGATE_RENDERCOMMAND_HPP
 
 #include "Core/Logger.h"
+#include "ImGui-layer/imgui_interface.h"
+#include "Rendering/Mesh.h"
+#include  "imgui.h"
 
 namespace Agate {
 
@@ -21,7 +24,7 @@ namespace Agate {
          * Implementations should perform the necessary rendering work without
          * modifying the command object itself.
          */
-        virtual void Execute() const = 0;
+        virtual void Execute() = 0;
         virtual ~RenderCommand() = default;
     };
 
@@ -44,13 +47,51 @@ namespace Agate {
          * Implementations should perform the necessary rendering work without
          * modifying the command object itself.
          */
-        virtual void Execute() const override { PRINTWARN("Excute in draw mesh not implimented");}
+        virtual void Execute() override { PRINTWARN("Excute in draw mesh not implimented");}
 
         virtual ~DrawMesh() = default;
 
     private:
         int m_mesh;
     };
+
+    /**
+    * @brief Render command for drawing UI data across threads.
+    */
+    class DrawUI : public RenderCommand {
+    public:
+        DrawUI(const ImDrawData* data) {
+            // Shallow copy scalar fields
+            m_data = *data;
+
+            // Deep copy command lists into ImVector (matches ImDrawData::CmdLists type)
+            m_data.CmdLists.clear();
+            m_data.CmdLists.reserve(data->CmdListsCount);
+
+            for (int i = 0; i < data->CmdListsCount; i++) {
+                ImDrawList* cloned = data->CmdLists[i]->CloneOutput();
+                m_data.CmdLists.push_back(cloned);
+            }
+
+            m_data.CmdListsCount = m_data.CmdLists.Size;
+        }
+
+        void Execute() override {
+            imgui_interface::DrawFrame(&m_data);
+        }
+
+        ~DrawUI() override {
+            // Free cloned lists
+            for (int i = 0; i < m_data.CmdLists.Size; i++) {
+                IM_DELETE(m_data.CmdLists[i]);
+            }
+            m_data.CmdLists.clear();
+            m_data.CmdListsCount = 0;
+        }
+
+    private:
+        ImDrawData m_data{};
+    }; 
 
 } // Namespace Agate
 
