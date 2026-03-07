@@ -11,7 +11,7 @@
 namespace Agate {
 
 /**
- * @brief Type erasing wrappper for tasks so that all tasks can
+ * @brief Type erasing wrapper for tasks so that all tasks can
  *        be placed in the task queue
  */
 class Task {

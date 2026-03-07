@@ -143,7 +143,7 @@ public:
     TaskPool(const TaskPool&) = delete;
 
     /**
-     * @brief Delete move constructor for singleton
+     * @brief Delete copy assignment for singleton
      */
     TaskPool& operator=(const TaskPool&) = delete;
 
