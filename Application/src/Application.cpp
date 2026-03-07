@@ -141,7 +141,7 @@ public:
         for (std::size_t i = 0; i < 5; ++i) {
             PRINTMSG("Task {} finished in position {}", i, taskHandles[i].Wait().Get());
         }
-        PRINTMSG("{}", messageHandle.Get());
+        PRINTMSG("{}", messageHandle.Wait().Get());
 
         PRINTMSG("Secret Message: {}", secretMessageHandle.Wait().Get());
         PRINTMSG("Second Secret Message: {}", *secondSecretMessageHandle.Wait().Get());
