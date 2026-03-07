@@ -1,9 +1,13 @@
 
 #include "Agate.h"
+#include <array>
+#include <atomic>
 #include <chrono>
 #include <memory>
 #include <filesystem>
 #include <future>
+#include <string>
+
 class app : public Agate::EntryPoint {
 
 };

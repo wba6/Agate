@@ -34,8 +34,7 @@ private:
     std::shared_ptr<QualifiedTaskState<ResultType>> sharedState;
 public:
 
-    TaskHandle(std::shared_ptr<QualifiedTaskState<ResultType>> state = nullptr)
-        : sharedState(state) {}
+    TaskHandle(std::shared_ptr<QualifiedTaskState<ResultType>> state = nullptr);
 
     /**
      * @brief Assigns a callback to be executed upon task completion
@@ -48,20 +47,7 @@ public:
      * @return Reference to this handle for call chaining
      */
     template<typename FuncType>
-    TaskHandle<ResultType>& Then(FuncType&& callback) {
-
-        std::scoped_lock lock(sharedState->mutex);
-        bool statusDone = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Done) == static_cast<std::uint32_t>(TaskStatus::Done);
-        if (sharedState->result.has_value() && statusDone) {
-            callback(*(sharedState->result));
-
-            return *this;
-        }
-        auto callbackPtr = std::make_unique<QualifiedCallback<ResultType, FuncType>>(std::forward<FuncType>(callback));
-        sharedState->callback = std::move(callbackPtr);
-
-        return *this;
-    }
+    TaskHandle<ResultType>& Then(FuncType&& callback);
 
     /**
      * @brief Blocks execution until the task for this handle is in a
@@ -71,16 +57,7 @@ public:
      * 
      * @return Reference to this handle for call chaining
      */
-    TaskHandle<ResultType>& Wait() {
-
-        std::unique_lock lock(sharedState->mutex);
-        sharedState->condition.wait(lock, [this]() -> bool {
-            bool statusTerminal = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Terminal) != static_cast<std::uint32_t>(0);
-            return statusTerminal;
-        });
-
-        return *this;
-    }
+    TaskHandle<ResultType>& Wait();
 
     /**
      * @brief Attempts to extract the result from the task for
@@ -88,28 +65,70 @@ public:
      * 
      * @return Result of the completed task
      */
-    ResultType Get() {
-
-        // Critical error: Invalid access attempt
-        if (!sharedState->result.has_value()) {
-            PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
-            throw std::runtime_error("Invalid std::optional access attempt");
-        }
-
-        ResultType result = std::move(*(sharedState->result));
-        sharedState->result.reset();
-        return result;
-    }
+    ResultType Get();
 
     /**
      * @brief Cancels the task. If the task is currently running, it is stopped
      *        and set to a cancelled status. Otherwise, the task is set to a
      *        cancelled status
      */
-    void Cancel() {
-        PRINTWARN("TaskHandle::Cancel not yet implemented");
-    }
+    void Cancel();
 };
+
+// Note: Definitions must be outside of the class for MSVC builds
+
+template<typename ResultType>
+TaskHandle<ResultType>::TaskHandle(std::shared_ptr<QualifiedTaskState<ResultType>> state)
+    : sharedState(state) {}
+
+template<typename ResultType>
+template<typename FuncType>
+TaskHandle<ResultType>& TaskHandle<ResultType>::Then(FuncType&& callback) {
+
+    std::scoped_lock lock(sharedState->mutex);
+    bool statusDone = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Done) == static_cast<std::uint32_t>(TaskStatus::Done);
+    if (sharedState->result.has_value() && statusDone) {
+        callback(*(sharedState->result));
+
+        return *this;
+    }
+    auto callbackPtr = std::make_unique<QualifiedCallback<ResultType, FuncType>>(std::forward<FuncType>(callback));
+    sharedState->callback = std::move(callbackPtr);
+
+    return *this;
+}
+
+
+template<typename ResultType>
+TaskHandle<ResultType>& TaskHandle<ResultType>::Wait() {
+
+    std::unique_lock lock(sharedState->mutex);
+    sharedState->condition.wait(lock, [this]() -> bool {
+        bool statusTerminal = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Terminal) != static_cast<std::uint32_t>(0);
+        return statusTerminal;
+    });
+
+    return *this;
+}
+
+template<typename ResultType>
+ResultType TaskHandle<ResultType>::Get() {
+
+    // Critical error: Invalid access attempt
+    if (!sharedState->result.has_value()) {
+        PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
+        throw std::runtime_error("Invalid std::optional access attempt");
+    }
+
+    ResultType result = std::move(*(sharedState->result));
+    sharedState->result.reset();
+    return result;
+}
+
+template<typename ResultType>
+void TaskHandle<ResultType>::Cancel() {
+    PRINTWARN("TaskHandle::Cancel not yet implemented");
+}
 
 class TaskPool {
 private:
