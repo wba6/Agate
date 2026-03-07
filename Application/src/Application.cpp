@@ -95,7 +95,7 @@ public:
 };
 
 class TaskTestLayer : public Agate::Layer {
-private:;
+private:
     std::atomic<int> taskCounter{ 0 };
     std::array<Agate::TaskHandle<std::size_t>, 5> taskHandles;
     Agate::TaskHandle<std::string> messageHandle;

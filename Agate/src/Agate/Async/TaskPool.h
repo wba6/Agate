@@ -96,7 +96,9 @@ public:
             throw std::runtime_error("Invalid std::optional access attempt");
         }
 
-        return std::move(*(sharedState->result));
+        ResultType result = std::move(*(sharedState->result));
+        sharedState->result.reset();
+        return result;
     }
 
     /**
