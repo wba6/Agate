@@ -22,7 +22,7 @@ namespace Agate {
  *        to this process. On MacOS/OSX, retrieves the amount of system
  *        threads available as per `std::thread::hardware_concurrency`
  */
-unsigned int ProcessConcurrency() {
+inline unsigned int ProcessConcurrency() {
 #ifdef _WIN32
 
     // Windows: Process affinity mask is a 64-bit bitset where each set bit is an available thread

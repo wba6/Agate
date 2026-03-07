@@ -53,7 +53,7 @@ public:
         std::scoped_lock lock(sharedState->mutex);
         bool statusDone = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Done) == static_cast<std::uint32_t>(TaskStatus::Done);
         if (sharedState->result.has_value() && statusDone) {
-            *(sharedState->result) = callback(std::move(*(sharedState->result)));
+            callback(*(sharedState->result));
 
             return *this;
         }
