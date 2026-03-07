@@ -99,6 +99,10 @@ private:;
     std::atomic<int> taskCounter{ 0 };
     std::array<Agate::TaskHandle<std::size_t>, 5> taskHandles;
     Agate::TaskHandle<std::string> messageHandle;
+    std::unique_ptr<std::string> originalMessage = std::make_unique<std::string>("The password is 12345");
+    std::unique_ptr<std::string> modifiedMessage = std::make_unique<std::string>("The password is 54321");
+    Agate::TaskHandle<std::string> secretMessageHandle;
+    Agate::TaskHandle<std::shared_ptr<std::string>> secondSecretMessageHandle;
 public:
 
     void Attach() override
@@ -114,6 +118,22 @@ public:
                 return this->taskCounter.load();
             });
         }
+
+        secretMessageHandle = Agate::TaskPool::Enqueue([this]() -> std::string {
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            return std::string(*this->originalMessage);
+        }).Then([this](std::string result) -> std::string {
+            result = *this->modifiedMessage;
+            return std::move(result);
+        });
+
+        secondSecretMessageHandle = Agate::TaskPool::Enqueue([this]() -> std::shared_ptr<std::string> {
+            std::this_thread::sleep_for(std::chrono::seconds(4));
+            return std::make_shared<std::string>(*this->originalMessage);
+        }).Then([this](std::shared_ptr<std::string> result) -> std::shared_ptr<std::string> {
+            *result = *this->modifiedMessage;
+            return std::move(result);
+        });
     }
 
     void Detach() override
@@ -122,6 +142,9 @@ public:
             PRINTMSG("Task {} finished in position {}", i, taskHandles[i].Wait().Get());
         }
         PRINTMSG("{}", messageHandle.Get());
+
+        PRINTMSG("Secret Message: {}", secretMessageHandle.Wait().Get());
+        PRINTMSG("Second Secret Message: {}", *secondSecretMessageHandle.Wait().Get());
     }
 
     void OnRender()override

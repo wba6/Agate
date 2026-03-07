@@ -53,11 +53,12 @@ public:
         std::scoped_lock lock(sharedState->mutex);
         bool statusDone = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Done) == static_cast<std::uint32_t>(TaskStatus::Done);
         if (sharedState->result.has_value() && statusDone) {
-            callback(*(sharedState->result));
+            *(sharedState->result) = callback(std::move(*(sharedState->result)));
 
             return *this;
         }
-        sharedState->callback = std::make_unique(callback);
+        auto callbackPtr = std::make_unique<QualifiedCallback<ResultType, FuncType>>(std::forward<FuncType>(callback));
+        sharedState->callback = std::move(callbackPtr);
 
         return *this;
     }
