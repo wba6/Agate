@@ -6,6 +6,7 @@
 #include <memory>
 #include <filesystem>
 #include <future>
+#include <stdexcept>
 #include <string>
 
 class app : public Agate::EntryPoint {
@@ -126,21 +127,19 @@ public:
         secretMessageHandle = Agate::TaskPool::Enqueue([this]() -> std::string {
             std::this_thread::sleep_for(std::chrono::seconds(3));
             return std::string(*this->originalMessage);
-        }).Then([this](std::string result) -> std::string {
+        }).Then([this](std::string result) -> void {
             result = *this->modifiedMessage;
-            return std::move(result);
         });
 
         secondSecretMessageHandle = Agate::TaskPool::Enqueue([this]() -> std::shared_ptr<std::string> {
             std::this_thread::sleep_for(std::chrono::seconds(4));
             return std::make_shared<std::string>(*this->originalMessage);
-        }).Then([this](std::shared_ptr<std::string> result) -> std::shared_ptr<std::string> {
+        }).Then([this](std::shared_ptr<std::string> result) -> void {
             *result = *this->modifiedMessage;
-            return std::move(result);
         });
 
         iWillFail = Agate::TaskPool::Enqueue([]() -> int {
-            throw std::exception("I failed");
+            throw std::runtime_error("I failed");
             return 0;
         });
     }
