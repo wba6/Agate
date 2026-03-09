@@ -163,8 +163,8 @@ private:
 public:
 
     /**
-     * @brief Destructor - shuts down worker threads and flushes
-     *        pending tasks
+     * @brief Destructor - flushes and cancels remaining tasks,
+     *        and shuts down worker threads
      */
     ~TaskPool();
 
@@ -219,6 +219,15 @@ public:
             task = std::move(boundTask)
         ]() mutable {
 
+            // Pool shutting down
+            if (ShuttingDown()) {
+                std::scoped_lock lock(state->mutex);
+                state->status.store(TaskStatus::Cancelled);
+                state->condition.notify_all();
+
+                return;
+            }
+
             // Task cancelled before running
             if ((state->status.load() & TaskStatus::CancelRequested) == TaskStatus::CancelRequested) {
                 state->status.store(TaskStatus::Cancelled);
@@ -261,6 +270,15 @@ public:
         instance->queueCondition.notify_one();
 
         return handle;
+    }
+
+private:
+
+    /**
+     * @brief Private static accessor for shutdown for task usage
+     */
+    static bool ShuttingDown() {
+        return instance && instance->shutdown.load();
     }
 };
 } // namespace Agate

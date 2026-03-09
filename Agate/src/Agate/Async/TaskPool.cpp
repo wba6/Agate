@@ -20,8 +20,13 @@ TaskPool::TaskPool(unsigned int threadCount) {
                         return this->shutdown.load() || !(this->taskQueue.empty());
                     });
 
-                    // Shutdown
+                    // Shutdown - First worker to hit this will flush the queue
                     if (this->shutdown.load()) {
+                        while (!this->taskQueue.empty()) {
+                            currentTask = std::move(this->taskQueue.front());
+                            this->taskQueue.pop();
+                            currentTask->Run();
+                        }
                         return;
                     }
 
