@@ -64,7 +64,7 @@ public:
     /**
      * @brief Invokes the callback with the result of the task
      */
-    virtual void Run(ResultType& result) = 0;
+    virtual void Run(ResultType result) = 0;
 };
 
 /**
@@ -93,7 +93,7 @@ public:
     /**
      * @brief Invokes the callback with the result of the task
      */
-    virtual void Run(ResultType& result) override {
+    virtual void Run(ResultType result) override {
         callback(result);
     }
 };
