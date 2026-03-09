@@ -207,6 +207,13 @@ public:
         std::shared_ptr<QualifiedTaskState<ResultType>> state = std::make_shared<QualifiedTaskState<ResultType>>();
         TaskHandle<ResultType> handle{ state };
 
+        // Task pool invalid
+        if (!instance || instance->shutdown.load()) {
+            state->status.store(TaskStatus::Error);
+
+            return TaskHandle<ResultType>(state);
+        }
+
         // Wrap the task with logic to safely store its result in the handle's state
         auto boundTask = [
             task = std::forward<TaskFunc>(task),
