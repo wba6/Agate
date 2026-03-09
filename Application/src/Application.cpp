@@ -154,7 +154,7 @@ public:
         PRINTMSG("Secret Message: {}", secretMessageHandle.Wait().Get());
         PRINTMSG("Second Secret Message: {}", *secondSecretMessageHandle.Wait().Get());
 
-        if ((iWillFail.Status() & Agate::TaskStatus::Error) == Agate::TaskStatus::Error) {
+        if ((iWillFail.Wait().Status() & Agate::TaskStatus::Error) == Agate::TaskStatus::Error) {
             PRINTMSG("iWillFail failed");
         } else {
             PRINTMSG("iWillFail did not fail");
