@@ -244,7 +244,10 @@ public:
                 state->condition.notify_all();
 
             } catch (const std::exception& exception) {
-                state->status.store(TaskStatus::Error);
+                {
+                    std::scoped_lock lock(state->mutex);
+                    state->status.store(TaskStatus::Error);
+                }
                 state->condition.notify_all();
             }
         };
