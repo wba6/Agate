@@ -215,18 +215,26 @@ public:
                 return;
             }
 
-            ResultType result = task();
+            try {
 
-            // Safely store result
-            {
-                std::scoped_lock lock(state->mutex);
-                state->result = std::move(result);
-                state->status.store(TaskStatus::Done);
-                if (state->callback) {
-                    state->callback->Run(*(state->result));
+                state->status.store(TaskStatus::Working);
+                ResultType result = task();
+
+                // Safely store result
+                {
+                    std::scoped_lock lock(state->mutex);
+                    state->result = std::move(result);
+                    state->status.store(TaskStatus::Done);
+                    if (state->callback) {
+                        state->callback->Run(*(state->result));
+                    }
                 }
+                state->condition.notify_all();
+
+            } catch (const std::exception& exception) {
+                state->status.store(TaskStatus::Error);
+                state->condition.notify_all();
             }
-            state->condition.notify_all();
         };
 
         // Package and enqueue task, then alert workers
