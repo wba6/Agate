@@ -107,6 +107,7 @@ private:
     std::unique_ptr<std::string> modifiedMessage = std::make_unique<std::string>("The password is 54321");
     Agate::TaskHandle<std::string> secretMessageHandle;
     Agate::TaskHandle<std::shared_ptr<std::string>> secondSecretMessageHandle;
+    Agate::TaskHandle<int> iWillFail;
 public:
 
     void Attach() override
@@ -138,6 +139,11 @@ public:
             *result = *this->modifiedMessage;
             return std::move(result);
         });
+
+        iWillFail = Agate::TaskPool::Enqueue([]() -> int {
+            throw std::exception("I failed");
+            return 0;
+        });
     }
 
     void Detach() override
@@ -149,6 +155,12 @@ public:
 
         PRINTMSG("Secret Message: {}", secretMessageHandle.Wait().Get());
         PRINTMSG("Second Secret Message: {}", *secondSecretMessageHandle.Wait().Get());
+
+        if ((iWillFail.Status() & Agate::TaskStatus::Error) == Agate::TaskStatus::Error) {
+            PRINTMSG("iWillFail failed");
+        } else {
+            PRINTMSG("iWillFail did not fail");
+        }
     }
 
     void OnRender()override

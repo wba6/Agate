@@ -73,6 +73,13 @@ public:
      *        cancelled status
      */
     void Cancel();
+
+    /**
+     * @brief Queries the current status of this handle's task
+     * 
+     * @return Current task status
+     */
+    inline TaskStatus Status() const;
 };
 
 // Note: Definitions must be outside of the class for MSVC builds
@@ -128,6 +135,11 @@ ResultType TaskHandle<ResultType>::Get() {
 template<typename ResultType>
 void TaskHandle<ResultType>::Cancel() {
     PRINTWARN("TaskHandle::Cancel not yet implemented");
+}
+
+template<typename ResultType>
+inline TaskStatus TaskHandle<ResultType>::Status() const {
+    return sharedState->status.load();
 }
 
 class TaskPool {
