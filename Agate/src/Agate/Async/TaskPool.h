@@ -122,11 +122,12 @@ template<typename ResultType>
 ResultType TaskHandle<ResultType>::Get() {
 
     // Critical error: Invalid access attempt
-    if (!sharedState->result.has_value()) {
+    if (!sharedState->result.has_value() || Status() != TaskStatus::Done) {
         PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
         throw std::runtime_error("Invalid std::optional access attempt");
     }
 
+    std::scoped_lock lock(sharedState->mutex);
     ResultType result = std::move(*(sharedState->result));
     sharedState->result.reset();
     return result;
