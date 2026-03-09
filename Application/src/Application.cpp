@@ -112,7 +112,6 @@ public:
 
     void Attach() override
     {
-        Agate::TaskPool::Initialize();
         messageHandle = Agate::TaskPool::Enqueue([]() -> std::string {
             return "Hello from Task Land";
         });
