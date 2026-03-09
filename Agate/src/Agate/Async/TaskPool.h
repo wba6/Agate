@@ -199,7 +199,7 @@ public:
      * @return Handle linked to the task for cancellation, extraction, or continuation
      */
     template<typename TaskFunc, typename... Args>
-        requires std::invocable<TaskFunc, Args...>
+        requires std::invocable<std::decay_t<TaskFunc>, std::decay_t<Args>...>
     static TaskHandle<std::invoke_result_t<std::decay_t<TaskFunc>, std::decay_t<Args>...>> 
     Enqueue(TaskFunc&& task, Args&&... args) {
 
