@@ -116,7 +116,7 @@ struct QualifiedTaskState {
 
     std::mutex mutex;
     std::condition_variable condition;
-    std::atomic<TaskStatus> status;
+    std::atomic<TaskStatus> status = TaskStatus::Ready;
 };
 
 } // namespace Agate

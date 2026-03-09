@@ -152,7 +152,7 @@ private:
     std::condition_variable queueCondition;
     std::queue<std::unique_ptr<Task>> taskQueue;
 
-    std::atomic<bool> shutdown;
+    std::atomic<bool> shutdown = false;
     std::vector<std::jthread> workers;
 
     /**
