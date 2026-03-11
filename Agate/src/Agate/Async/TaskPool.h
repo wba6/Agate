@@ -130,6 +130,8 @@ ResultType TaskHandle<ResultType>::Get() {
 
     ResultType result = std::move(*(sharedState->result));
     sharedState->result.reset();
+    sharedState->status.store(TaskStatus::Extracted);
+
     return result;
 }
 
