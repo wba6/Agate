@@ -5,7 +5,6 @@
 #include <chrono>
 #include <memory>
 #include <filesystem>
-#include <future>
 #include <stdexcept>
 #include <string>
 
@@ -47,7 +46,7 @@ public:
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
         model = nullptr;
-        pendingModel = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
+        modelHandle = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
     }
 
     void Detach() override
@@ -58,12 +57,9 @@ public:
     {
 
         // Poll for model completion until model is retrieved
-        if (pendingModel.valid()) {
-            const auto status = pendingModel.wait_for(std::chrono::seconds(0));
-            if (status == std::future_status::ready) {
-                model = pendingModel.get();
-                model->LoadTextures();
-            }
+        if (modelHandle.Status() == Agate::TaskStatus::Done) {
+            model = std::make_unique<Agate::ModelEditor>(std::move(modelHandle.Wait().Get()));
+            model->LoadTextures();
         }
 
         shader->Bind();
@@ -86,17 +82,17 @@ public:
     }
     virtual ~TemplayerEx()
     {
-        if (pendingModel.valid()) {
+        if (static_cast<uint32_t>(modelHandle.Status() & Agate::TaskStatus::Terminal) != static_cast<uint32_t>(0)) {
             PRINTMSG("[TemplateLayer]: Waiting for pending model");
-            pendingModel.wait();
-            model = pendingModel.get();
+            modelHandle.Wait();
+            model = std::make_unique<Agate::ModelEditor>(std::move(modelHandle.Get()));
         }
     }
 
     std::unique_ptr<Agate::Shader> shader;
     std::unique_ptr<Agate::Camera> camera;
     std::unique_ptr<Agate::ModelEditor> model;
-    std::future<std::unique_ptr<Agate::ModelEditor>> pendingModel;
+    Agate::TaskHandle<Agate::ModelEditor> modelHandle;
 };
 
 class TaskTestLayer : public Agate::Layer {

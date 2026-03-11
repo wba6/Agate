@@ -1,11 +1,11 @@
 #ifndef AGATE_MODELLOADER_H
 #define AGATE_MODELLOADER_H
 
+#include "Agate/Async/TaskPool.h"
 #include "Mesh.h"
 #include "ModelEditor.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/Texture.h"
-#include <future>
 #include <memory>
 
 #define MAX_BONE_INFLUENCE 4
@@ -30,7 +30,7 @@ namespace Agate {
          * 
          * @param path Path to the model file
          */
-        static std::future<std::unique_ptr<ModelEditor>> LoadModel(std::string const &path);
+        static TaskHandle<ModelEditor> LoadModel(std::string const &path);
 
 protected:
 
