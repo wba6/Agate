@@ -11,11 +11,10 @@
 #include "Agate/Core/Logger.h"
 #include "Task.h"
 #include "TaskState.h"
+#include "TaskWorker.h"
 #include <concepts>
 #include <memory>
-#include <queue>
 #include <stdexcept>
-#include <thread>
 #include <type_traits>
 #include <vector>
 
@@ -149,12 +148,9 @@ private:
     static std::once_flag initializationFlag;
     static std::unique_ptr<TaskPool> instance;
 
-    std::mutex queueLock;
-    std::condition_variable queueCondition;
-    std::queue<std::unique_ptr<Task>> taskQueue;
-
     std::atomic<bool> shutdown = false;
-    std::vector<std::jthread> workers;
+    std::atomic<std::size_t> nextWorker = 0;
+    std::vector<std::unique_ptr<TaskWorker>> workers;
 
     /**
      * @brief Singleton constructor - initializes worker threads
@@ -271,11 +267,11 @@ public:
 
         // Package and enqueue task, then alert workers
         std::unique_ptr<Task> packedTask = std::make_unique<QualifiedTask<decltype(wrappedTask)>>(std::move(wrappedTask));
-        {
-            std::scoped_lock lock(instance->queueLock);
-            instance->taskQueue.push(std::move(packedTask));
+        instance->workers[instance->nextWorker]->Push(std::move(packedTask));
+        for (std::size_t i = 0; i < instance->workers.size(); ++i) {
+            instance->workers[i]->Notify();
         }
-        instance->queueCondition.notify_one();
+        instance->nextWorker = (instance->nextWorker + 1) % instance->workers.size();
 
         return handle;
     }
