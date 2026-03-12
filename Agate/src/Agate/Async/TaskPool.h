@@ -15,7 +15,7 @@
 #include <memory>
 #include <queue>
 #include <stdexcept>
-#include <thread>
+#include <jthread>
 #include <type_traits>
 #include <vector>
 
