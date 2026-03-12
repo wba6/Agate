@@ -150,6 +150,12 @@ private:
 
     std::atomic<bool> shutdown = false;
     std::atomic<std::size_t> nextWorker = 0;
+
+    /** @note If this is allowed to be resized after initialization,
+     *        workers will have a dangling reference to the old vector
+     *        and will need to be refactored to use a different
+     *        reference type
+     */
     std::vector<std::unique_ptr<TaskWorker>> workers;
 
     /**
