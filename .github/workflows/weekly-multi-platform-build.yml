@@ -39,9 +39,7 @@ jobs:
     - name: Install dependencies on macos
       if: runner.os == 'macos'
       run: |
-        brew install --quiet ninja gcc
-        echo "CC=gcc-13" >> $GITHUB_ENV
-        echo "CXX=g++-13" >> $GITHUB_ENV
+        brew install --quiet ninja llvm
 
     - name: Install CMake on Windows
       if: runner.os == 'Windows'
