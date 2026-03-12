@@ -267,11 +267,11 @@ public:
 
         // Package and enqueue task, then alert workers
         std::unique_ptr<Task> packedTask = std::make_unique<QualifiedTask<decltype(wrappedTask)>>(std::move(wrappedTask));
-        instance->workers[instance->nextWorker]->Push(std::move(packedTask));
+        std::size_t targetIndex = instance->nextWorker.fetch_add(1, std::memory_order_relaxed) % instance->workers.size();
+        instance->workers[targetIndex]->Push(std::move(packedTask));
         for (std::size_t i = 0; i < instance->workers.size(); ++i) {
             instance->workers[i]->Notify();
         }
-        instance->nextWorker = (instance->nextWorker + 1) % instance->workers.size();
 
         return handle;
     }
