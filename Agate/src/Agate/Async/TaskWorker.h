@@ -8,6 +8,7 @@
 #include "Task.h"
 #include <condition_variable>
 #include <deque>
+#include <memory>
 #include <mutex>
 #include <span>
 #include <thread>
