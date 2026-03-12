@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-15]
         config: [Debug, Release]
 
     steps:
@@ -39,7 +39,7 @@ jobs:
     - name: Install dependencies on macos
       if: runner.os == 'macos'
       run: |
-        brew install --quiet ninja llvm
+        brew install --quiet ninja
 
     - name: Install CMake on Windows
       if: runner.os == 'Windows'
