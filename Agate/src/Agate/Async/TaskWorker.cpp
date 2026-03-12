@@ -41,8 +41,14 @@ void TaskWorker::Run(std::stop_token stopToken) {
         {
             std::unique_lock lock(workerLock);
 
-            // Find work
-            if (taskQueue.empty()) {
+            if (!taskQueue.empty()) {
+
+                // Local work
+                currentTask = std::move(taskQueue.front());
+                taskQueue.pop_front();
+            } else {
+
+                // No local work found
                 lock.unlock();
                 for (unsigned int i = 0; i < STEAL_ATTEMPTS; ++i) {
                     currentTask = AttemptSteal();
@@ -50,20 +56,18 @@ void TaskWorker::Run(std::stop_token stopToken) {
                         break;
                     }
                 }
-            } else {
-                currentTask = std::move(taskQueue.front());
-                taskQueue.pop_front();
-            }
 
-            // No work available
-            if (!currentTask) {
-                lock.lock();
-                workerCondition.wait(lock, stopToken, [this]() -> bool {
-                    return !taskQueue.empty();
-                });
-                continue;
+                // No work found
+                if (!currentTask) {
+                    lock.lock();
+                    workerCondition.wait(lock, stopToken, [this]() -> bool {
+                        return !taskQueue.empty();
+                    });
+                }
             }
         }
+
+        // Work found
         if (currentTask) {
             currentTask->Run();
         }
