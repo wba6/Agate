@@ -6,10 +6,13 @@
 #define AGATE_RENDERCOMMAND_HPP
 
 #include "Core/Logger.h"
+#include <glm/glm.hpp>
 #include "ImGui-layer/imgui_interface.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/mock/IndexBufferUser.hpp"
 #include "Rendering/mock/VertexArrayUser.hpp"
+#include "Rendering/mock/ShaderUser.hpp"
+#include "Rendering/mock/TextureUser.hpp"
 #include  "imgui.h"
 
 namespace Agate {
@@ -21,7 +24,14 @@ namespace Agate {
         DrawMesh,
         DrawUI,
         CreateVertexArray,
-        CreateIndexBuffer
+        CreateIndexBuffer,
+        CreateShader,
+        CreateTexture,
+        UpdateShaderUniform4f,
+        UpdateShaderUniform3f,
+        UpdateShaderUniformMat4,
+        UpdateShaderUniform1i,
+        UpdateShaderUniform1f
     };
 
     /**
@@ -236,6 +246,143 @@ namespace Agate {
     public:
         IndexBufferUser m_IBU;
         UUID m_VAUUID;
+    };
+
+    class CreateShader : public RenderCommand {
+    public:
+        CreateShader(ShaderUser SU)
+        : m_SU(std::move(SU)){}
+
+        void Execute() override {PRINTMSG("Creating Shader");};
+
+        /**
+        * @brief Command Type of this event
+        */
+        virtual CommandTypes GetCommandType() override {
+            return CommandTypes::CreateShader;
+        };
+
+        /**
+         * @brief Type of this command
+         */
+        static CommandTypes s_GetCommandType() {
+            return CommandTypes::CreateShader;
+        }
+
+        virtual ~CreateShader() = default;
+    public:
+        ShaderUser m_SU;
+    };
+
+    class CreateTexture : public RenderCommand {
+    public:
+        CreateTexture(TextureUser TU)
+        : m_TU(std::move(TU)){}
+
+        void Execute() override {PRINTMSG("Creating Texture");};
+
+        /**
+        * @brief Command Type of this event
+        */
+        virtual CommandTypes GetCommandType() override {
+            return CommandTypes::CreateTexture;
+        };
+
+        /**
+         * @brief Type of this command
+         */
+        static CommandTypes s_GetCommandType() {
+            return CommandTypes::CreateTexture;
+        }
+
+        virtual ~CreateTexture() = default;
+    public:
+        TextureUser m_TU;
+    };
+
+    class UpdateShaderUniform4f : public RenderCommand {
+    public:
+        UpdateShaderUniform4f(UUID shaderUUID, std::string uniform, float x, float y, float z, float w)
+        : m_ShaderUUID(shaderUUID), m_Uniform(std::move(uniform)), m_X(x), m_Y(y), m_Z(z), m_W(w) {}
+
+        void Execute() override {}
+
+        virtual CommandTypes GetCommandType() override { return CommandTypes::UpdateShaderUniform4f; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::UpdateShaderUniform4f; }
+
+        virtual ~UpdateShaderUniform4f() = default;
+    public:
+        UUID m_ShaderUUID;
+        std::string m_Uniform;
+        float m_X, m_Y, m_Z, m_W;
+    };
+
+    class UpdateShaderUniform3f : public RenderCommand {
+    public:
+        UpdateShaderUniform3f(UUID shaderUUID, std::string uniform, float x, float y, float z)
+        : m_ShaderUUID(shaderUUID), m_Uniform(std::move(uniform)), m_X(x), m_Y(y), m_Z(z) {}
+
+        void Execute() override {}
+
+        virtual CommandTypes GetCommandType() override { return CommandTypes::UpdateShaderUniform3f; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::UpdateShaderUniform3f; }
+
+        virtual ~UpdateShaderUniform3f() = default;
+    public:
+        UUID m_ShaderUUID;
+        std::string m_Uniform;
+        float m_X, m_Y, m_Z;
+    };
+
+    class UpdateShaderUniformMat4 : public RenderCommand {
+    public:
+        UpdateShaderUniformMat4(UUID shaderUUID, std::string uniform, glm::mat4 trans)
+        : m_ShaderUUID(shaderUUID), m_Uniform(std::move(uniform)), m_Trans(trans) {}
+
+        void Execute() override {}
+
+        virtual CommandTypes GetCommandType() override { return CommandTypes::UpdateShaderUniformMat4; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::UpdateShaderUniformMat4; }
+
+        virtual ~UpdateShaderUniformMat4() = default;
+    public:
+        UUID m_ShaderUUID;
+        std::string m_Uniform;
+        glm::mat4 m_Trans;
+    };
+
+    class UpdateShaderUniform1i : public RenderCommand {
+    public:
+        UpdateShaderUniform1i(UUID shaderUUID, std::string uniform, int value)
+        : m_ShaderUUID(shaderUUID), m_Uniform(std::move(uniform)), m_Value(value) {}
+
+        void Execute() override {}
+
+        virtual CommandTypes GetCommandType() override { return CommandTypes::UpdateShaderUniform1i; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::UpdateShaderUniform1i; }
+
+        virtual ~UpdateShaderUniform1i() = default;
+    public:
+        UUID m_ShaderUUID;
+        std::string m_Uniform;
+        int m_Value;
+    };
+
+    class UpdateShaderUniform1f : public RenderCommand {
+    public:
+        UpdateShaderUniform1f(UUID shaderUUID, std::string uniform, float x)
+        : m_ShaderUUID(shaderUUID), m_Uniform(std::move(uniform)), m_X(x) {}
+
+        void Execute() override {}
+
+        virtual CommandTypes GetCommandType() override { return CommandTypes::UpdateShaderUniform1f; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::UpdateShaderUniform1f; }
+
+        virtual ~UpdateShaderUniform1f() = default;
+    public:
+        UUID m_ShaderUUID;
+        std::string m_Uniform;
+        float m_X;
     };
 
 } // Namespace Agate

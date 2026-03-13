@@ -10,6 +10,7 @@
 #include "Rendering/OpenGl/IndexBuffer.h"
 #include "Rendering/OpenGl/Texture.h"
 #include "Rendering/OpenGl/VertexArray.h"
+#include "Rendering/OpenGl/Shader.h"
 
 namespace Agate {
 
@@ -57,11 +58,17 @@ namespace Agate {
             
             /**
              */
-            static void CreateShader();
+            static void CreateShader(CreateShader e);
 
             /**
              */
-            static void CreateTexture();
+            static void CreateTexture(CreateTexture e);
+
+            static void UpdateShaderUniform4f(UpdateShaderUniform4f e);
+            static void UpdateShaderUniform3f(UpdateShaderUniform3f e);
+            static void UpdateShaderUniformMat4(UpdateShaderUniformMat4 e);
+            static void UpdateShaderUniform1i(UpdateShaderUniform1i e);
+            static void UpdateShaderUniform1f(UpdateShaderUniform1f e);
 
         private:
             Renderer() = delete;
@@ -70,8 +77,8 @@ namespace Agate {
             static std::mutex s_CommandMutex;
             static std::unordered_map<UUID, std::shared_ptr<VertexArray>> s_VaoMap;
             static std::unordered_map<UUID, std::shared_ptr<IndexBuffer>> s_IndexBufferMap;
-            static std::unordered_map<UUID, Texture> s_TextureMap;
-            static std::unordered_map<UUID, Shader> s_ShaderMap;
+            static std::unordered_map<UUID, std::shared_ptr<Texture>> s_TextureMap;
+            static std::unordered_map<UUID, std::shared_ptr<Shader>> s_ShaderMap;
     };
 }
 #endif // AGATE_RENDERER_HPP

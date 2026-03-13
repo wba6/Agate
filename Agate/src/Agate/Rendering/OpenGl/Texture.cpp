@@ -130,7 +130,7 @@ namespace Agate {
      *
      * @return A Texture object
      */
-    Texture::Texture(const char *file, std::string &directory)
+    Texture::Texture(const char *file, const std::string &directory)
             : m_width(0), m_height(0), m_path(file), m_type("texture"), m_target(GL_TEXTURE_2D), m_textureID(0), m_directory(directory) {
 
     }
