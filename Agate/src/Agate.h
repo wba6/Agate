@@ -32,3 +32,5 @@
 #include "Agate/Rendering/ModelLoader.h"
 #include "Agate/Rendering/Camera.h"
 
+//-----------Async-------------
+#include "Agate/Async/TaskPool.h"
