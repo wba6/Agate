@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-15]
         config: [Debug, Release]
 
     steps:
@@ -48,7 +48,14 @@ jobs:
         choco install ninja --no-progress
       
     - name: Configure CMake
-      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }} -G Ninja -DCMAKE_CXX_FLAGS="-Wno-error=array-bounds" -DCMAKE_C_FLAGS="-Wno-error=unknown-pragmas"
+      shell: bash
+      run: |
+        if [ "$RUNNER_OS" == "macOS" ]; then
+          EXTRA_CXX_FLAGS="-fexperimental-library"
+        else
+          EXTRA_CXX_FLAGS=""
+        fi
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.config }} -G Ninja -DCMAKE_CXX_FLAGS="-Wno-error=array-bounds $EXTRA_CXX_FLAGS" -DCMAKE_C_FLAGS="-Wno-error=unknown-pragmas"
 
     - name: Build with CMake
       run: cmake --build build --config ${{ matrix.config }}
