@@ -13,7 +13,9 @@ TaskWorker::TaskWorker(unsigned int id, std::span<std::unique_ptr<TaskWorker>> a
 }
 
 void TaskWorker::Start() {
-    worker = std::jthread(&TaskWorker::Run, this);
+    worker = std::jthread([this](std::stop_token stopToken) {
+        Run(stopToken);
+    });
 }
 
 void TaskWorker::Push(std::unique_ptr<Task> task) {
