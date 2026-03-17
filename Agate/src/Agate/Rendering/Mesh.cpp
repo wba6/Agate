@@ -25,7 +25,7 @@ void Mesh::Draw(Agate::ShaderUser &shader) {
         // Instead, we just set the uniform on the shader mock, 
         // which will communicate with the render thread.
         
-        // m_textures[i].bind(i); // This should also be mocked if needed
+        m_textures[i].bind(i); 
 
         std::string type = m_textures[i].getType(); 
         std::string name;
