@@ -453,43 +453,6 @@ namespace Agate {
         float m_X;
     };
 
-    /**
-    * @brief Render command for drawing UI data across threads.
-    */
-    class DrawUI : public RenderCommand {
-    public:
-        DrawUI(const ImDrawData* data) {
-            // Shallow copy scalar fields
-            m_data = *data;
-
-            // Deep copy command lists into ImVector (matches ImDrawData::CmdLists type)
-            m_data.CmdLists.clear();
-            m_data.CmdLists.reserve(data->CmdListsCount);
-
-            for (int i = 0; i < data->CmdListsCount; i++) {
-                ImDrawList* cloned = data->CmdLists[i]->CloneOutput();
-                m_data.CmdLists.push_back(cloned);
-            }
-
-            m_data.CmdListsCount = m_data.CmdLists.Size;
-        }
-
-        void Execute() override {
-            imgui_interface::DrawFrame(&m_data);
-        }
-
-        ~DrawUI() override {
-            // Free cloned lists
-            for (int i = 0; i < m_data.CmdLists.Size; i++) {
-                IM_DELETE(m_data.CmdLists[i]);
-            }
-            m_data.CmdLists.clear();
-            m_data.CmdListsCount = 0;
-        }
-
-    private:
-        ImDrawData m_data{};
-    }; 
 
 } // Namespace Agate
 
