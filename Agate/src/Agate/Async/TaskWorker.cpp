@@ -28,6 +28,7 @@ void TaskWorker::Push(std::unique_ptr<Task> task) {
 }
 
 void TaskWorker::Notify() {
+    m_notified = true;
     m_workerCondition.notify_one();
 }
 
@@ -62,8 +63,9 @@ void TaskWorker::Run(std::stop_token stopToken) {
                 if (!currentTask) {
                     lock.lock();
                     m_workerCondition.wait(lock, stopToken, [this]() -> bool {
-                        return !m_taskQueue.empty();
+                        return !m_taskQueue.empty() || m_notified;
                     });
+                    m_notified = false;
                 }
             }
         }

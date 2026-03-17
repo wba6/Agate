@@ -18,6 +18,7 @@ namespace Agate {
 class TaskWorker {
 private:
     unsigned int m_id;
+    bool m_notified = false;
     std::span<std::unique_ptr<TaskWorker>> m_allWorkers;
     std::deque<std::unique_ptr<Task>> m_taskQueue;
     std::mutex m_workerLock;
