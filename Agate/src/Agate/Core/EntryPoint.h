@@ -103,7 +103,7 @@ namespace Agate {
         std::shared_ptr<Window> m_window;
         LayerStack m_layerStack;
         bool m_running;
-        float deltaTime;
+        std::atomic<float> m_deltaTime;
 
     private:
         static EntryPoint *s_instance;

@@ -16,7 +16,7 @@ Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 
 Agate::EntryPoint::EntryPoint()
-        : deltaTime{0} {
+        : m_deltaTime{0} {
     s_instance = this;
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
@@ -49,13 +49,13 @@ void Agate::EntryPoint::Run() {
         double lastTime = m_window->WindowOpenTime();
         while (m_running) {
             double frameTime = m_window->WindowOpenTime();
-            float frameDelta = static_cast<float>(frameTime - lastTime);
+            m_deltaTime = static_cast<float>(frameTime - lastTime);
             lastTime = frameTime;
 
             // Calculate and store stats for the UI to read
-            if (frameDelta > 0) {
-                a_RenderThreadFPS = 1.0f / frameDelta;
-                a_RenderThreadMS = frameDelta * 1000.0f;
+            if (m_deltaTime > 0) {
+                a_RenderThreadFPS = 1.0f / m_deltaTime;
+                a_RenderThreadMS = m_deltaTime * 1000.0f;
             }
             Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
@@ -144,7 +144,7 @@ Agate::EntryPoint *&Agate::EntryPoint::GetInstance() {
 }
 
 float Agate::EntryPoint::GetDeltaTime() {
-    return deltaTime;
+    return m_deltaTime.load();
 }
 
 std::shared_ptr<Agate::Window> Agate::EntryPoint::GetWindow() {
