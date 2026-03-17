@@ -50,6 +50,7 @@ namespace Agate {
             notifier.NotifyCommand<UpdateShaderUniformMat4>(BindStaticFn(Renderer::OnUpdateShaderUniformMat4));
             notifier.NotifyCommand<UpdateShaderUniform1i>(BindStaticFn(Renderer::OnUpdateShaderUniform1i));
             notifier.NotifyCommand<UpdateShaderUniform1f>(BindStaticFn(Renderer::OnUpdateShaderUniform1f));
+            notifier.NotifyCommand<SetViewport>(BindStaticFn(Renderer::OnSetViewport));
 
 
             if (e) {
@@ -204,6 +205,10 @@ namespace Agate {
             shaderIt->second->Bind();
             shaderIt->second->SetUniform1f(e.m_Uniform.c_str(), e.m_X);
         }
+    }
+
+    void Renderer::OnSetViewport(SetViewport e) {
+        glViewport(e.m_X, e.m_Y, e.m_Width, e.m_Height);
     }
 
 }

@@ -109,6 +109,7 @@ void Agate::EntryPoint::OnEvent(Event &e) {
     EventNotifier notifier(e);
 
     notifier.NotifyEvent<WindowCloseEvent>(BindFn(EntryPoint::OnWindowClose));
+    notifier.NotifyEvent<WindowResizedEvent>(BindFn(EntryPoint::OnWindowResized));
 
     for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
         m_layerStack.m_layers.at(i)->OnEvent(e);
@@ -121,6 +122,11 @@ void Agate::EntryPoint::OnEvent(Event &e) {
 bool Agate::EntryPoint::OnWindowClose(WindowCloseEvent &e) {
     m_running = false;
     return true;
+}
+
+bool Agate::EntryPoint::OnWindowResized(WindowResizedEvent &e) {
+    Renderer::Submit(std::make_unique<SetViewport>(0, 0, e.GetWidth(), e.GetHeight()));
+    return false;
 }
 
 void Agate::EntryPoint::EmplaceLayer(std::shared_ptr<Layer> layer) {

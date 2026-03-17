@@ -83,6 +83,8 @@ namespace Agate {
             static void OnUpdateShaderUniform1i(UpdateShaderUniform1i e);
             static void OnUpdateShaderUniform1f(UpdateShaderUniform1f e);
 
+            static void OnSetViewport(SetViewport e);
+
         private:
             Renderer() = delete;
             static std::queue<std::unique_ptr<RenderCommand>> s_CommandQueue; // write buffer

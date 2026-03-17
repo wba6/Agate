@@ -49,6 +49,15 @@ namespace Agate {
         bool OnWindowClose(WindowCloseEvent &e);
 
         /**
+         * @brief Special event handler for WindowResizedEvent
+         * 
+         * @param e Triggering event
+         * 
+         * @return False
+         */
+        bool OnWindowResized(WindowResizedEvent &e);
+
+        /**
          * @brief Inserts a layer in front of the first overlay
          *        layer in the stack
          * 

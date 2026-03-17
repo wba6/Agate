@@ -77,9 +77,9 @@ namespace Agate {
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
             WindowResizedEvent event(width, height);
+            data.width = width;
+            data.height = height;
             data.callback(event);
-
-            data.context->SetWindowSize(width, height);
         });
     }
 
@@ -100,7 +100,7 @@ namespace Agate {
     }
 
     int Window::GetHieght() {
-        return m_windowProps.width;
+        return m_windowProps.height;
     }
 
     void Window::SetVSync(bool enable) {

@@ -38,7 +38,8 @@ namespace Agate {
         UpdateShaderUniform3f,
         UpdateShaderUniformMat4,
         UpdateShaderUniform1i,
-        UpdateShaderUniform1f
+        UpdateShaderUniform1f,
+        SetViewport
     };
 
     /**
@@ -451,6 +452,21 @@ namespace Agate {
         UUID m_ShaderUUID;
         std::string m_Uniform;
         float m_X;
+    };
+
+    class SetViewport : public RenderCommand {
+    public:
+        SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+        : m_X(x), m_Y(y), m_Width(width), m_Height(height) {}
+
+        void Execute() override {}
+
+        virtual CommandTypes GetCommandType() override { return CommandTypes::SetViewport; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::SetViewport; }
+
+        virtual ~SetViewport() = default;
+    public:
+        uint32_t m_X, m_Y, m_Width, m_Height;
     };
 
 
