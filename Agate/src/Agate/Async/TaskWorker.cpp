@@ -8,12 +8,12 @@ namespace {
 namespace Agate {
 
 TaskWorker::TaskWorker(unsigned int id, std::span<std::unique_ptr<TaskWorker>> allWorkers)
-    : id(id), allWorkers(allWorkers) {
+    : m_id(id), m_allWorkers(allWorkers) {
 
 }
 
 void TaskWorker::Start() {
-    worker = std::jthread([this](std::stop_token stopToken) {
+    m_worker = std::jthread([this](std::stop_token stopToken) {
         Run(stopToken);
     });
 }
@@ -21,18 +21,18 @@ void TaskWorker::Start() {
 void TaskWorker::Push(std::unique_ptr<Task> task) {
 
     {
-        std::scoped_lock lock(workerLock);
-        taskQueue.push_front(std::move(task));
+        std::scoped_lock lock(m_workerLock);
+        m_taskQueue.push_front(std::move(task));
     }
-    workerCondition.notify_one();
+    m_workerCondition.notify_one();
 }
 
 void TaskWorker::Notify() {
-    workerCondition.notify_one();
+    m_workerCondition.notify_one();
 }
 
 void TaskWorker::RequestStop() {
-    worker.request_stop();
+    m_worker.request_stop();
 }
 
 void TaskWorker::Run(std::stop_token stopToken) {
@@ -40,13 +40,13 @@ void TaskWorker::Run(std::stop_token stopToken) {
     while (!stopToken.stop_requested()) {
         std::unique_ptr<Task> currentTask;
         {
-            std::unique_lock lock(workerLock);
+            std::unique_lock lock(m_workerLock);
 
-            if (!taskQueue.empty()) {
+            if (!m_taskQueue.empty()) {
 
                 // Local work
-                currentTask = std::move(taskQueue.front());
-                taskQueue.pop_front();
+                currentTask = std::move(m_taskQueue.front());
+                m_taskQueue.pop_front();
             } else {
 
                 // No local work found
@@ -61,8 +61,8 @@ void TaskWorker::Run(std::stop_token stopToken) {
                 // No work found
                 if (!currentTask) {
                     lock.lock();
-                    workerCondition.wait(lock, stopToken, [this]() -> bool {
-                        return !taskQueue.empty();
+                    m_workerCondition.wait(lock, stopToken, [this]() -> bool {
+                        return !m_taskQueue.empty();
                     });
                 }
             }
@@ -78,13 +78,13 @@ void TaskWorker::Run(std::stop_token stopToken) {
     while (true) {
         std::unique_ptr<Task> currentTask;
         {
-            std::unique_lock lock(workerLock);
-            if (taskQueue.empty()) {
+            std::unique_lock lock(m_workerLock);
+            if (m_taskQueue.empty()) {
 
                 return;
             }
-            currentTask = std::move(taskQueue.front());
-            taskQueue.pop_front();
+            currentTask = std::move(m_taskQueue.front());
+            m_taskQueue.pop_front();
         }
         if (currentTask) {
             currentTask->Run();
@@ -95,28 +95,28 @@ void TaskWorker::Run(std::stop_token stopToken) {
 std::unique_ptr<Task> TaskWorker::AttemptSteal() {
 
     // No workers to steal from
-    if (allWorkers.size() <= 1) {
+    if (m_allWorkers.size() <= 1) {
         return nullptr;
     }
 
     static thread_local std::mt19937 generator{ std::random_device{}() };
-    unsigned int victim = std::uniform_int_distribution<unsigned int>{ 0, static_cast<unsigned int>(allWorkers.size() - 1) }(generator);
-    while (victim == id) {
-        victim = std::uniform_int_distribution<unsigned int>{ 0, static_cast<unsigned int>(allWorkers.size() - 1) }(generator);
+    unsigned int victim = std::uniform_int_distribution<unsigned int>{ 0, static_cast<unsigned int>(m_allWorkers.size() - 1) }(generator);
+    while (victim == m_id) {
+        victim = std::uniform_int_distribution<unsigned int>{ 0, static_cast<unsigned int>(m_allWorkers.size() - 1) }(generator);
     }
 
-    return allWorkers[victim]->ExtractStolenWork();
+    return m_allWorkers[victim]->ExtractStolenWork();
 }
 
 std::unique_ptr<Task> TaskWorker::ExtractStolenWork() {
 
-    std::unique_lock<std::mutex> lock(workerLock, std::try_to_lock);
-    if (!lock.owns_lock() || taskQueue.empty()) {
+    std::unique_lock<std::mutex> lock(m_workerLock, std::try_to_lock);
+    if (!lock.owns_lock() || m_taskQueue.empty()) {
         return nullptr;
     }
 
-    std::unique_ptr<Task> stolenWork = std::move(taskQueue.back());
-    taskQueue.pop_back();
+    std::unique_ptr<Task> stolenWork = std::move(m_taskQueue.back());
+    m_taskQueue.pop_back();
     return stolenWork;
 }
 

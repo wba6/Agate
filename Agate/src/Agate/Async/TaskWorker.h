@@ -17,12 +17,12 @@ namespace Agate {
 
 class TaskWorker {
 private:
-    unsigned int id;
-    std::span<std::unique_ptr<TaskWorker>> allWorkers;
-    std::deque<std::unique_ptr<Task>> taskQueue;
-    std::mutex workerLock;
-    std::condition_variable_any workerCondition;
-    std::jthread worker;
+    unsigned int m_id;
+    std::span<std::unique_ptr<TaskWorker>> m_allWorkers;
+    std::deque<std::unique_ptr<Task>> m_taskQueue;
+    std::mutex m_workerLock;
+    std::condition_variable_any m_workerCondition;
+    std::jthread m_worker;
 public:
 
     /**
