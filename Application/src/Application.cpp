@@ -5,8 +5,7 @@
 #include <chrono>
 #include <memory>
 #include <filesystem>
-#include <future>
-#include <stdexcept>
+#include <future> #include <stdexcept>
 #include <string>
 
 class app : public Agate::EntryPoint {
@@ -176,6 +175,11 @@ public:
     void OnRender()override
     {
     };
+
+    void OnUpdate() override
+    {
+    };
+
 
     void OnEvent(Agate::Event &e) override
     {
