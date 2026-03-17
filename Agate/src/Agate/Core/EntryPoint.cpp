@@ -27,9 +27,6 @@ Agate::EntryPoint::EntryPoint()
     //m_layerStack.AddOverlay(new Example_imguiLayer());
 
     CurrentContext::OpenGL = true;
-
-    std::unique_ptr<DrawMesh> mesh = std::make_unique<DrawMesh>(1);
-    Renderer::Submit(std::move(mesh));
 }
 
 Agate::EntryPoint::~EntryPoint() {

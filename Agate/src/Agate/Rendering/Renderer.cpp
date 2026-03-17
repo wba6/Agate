@@ -1,4 +1,5 @@
 #include "Renderer.hpp"
+#include <glad/glad.h>
 #include "Rendering/OpenGl/IndexBuffer.h"
 #include "Rendering/OpenGl/VertexArray.h"
 #include "Rendering/OpenGl/Shader.h"
@@ -32,15 +33,23 @@ namespace Agate {
             s_ExecuteQueue.pop();
 
             CommandNotifier notifier(*e);
-            notifier.NotifyCommand<CreateVertexArray>(BindStaticFn(Renderer::CreateVAO));
-            notifier.NotifyCommand<CreateIndexBuffer>(BindStaticFn(Renderer::CreateIB));
-            notifier.NotifyCommand<CreateShader>(BindStaticFn(Renderer::CreateShader));
-            notifier.NotifyCommand<CreateTexture>(BindStaticFn(Renderer::CreateTexture));
-            notifier.NotifyCommand<UpdateShaderUniform4f>(BindStaticFn(Renderer::UpdateShaderUniform4f));
-            notifier.NotifyCommand<UpdateShaderUniform3f>(BindStaticFn(Renderer::UpdateShaderUniform3f));
-            notifier.NotifyCommand<UpdateShaderUniformMat4>(BindStaticFn(Renderer::UpdateShaderUniformMat4));
-            notifier.NotifyCommand<UpdateShaderUniform1i>(BindStaticFn(Renderer::UpdateShaderUniform1i));
-            notifier.NotifyCommand<UpdateShaderUniform1f>(BindStaticFn(Renderer::UpdateShaderUniform1f));
+            notifier.NotifyCommand<CreateVertexArray>(BindStaticFn(Renderer::OnCreateVAO));
+            notifier.NotifyCommand<CreateIndexBuffer>(BindStaticFn(Renderer::OnCreateIB));
+            notifier.NotifyCommand<CreateShader>(BindStaticFn(Renderer::OnCreateShader));
+            notifier.NotifyCommand<CreateTexture>(BindStaticFn(Renderer::OnCreateTexture));
+            notifier.NotifyCommand<BindVertexArray>(BindStaticFn(Renderer::OnBindVAO));
+            notifier.NotifyCommand<UnBindVertexArray>(BindStaticFn(Renderer::OnUnBindVAO));
+            notifier.NotifyCommand<BindIndexBuffer>(BindStaticFn(Renderer::OnBindIBO));
+            notifier.NotifyCommand<UnBindIndexBuffer>(BindStaticFn(Renderer::OnUnBindIBO));
+            notifier.NotifyCommand<BindShader>(BindStaticFn(Renderer::OnBindShader));
+            notifier.NotifyCommand<UnBindShader>(BindStaticFn(Renderer::OnUnBindShader));
+            notifier.NotifyCommand<BindTexture>(BindStaticFn(Renderer::OnBindTexture));
+            notifier.NotifyCommand<DrawMesh>(BindStaticFn(Renderer::OnDrawMesh));
+            notifier.NotifyCommand<UpdateShaderUniform4f>(BindStaticFn(Renderer::OnUpdateShaderUniform4f));
+            notifier.NotifyCommand<UpdateShaderUniform3f>(BindStaticFn(Renderer::OnUpdateShaderUniform3f));
+            notifier.NotifyCommand<UpdateShaderUniformMat4>(BindStaticFn(Renderer::OnUpdateShaderUniformMat4));
+            notifier.NotifyCommand<UpdateShaderUniform1i>(BindStaticFn(Renderer::OnUpdateShaderUniform1i));
+            notifier.NotifyCommand<UpdateShaderUniform1f>(BindStaticFn(Renderer::OnUpdateShaderUniform1f));
 
 
             if (e) {
@@ -51,7 +60,7 @@ namespace Agate {
 
      /**
      */
-    void Renderer::CreateVAO(CreateVertexArray e) {
+    void Renderer::OnCreateVAO(CreateVertexArray e) {
         // We removed the old "not smart" comment because it's smart now!
         // Allocate the VertexArray on the heap and wrap it in a shared_ptr
         auto vao = std::make_shared<VertexArray>(
@@ -65,7 +74,7 @@ namespace Agate {
 
     /**
      */
-    void Renderer::CreateIB(CreateIndexBuffer e) {
+    void Renderer::OnCreateIB(CreateIndexBuffer e) {
         // Safely look up the VAO using .find() to prevent default-construction
         auto vaoIterator = s_VaoMap.find(e.m_VAUUID);
         if (vaoIterator == s_VaoMap.end()) {
@@ -85,7 +94,7 @@ namespace Agate {
 
     /**
      */
-    void Renderer::CreateShader(CreateShader e){
+    void Renderer::OnCreateShader(CreateShader e){
         auto shader = std::make_shared<Shader>(
             e.m_SU.getVertexShaderPath().c_str(), 
             e.m_SU.getFragmentShaderPath().c_str()
@@ -95,7 +104,7 @@ namespace Agate {
 
     /**
      */
-    void Renderer::CreateTexture(CreateTexture e){
+    void Renderer::OnCreateTexture(CreateTexture e){
         auto texture = std::make_shared<Texture>(
             e.m_TU.getPath().c_str(),
             e.m_TU.getDirectory()
@@ -104,7 +113,60 @@ namespace Agate {
         s_TextureMap[e.m_TU.getUUID()] = texture;
     }
 
-    void Renderer::UpdateShaderUniform4f(UpdateShaderUniform4f e) {
+    void Renderer::OnBindVAO(BindVertexArray e) {
+        auto it = s_VaoMap.find(e.m_UUID);
+        if (it != s_VaoMap.end()) {
+            it->second->Bind();
+        }
+    }
+
+    void Renderer::OnUnBindVAO(UnBindVertexArray e) {
+        // We don't need a specific VAO to unbind in OpenGL
+        glBindVertexArray(0);
+    }
+
+    void Renderer::OnBindIBO(BindIndexBuffer e) {
+        auto it = s_IndexBufferMap.find(e.m_UUID);
+        if (it != s_IndexBufferMap.end()) {
+            it->second->Bind();
+        }
+    }
+
+    void Renderer::OnUnBindIBO(UnBindIndexBuffer e) {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    void Renderer::OnBindShader(BindShader e) {
+        auto it = s_ShaderMap.find(e.m_UUID);
+        if (it != s_ShaderMap.end()) {
+            it->second->Bind();
+        }
+    }
+
+    void Renderer::OnUnBindShader(UnBindShader e) {
+        glUseProgram(0);
+    }
+
+    void Renderer::OnBindTexture(BindTexture e) {
+        auto it = s_TextureMap.find(e.m_UUID);
+        if (it != s_TextureMap.end()) {
+            it->second->bind(e.m_Slot);
+        }
+    }
+
+    void Renderer::OnDrawMesh(DrawMesh e) {
+        auto vaoIt = s_VaoMap.find(e.m_VaoUUID);
+        auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
+
+        if (vaoIt != s_VaoMap.end() && shaderIt != s_ShaderMap.end()) {
+            shaderIt->second->Bind();
+            vaoIt->second->Bind();
+            glDrawElements(GL_TRIANGLES, e.m_IndexCount, GL_UNSIGNED_INT, 0);
+            vaoIt->second->UnBind();
+        }
+    }
+
+    void Renderer::OnUpdateShaderUniform4f(UpdateShaderUniform4f e) {
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt != s_ShaderMap.end()) {
             shaderIt->second->Bind();
@@ -112,7 +174,7 @@ namespace Agate {
         }
     }
 
-    void Renderer::UpdateShaderUniform3f(UpdateShaderUniform3f e) {
+    void Renderer::OnUpdateShaderUniform3f(UpdateShaderUniform3f e) {
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt != s_ShaderMap.end()) {
             shaderIt->second->Bind();
@@ -120,7 +182,7 @@ namespace Agate {
         }
     }
 
-    void Renderer::UpdateShaderUniformMat4(UpdateShaderUniformMat4 e) {
+    void Renderer::OnUpdateShaderUniformMat4(UpdateShaderUniformMat4 e) {
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt != s_ShaderMap.end()) {
             shaderIt->second->Bind();
@@ -128,7 +190,7 @@ namespace Agate {
         }
     }
 
-    void Renderer::UpdateShaderUniform1i(UpdateShaderUniform1i e) {
+    void Renderer::OnUpdateShaderUniform1i(UpdateShaderUniform1i e) {
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt != s_ShaderMap.end()) {
             shaderIt->second->Bind();
@@ -136,7 +198,7 @@ namespace Agate {
         }
     }
 
-    void Renderer::UpdateShaderUniform1f(UpdateShaderUniform1f e) {
+    void Renderer::OnUpdateShaderUniform1f(UpdateShaderUniform1f e) {
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt != s_ShaderMap.end()) {
             shaderIt->second->Bind();

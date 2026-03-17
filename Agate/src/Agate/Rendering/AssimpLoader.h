@@ -11,7 +11,7 @@
 
 #include "Mesh.h"
 #include "ModelLoader.h"
-#include "OpenGl/Texture.h"
+#include "mock/TextureUser.hpp"
 #include <future>
 #include <string>
 #include <assimp/Importer.hpp>
@@ -94,7 +94,7 @@ private:
      * 
      * @return Textures required by this material
      */
-    std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
+    std::vector<TextureUser> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
 
     /**
      * @brief Builds flags for import post-processing options

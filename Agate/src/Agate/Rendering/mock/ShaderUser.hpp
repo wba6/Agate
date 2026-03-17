@@ -3,21 +3,23 @@
 
 #include <string>
 #include <glm/glm.hpp>
-#include "Rendering/UUID.hpp"
+#include "Agate/Rendering/UUID.hpp"
 
 namespace Agate {
 
     class ShaderUser {
 
     public:
-        ShaderUser(const char *vertexShaderPath, const char *fragmentShaderPath)
-            : m_vertexShaderPath(vertexShaderPath), m_fragmentShaderPath(fragmentShaderPath) {}
+        ShaderUser(const char *vertexShaderPath, const char *fragmentShaderPath);
 
         virtual ~ShaderUser() = default;
 
         const std::string& getVertexShaderPath() const { return m_vertexShaderPath; }
         const std::string& getFragmentShaderPath() const { return m_fragmentShaderPath; }
         UUID getUUID() const { return m_UUID; }
+
+        void Bind() const;
+        void UnBind() const;
 
         void SetUniform4f(const char *uniform, float x, float y, float z, float w);
         void SetUniform3f(const char *uniform, float x, float y, float z);

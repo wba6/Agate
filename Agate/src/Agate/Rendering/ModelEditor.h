@@ -9,10 +9,11 @@
 #define AGATE_MODELEDITOR_H
 
 #include "Mesh.h"
-#include "OpenGl/Shader.h"
+#include "mock/ShaderUser.hpp"
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace Agate {
 
@@ -56,7 +57,7 @@ public:
      * 
      * @param shader Shader to use when drawing
      */
-    void Draw(Shader& shader);
+    void Draw(ShaderUser& shader);
 
     /**
      * @brief Rotates the model about an axis

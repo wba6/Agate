@@ -3,6 +3,19 @@
 
 namespace Agate {
 
+    ShaderUser::ShaderUser(const char *vertexShaderPath, const char *fragmentShaderPath)
+        : m_vertexShaderPath(vertexShaderPath), m_fragmentShaderPath(fragmentShaderPath) {
+        Renderer::Submit(std::make_unique<CreateShader>(*this));
+    }
+
+    void ShaderUser::Bind() const {
+        Renderer::Submit(std::make_unique<BindShader>(m_UUID));
+    }
+
+    void ShaderUser::UnBind() const {
+        Renderer::Submit(std::make_unique<UnBindShader>());
+    }
+
     void ShaderUser::SetUniform4f(const char *uniform, float x, float y, float z, float w) {
         Renderer::Submit(std::make_unique<UpdateShaderUniform4f>(m_UUID, uniform, x, y, z, w));
     }

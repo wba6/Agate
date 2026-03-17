@@ -1,7 +1,7 @@
 #include "AssimpLoader.h"
 #include "Agate/Core/Logger.h"
 #include "Mesh.h"
-#include "OpenGl/Texture.h"
+#include "mock/TextureUser.hpp"
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <future>
@@ -81,7 +81,7 @@ Mesh AssimpLoader::processMesh(aiMesh *mesh, const aiScene *scene, const glm::ma
     // data to fill
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+    std::vector<TextureUser> textures;
 
     // walk through each of the mesh's vertices
     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
@@ -130,24 +130,24 @@ Mesh AssimpLoader::processMesh(aiMesh *mesh, const aiScene *scene, const glm::ma
     // process materials
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+    std::vector<TextureUser> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+    std::vector<TextureUser> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+    std::vector<TextureUser> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+    std::vector<TextureUser> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     return Mesh{vertices, indices, textures};
 }
 
-std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName) {
+std::vector<TextureUser> AssimpLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName) {
 
-    std::vector<Texture> textures;
+    std::vector<TextureUser> textures;
     for (unsigned int i = 0; i < material->GetTextureCount(type); i++) {
         aiString str;
         material->GetTexture(type, i, &str);
@@ -160,8 +160,8 @@ std::vector<Texture> AssimpLoader::loadMaterialTextures(aiMaterial* material, ai
             }
         }
         if (!skip) {
-            Texture texture(str.C_Str(), m_directory);
-            texture.setType(typeName);
+            TextureUser texture(str.C_Str(), m_directory);
+            texture.setType(typeName); 
             textures.push_back(texture);
             m_texturesLoaded.push_back(texture);
         }

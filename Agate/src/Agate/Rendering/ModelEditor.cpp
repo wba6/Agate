@@ -1,5 +1,7 @@
 #include "ModelEditor.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace Agate {
 
@@ -11,7 +13,7 @@ Transform::Transform()
 ModelEditor::ModelEditor(std::string path, std::vector<Mesh> meshes)
         : m_path(path), m_meshes(meshes) {}
 
-void ModelEditor::Draw(Shader& shader) {
+void ModelEditor::Draw(ShaderUser& shader) {
 
     for (Mesh& mesh: m_meshes) {
         mesh.Draw(shader);
@@ -64,9 +66,7 @@ void ModelEditor::LoadTextures() {
     */
     PRINTMSG("Loading textures - This may take a minute");
     for (auto& mesh: m_meshes) {
-        for (auto& texture: mesh.m_textures) {
-            texture.initialize();
-        }
+        // TextureUser handles its own creation via constructor submission
         mesh.setupMesh();
     }
 }

@@ -16,7 +16,7 @@ namespace Agate {
     float Camera::s_fov{45.f};
     glm::vec3 Camera::s_cameraFront{glm::vec3(0.0f, 0.0f, -1.0f)};
 
-    Camera::Camera(Shader &shaderObj)
+    Camera::Camera(ShaderUser &shaderObj)
             : m_cameraSpeed(2.5f), s_Active(false), m_deltaTime(0.0f), m_lastFrame(0.0f), m_Shader(shaderObj),
               m_cameraPos(glm::vec3(0.0f, 0.0f, 3.0f)), m_cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)) {}
 

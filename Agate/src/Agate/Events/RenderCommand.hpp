@@ -27,6 +27,13 @@ namespace Agate {
         CreateIndexBuffer,
         CreateShader,
         CreateTexture,
+        BindVertexArray,
+        UnBindVertexArray,
+        BindIndexBuffer,
+        UnBindIndexBuffer,
+        BindShader,
+        UnBindShader,
+        BindTexture,
         UpdateShaderUniform4f,
         UpdateShaderUniform3f,
         UpdateShaderUniformMat4,
@@ -109,17 +116,17 @@ namespace Agate {
         /**
          * @brief Constructor - takes in the mesh to cummicate to the render
          *  
-         * @param mesh : currently an int for testing purposes a real mesh in future 
+         * @param vaoUUID : UUID of the Vertex Array
+         * @param shaderUUID : UUID of the Shader
+         * @param indexCount : Number of indices to draw
          */
-        DrawMesh(int mesh): m_mesh(mesh) {};
+        DrawMesh(UUID vaoUUID, UUID shaderUUID, uint32_t indexCount)
+            : m_VaoUUID(vaoUUID), m_ShaderUUID(shaderUUID), m_IndexCount(indexCount) {};
 
          /**
          * @brief Execute the render operation.
-         *
-         * Implementations should perform the necessary rendering work without
-         * modifying the command object itself.
          */
-        virtual void Execute() override { PRINTWARN("Excute in draw mesh not implimented");}
+        virtual void Execute() override {}
 
         /**
          * @brief Command Type of this event
@@ -135,12 +142,12 @@ namespace Agate {
             return CommandTypes::DrawMesh;
         }
 
-
-
         virtual ~DrawMesh() = default;
 
-    private:
-        int m_mesh;
+    public:
+        UUID m_VaoUUID;
+        UUID m_ShaderUUID;
+        uint32_t m_IndexCount;
     };
 
     /**
@@ -298,6 +305,67 @@ namespace Agate {
         virtual ~CreateTexture() = default;
     public:
         TextureUser m_TU;
+    };
+
+    class BindVertexArray : public RenderCommand {
+    public:
+        BindVertexArray(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::BindVertexArray; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::BindVertexArray; }
+        UUID m_UUID;
+    };
+
+    class UnBindVertexArray : public RenderCommand {
+    public:
+        UnBindVertexArray() = default;
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::UnBindVertexArray; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::UnBindVertexArray; }
+    };
+
+    class BindIndexBuffer : public RenderCommand {
+    public:
+        BindIndexBuffer(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::BindIndexBuffer; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::BindIndexBuffer; }
+        UUID m_UUID;
+    };
+
+    class UnBindIndexBuffer : public RenderCommand {
+    public:
+        UnBindIndexBuffer() = default;
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::UnBindIndexBuffer; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::UnBindIndexBuffer; }
+    };
+
+    class BindShader : public RenderCommand {
+    public:
+        BindShader(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::BindShader; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::BindShader; }
+        UUID m_UUID;
+    };
+
+    class UnBindShader : public RenderCommand {
+    public:
+        UnBindShader() = default;
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::UnBindShader; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::UnBindShader; }
+    };
+
+    class BindTexture : public RenderCommand {
+    public:
+        BindTexture(UUID uuid, uint32_t slot) : m_UUID(uuid), m_Slot(slot) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::BindTexture; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::BindTexture; }
+        UUID m_UUID;
+        uint32_t m_Slot;
     };
 
     class UpdateShaderUniform4f : public RenderCommand {

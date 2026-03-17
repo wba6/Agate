@@ -49,26 +49,39 @@ namespace Agate {
 
             /**
              */
-            static void CreateVAO(CreateVertexArray e);
+            static void OnCreateVAO(CreateVertexArray e);
 
             /**
              */
-            static void CreateIB(CreateIndexBuffer e);
+            static void OnCreateIB(CreateIndexBuffer e);
 
             
             /**
              */
-            static void CreateShader(CreateShader e);
+            static void OnCreateShader(CreateShader e);
 
             /**
              */
-            static void CreateTexture(CreateTexture e);
+            static void OnCreateTexture(CreateTexture e);
 
-            static void UpdateShaderUniform4f(UpdateShaderUniform4f e);
-            static void UpdateShaderUniform3f(UpdateShaderUniform3f e);
-            static void UpdateShaderUniformMat4(UpdateShaderUniformMat4 e);
-            static void UpdateShaderUniform1i(UpdateShaderUniform1i e);
-            static void UpdateShaderUniform1f(UpdateShaderUniform1f e);
+            static void OnBindVAO(BindVertexArray e);
+            static void OnUnBindVAO(UnBindVertexArray e);
+
+            static void OnBindIBO(BindIndexBuffer e);
+            static void OnUnBindIBO(UnBindIndexBuffer e);
+
+            static void OnBindShader(BindShader e);
+            static void OnUnBindShader(UnBindShader e);
+
+            static void OnBindTexture(BindTexture e);
+
+            static void OnDrawMesh(DrawMesh e);
+
+            static void OnUpdateShaderUniform4f(UpdateShaderUniform4f e);
+            static void OnUpdateShaderUniform3f(UpdateShaderUniform3f e);
+            static void OnUpdateShaderUniformMat4(UpdateShaderUniformMat4 e);
+            static void OnUpdateShaderUniform1i(UpdateShaderUniform1i e);
+            static void OnUpdateShaderUniform1f(UpdateShaderUniform1f e);
 
         private:
             Renderer() = delete;

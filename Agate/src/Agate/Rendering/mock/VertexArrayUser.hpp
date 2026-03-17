@@ -4,7 +4,7 @@
 
 #include "../OpenGl/BufferLayout.h"
 #include "IndexBufferUser.hpp"
-#include "Rendering/UUID.hpp"
+#include "Agate/Rendering/UUID.hpp"
 #include <cstddef>
 #include <memory>
 
@@ -12,13 +12,12 @@ namespace Agate {
     class VertexArrayUser {
     public:
         //takes in a data layout and the data through a void pointer
-        VertexArrayUser(BufferDataLayout bufferInformation, std::shared_ptr<void> data, size_t data_size)
-        :m_bufferInformation(bufferInformation), m_data(data), m_dataSize(data_size){}
+        VertexArrayUser(BufferDataLayout bufferInformation, std::shared_ptr<void> data, size_t data_size);
 
         BufferDataLayout getBufferData() {return m_bufferInformation;};
         std::shared_ptr<void>  getData() {return m_data;};
         size_t getDataSize() { return m_dataSize;}
-        size_t getUUID() { return m_UUID;}
+        UUID getUUID() { return m_UUID;}
 
         /**
          * Adds index buffer to the vertex array
@@ -26,9 +25,9 @@ namespace Agate {
          */
         //void addIndexBuffer(IndexBufferUser indexBuffer);
 
-        //void Bind();
+        void Bind() const;
 
-        //void UnBind();
+        void UnBind() const;
 
         virtual ~VertexArrayUser() = default;
 
