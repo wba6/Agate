@@ -166,6 +166,43 @@ public:
     }
 };
 
+class TaskPerFrameLayer : public Agate::Layer {
+private:
+    std::array<Agate::TaskHandle<int>, 1000> bulkHandles;
+    std::size_t produced = 0;
+    std::size_t consumed = 0;
+public:
+
+    void Attach() override
+    {
+
+    }
+
+    void Detach() override
+    {
+
+    }
+
+    void OnRender()override
+    {
+        if (produced < bulkHandles.size()) {
+            bulkHandles[produced++] = Agate::TaskPool::Enqueue([counter = produced]() -> int {
+                std::this_thread::sleep_for(std::chrono::milliseconds(250));
+                return counter;
+            });
+            PRINTMSG("Producing {}", produced - 1);
+        }
+
+        if (consumed < produced && bulkHandles[consumed].Status() == Agate::TaskStatus::Done) {
+            PRINTMSG("Consuming {}", bulkHandles[consumed++].Wait().Get());
+        }
+    };
+
+    void OnEvent(Agate::Event &e) override
+    {
+    }
+};
+
 Agate::EntryPoint* Agate::CreateEntryPoint()
 {
     auto Application = new app();
@@ -176,6 +213,7 @@ Agate::EntryPoint* Agate::CreateEntryPoint()
     Application->EmplaceLayer(example_layer);
     Application->EmplaceLayer(std::make_shared<TemplayerEx>());
     Application->EmplaceLayer(taskTestLayer);
+    Application->EmplaceLayer(std::make_shared<TaskPerFrameLayer>());
 
     Application->RemoveLayer(example_layer);
     Application->RemoveLayer(taskTestLayer);

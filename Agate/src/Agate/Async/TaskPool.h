@@ -11,11 +11,10 @@
 #include "Agate/Core/Logger.h"
 #include "Task.h"
 #include "TaskState.h"
+#include "TaskWorker.h"
 #include <concepts>
 #include <memory>
-#include <queue>
 #include <stdexcept>
-#include <thread>
 #include <type_traits>
 #include <vector>
 
@@ -143,7 +142,7 @@ ResultType TaskHandle<ResultType>::Get() {
 
 template<typename ResultType>
 void TaskHandle<ResultType>::Cancel() {
-    PRINTWARN("TaskHandle::Cancel not yet implemented");
+    sharedState->Cancel();
 }
 
 template<typename ResultType>
@@ -157,12 +156,15 @@ private:
     static std::once_flag initializationFlag;
     static std::unique_ptr<TaskPool> instance;
 
-    std::mutex queueLock;
-    std::condition_variable queueCondition;
-    std::queue<std::unique_ptr<Task>> taskQueue;
-
     std::atomic<bool> shutdown = false;
-    std::vector<std::jthread> workers;
+    std::atomic<std::size_t> nextWorker = 0;
+
+    /** @note If this is allowed to be resized after initialization,
+     *        workers will have a dangling reference to the old vector
+     *        and will need to be refactored to use a different
+     *        reference type
+     */
+    std::vector<std::unique_ptr<TaskWorker>> workers;
 
     /**
      * @brief Singleton constructor - initializes worker threads
@@ -277,13 +279,17 @@ public:
             }
         };
 
+        auto cancel = [state]() -> void {
+            state->Cancel();
+        };
+
         // Package and enqueue task, then alert workers
-        std::unique_ptr<Task> packedTask = std::make_unique<QualifiedTask<decltype(wrappedTask)>>(std::move(wrappedTask));
-        {
-            std::scoped_lock lock(instance->queueLock);
-            instance->taskQueue.push(std::move(packedTask));
+        std::unique_ptr<Task> packedTask = std::make_unique<QualifiedTask<decltype(wrappedTask), decltype(cancel)>>(std::move(wrappedTask), std::move(cancel));
+        std::size_t targetIndex = instance->nextWorker.fetch_add(1, std::memory_order_relaxed) % instance->workers.size();
+        instance->workers[targetIndex]->Push(std::move(packedTask));
+        for (std::size_t i = 0; i < instance->workers.size(); ++i) {
+            instance->workers[i]->Notify();
         }
-        instance->queueCondition.notify_one();
 
         return handle;
     }

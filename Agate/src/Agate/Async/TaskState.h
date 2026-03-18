@@ -120,6 +120,13 @@ struct QualifiedTaskState {
     std::mutex mutex;
     std::condition_variable condition;
     std::atomic<TaskStatus> status = TaskStatus::Ready;
+
+    void Cancel() {
+        std::scoped_lock lock(mutex);
+        if (static_cast<std::uint32_t>(status.load() & TaskStatus::Terminal) != static_cast<std::uint32_t>(0)) {
+            status.store(TaskStatus::CancelRequested);
+        }
+    }
 };
 
 } // namespace Agate
