@@ -133,9 +133,16 @@ ResultType TaskHandle<ResultType>::Get() {
 
     // Critical error: Invalid access attempt
     std::scoped_lock lock(sharedState->mutex);
-    if (!sharedState->result.has_value() || Status() != TaskStatus::Done) {
-        PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
-        throw std::runtime_error("Invalid std::optional access attempt");
+    if constexpr (std::is_void_v<ResultType>) {
+        if (Status() != TaskStatus::Done) {
+            PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
+            throw std::runtime_error("Invalid std::optional access attempt");
+        }
+    } else {
+        if (!sharedState->result.has_value() || Status() != TaskStatus::Done) {
+            PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
+            throw std::runtime_error("Invalid std::optional access attempt");
+        }
     }
 
     if constexpr (std::is_void_v<ResultType>) {
