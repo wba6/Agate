@@ -89,6 +89,7 @@ void TaskWorker::Run(std::stop_token stopToken) {
             m_taskQueue.pop_front();
         }
         if (currentTask) {
+            currentTask->Cancel();
             currentTask->Run();
         }
     }

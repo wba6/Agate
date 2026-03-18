@@ -134,7 +134,7 @@ ResultType TaskHandle<ResultType>::Get() {
 
 template<typename ResultType>
 void TaskHandle<ResultType>::Cancel() {
-    PRINTWARN("TaskHandle::Cancel not yet implemented");
+    sharedState->Cancel();
 }
 
 template<typename ResultType>
@@ -271,8 +271,12 @@ public:
             }
         };
 
+        auto cancel = [state]() -> void {
+            state->Cancel();
+        };
+
         // Package and enqueue task, then alert workers
-        std::unique_ptr<Task> packedTask = std::make_unique<QualifiedTask<decltype(wrappedTask)>>(std::move(wrappedTask));
+        std::unique_ptr<Task> packedTask = std::make_unique<QualifiedTask<decltype(wrappedTask), decltype(cancel)>>(std::move(wrappedTask), std::move(cancel));
         std::size_t targetIndex = instance->nextWorker.fetch_add(1, std::memory_order_relaxed) % instance->workers.size();
         instance->workers[targetIndex]->Push(std::move(packedTask));
         for (std::size_t i = 0; i < instance->workers.size(); ++i) {
