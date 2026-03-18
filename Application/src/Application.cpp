@@ -109,6 +109,7 @@ private:
     Agate::TaskHandle<std::string> secretMessageHandle;
     Agate::TaskHandle<std::shared_ptr<std::string>> secondSecretMessageHandle;
     Agate::TaskHandle<int> iWillFail;
+    Agate::TaskHandle<void> delayedMessageHandle;
 public:
 
     void Attach() override
@@ -141,6 +142,12 @@ public:
         iWillFail = Agate::TaskPool::Enqueue([]() -> int {
             throw std::runtime_error("I failed");
             return 0;
+        });
+        delayedMessageHandle = Agate::TaskPool::Enqueue([]() -> void {
+            std::this_thread::sleep_for(std::chrono::seconds(10));
+            PRINTMSG("This message was delayed by 10 seconds");
+        }).Then([]() -> void {
+            PRINTMSG("This message was printed in a callback after the delayed message");
         });
     }
 

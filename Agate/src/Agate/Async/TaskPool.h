@@ -93,10 +93,21 @@ TaskHandle<ResultType>& TaskHandle<ResultType>::Then(FuncType&& callback) {
 
     std::scoped_lock lock(sharedState->mutex);
     bool statusDone = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Done) == static_cast<std::uint32_t>(TaskStatus::Done);
-    if (sharedState->result.has_value() && statusDone) {
-        callback(*(sharedState->result));
 
-        return *this;
+    // Task already done
+    if constexpr (std::is_void_v<ResultType>) {
+        // void specialization
+        if (statusDone) {
+            callback();
+
+            return *this;
+        }
+    } else {
+        if (sharedState->result.has_value() && statusDone) {
+            callback(*(sharedState->result));
+
+            return *this;
+        }
     }
     auto callbackPtr = std::make_unique<QualifiedCallback<ResultType, FuncType>>(std::forward<FuncType>(callback));
     sharedState->callback = std::move(callbackPtr);
@@ -127,9 +138,13 @@ ResultType TaskHandle<ResultType>::Get() {
         throw std::runtime_error("Invalid std::optional access attempt");
     }
 
-    ResultType result = std::move(*(sharedState->result));
-    sharedState->result.reset();
-    return result;
+    if constexpr (std::is_void_v<ResultType>) {
+        return;
+    } else {
+        ResultType result = std::move(*(sharedState->result));
+        sharedState->result.reset();
+        return result;
+    }
 }
 
 template<typename ResultType>
@@ -249,17 +264,32 @@ public:
             try {
 
                 state->status.store(TaskStatus::Working);
-                ResultType result = task();
 
-                // Safely store result
-                {
-                    std::scoped_lock lock(state->mutex);
-                    state->result = std::move(result);
-                    state->status.store(TaskStatus::Done);
-                    if (state->callback) {
-                        state->callback->Run(*(state->result));
+                if constexpr (std::is_void_v<ResultType>) {
+                    task();
+
+                    // Safely store result
+                    {
+                        std::scoped_lock lock(state->mutex);
+                        state->status.store(TaskStatus::Done);
+                        if (state->callback) {
+                            state->callback->Run();
+                        }
+                    }
+                } else {
+                    ResultType result = task();
+
+                    // Safely store result
+                    {
+                        std::scoped_lock lock(state->mutex);
+                        state->result = std::move(result);
+                        state->status.store(TaskStatus::Done);
+                        if (state->callback) {
+                            state->callback->Run(*(state->result));
+                        }
                     }
                 }
+
                 state->condition.notify_all();
 
             } catch (const std::exception& exception) {

@@ -12,6 +12,7 @@
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <variant>
 #include <type_traits>
 
 
@@ -76,7 +77,7 @@ public:
  * @tparam FuncType Type of the callback invocable
  */
 template<typename ResultType, typename FuncType>
-    requires std::invocable<FuncType, ResultType>
+    requires std::invocable<FuncType, ResultType> || (std::is_void_v<ResultType> && std::invocable<FuncType>)
 class QualifiedCallback : public TaskCallback<ResultType> {
 private:
     FuncType callback;
@@ -98,6 +99,46 @@ public:
     }
 };
 
+/*
+    Void specializations for callback types
+ */
+
+template<>
+class TaskCallback<void> {
+public:
+    /**
+     * @brief Virtual destructor for subclasses
+     */
+    virtual ~TaskCallback() = default;
+
+    /**
+     * @brief Invokes the callback with the result of the task
+     */
+    virtual void Run() = 0;
+};
+
+template<typename FuncType>
+    requires std::invocable<FuncType>
+class QualifiedCallback<void, FuncType> : public TaskCallback<void> {
+        FuncType callback;
+public:
+
+    /**
+     * @brief Forwarding constructor
+     * 
+     * @param callback Invocable to pass task result to when the callback is run
+     */
+    QualifiedCallback(FuncType&& callback)
+        : callback(std::forward<FuncType>(callback)) {}
+    
+    /**
+     * @brief Invokes the callback with the result of the task
+     */
+    virtual void Run() override {
+        callback();
+    }
+};
+
 /**
  * @brief Shared state wrapper for qualified tasks
  * 
@@ -111,7 +152,13 @@ public:
 template<typename ResultType>
 struct QualifiedTaskState {
 
-    std::optional<ResultType> result;
+    using ResultMemberType = std::conditional_t<
+        std::is_void_v<ResultType>,
+        std::monostate,
+        std::optional<ResultType>
+    >;
+
+    ResultMemberType result;
     std::unique_ptr<TaskCallback<ResultType>> callback;
 
     std::mutex mutex;
