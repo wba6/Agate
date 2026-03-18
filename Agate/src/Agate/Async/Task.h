@@ -26,6 +26,11 @@ public:
      * @brief Runs the task
      */
     virtual void Run() = 0;
+
+    /**
+     * @brief Cancels the task
+     */
+    virtual void Cancel() = 0;
 };
 
 /**
@@ -33,24 +38,32 @@ public:
  * 
  * @tparam FuncType Type of the invocable that runs the task
  */
-template<typename FuncType>
-    requires std::invocable<FuncType>
+template<typename FuncType, typename CancelType>
+    requires std::invocable<FuncType> && std::invocable<CancelType>
 class QualifiedTask : public Task {
 private:
     FuncType taskFn;
+    CancelType cancelFn;
 public:
 
     /**
      * @brief Forwarding constructor
      */
-    QualifiedTask(FuncType&& task)
-        : taskFn(std::forward<FuncType>(task)) {}
+    QualifiedTask(FuncType&& task, CancelType&& cancel)
+        : taskFn(std::forward<FuncType>(task)), cancelFn(std::forward<CancelType>(cancel)) {}
 
     /**
      * @brief Runs the task
      */
     virtual void Run() override {
         taskFn();
+    }
+
+    /**
+     * @brief Cancels the task
+     */
+    virtual void Cancel() override {
+        cancelFn();
     }
 };
 
