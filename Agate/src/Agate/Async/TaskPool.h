@@ -120,15 +120,23 @@ TaskHandle<ResultType>& TaskHandle<ResultType>::Wait() {
 template<typename ResultType>
 ResultType TaskHandle<ResultType>::Get() {
 
-    // Critical error: Invalid access attempt
+    // Result not ready
     std::scoped_lock lock(sharedState->mutex);
     if (!sharedState->result.has_value() || Status() != TaskStatus::Done) {
         PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
-        throw std::runtime_error("Invalid std::optional access attempt");
+        throw std::runtime_error("Invalid Task Extraction Attempt");
+    }
+
+    // Result already extracted
+    if ((sharedState->status.load() & TaskStatus::Extracted) == TaskStatus::Extracted) {
+        PRINTCRIT("Attempted to call `TaskHandle::Get` on an invalidated result due to prior extraction");
+        throw std::runtime_error("Invalid Task Extraction Attempt");
     }
 
     ResultType result = std::move(*(sharedState->result));
     sharedState->result.reset();
+    sharedState->status.store(sharedState->status.load() | TaskStatus::Extracted);
+
     return result;
 }
 
@@ -265,6 +273,7 @@ public:
             } catch (const std::exception& exception) {
                 {
                     std::scoped_lock lock(state->mutex);
+                    PRINTERROR("Task threw an exception: {}", exception.what());
                     state->status.store(TaskStatus::Error);
                 }
                 state->condition.notify_all();

@@ -1,11 +1,11 @@
 #ifndef AGATE_MODELLOADER_H
 #define AGATE_MODELLOADER_H
 
+#include "Agate/Async/TaskPool.h"
 #include "Mesh.h"
 #include "ModelEditor.h"
 #include "OpenGl/Shader.h"
 #include "OpenGl/Texture.h"
-#include <future>
 #include <memory>
 
 #define MAX_BONE_INFLUENCE 4
@@ -21,30 +21,24 @@ namespace Agate {
         std::string m_path;
 
         /**
-         * @brief Destructor - Blocks and waits for future completion if necessary
+         * @brief Destructor - Blocks and waits for completion if necessary
          */
         virtual ~ModelLoader();
 
         /**
-         * @brief Instructs the loader to start internally loading its model
+         * @brief Enqueues a task to load this loader's target and parses it into
+         *        an engine-ready format
          * 
          * @param path Path to the model file
          */
-        static std::future<std::unique_ptr<ModelEditor>> LoadModel(std::string const &path);
+        static TaskHandle<ModelEditor> LoadModel(std::string const &path);
 
 protected:
 
         /**
-         * @brief Construct a ModelLoader and start loading a model on a background task.
+         * @brief Construct a ModelLoader for a target model file
          *
-         * Initializes model metadata and launches an asynchronous Assimp import using
-         * std::async. The returned aiScene* is stored in a std::future so the caller
-         * can continue without blocking.
-         *
-         * @param path     Filesystem path to the model file.
-         *
-         * @note The actual GPU/engine-side preparation is deferred until Draw() observes
-         *       the future is ready and calls prepareScene().
+         * @param path Filesystem path to the model file
          */ 
         ModelLoader(std::string const &path);
 
