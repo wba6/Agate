@@ -166,6 +166,8 @@ public:
         } else {
             PRINTMSG("iWillFail did not fail");
         }
+
+        delayedMessageHandle.Wait();
     }
 
     void OnRender()override
