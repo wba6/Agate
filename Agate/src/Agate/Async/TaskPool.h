@@ -273,6 +273,7 @@ public:
             } catch (const std::exception& exception) {
                 {
                     std::scoped_lock lock(state->mutex);
+                    PRINTERROR("Task threw an exception: {}", exception.what());
                     state->status.store(TaskStatus::Error);
                 }
                 state->condition.notify_all();
