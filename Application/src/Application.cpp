@@ -60,6 +60,10 @@ public:
         if (modelHandle.Status() == Agate::TaskStatus::Done) {
             model = std::make_unique<Agate::ModelEditor>(std::move(modelHandle.Wait().Get()));
             model->LoadTextures();
+        } else if (modelHandle.Status() == Agate::TaskStatus::Error) {
+
+            // This will run every frame upon failure
+            PRINTCRIT("Failed to load model");
         }
 
         shader->Bind();
@@ -82,10 +86,10 @@ public:
     }
     virtual ~TemplayerEx()
     {
-        if (static_cast<uint32_t>(modelHandle.Status() & Agate::TaskStatus::Terminal) != static_cast<uint32_t>(0)) {
-            PRINTMSG("[TemplateLayer]: Waiting for pending model");
+        // Tasks not finished
+        if ((modelHandle.Status() & Agate::TaskStatus::Terminal) == static_cast<Agate::TaskStatus>(0)) {
+            PRINTMSG("[TemplateLayer]: Waiting for pending tasks to finish before destruction...");
             modelHandle.Wait();
-            model = std::make_unique<Agate::ModelEditor>(std::move(modelHandle.Get()));
         }
     }
 
@@ -195,6 +199,9 @@ public:
 
         if (consumed < produced && bulkHandles[consumed].Status() == Agate::TaskStatus::Done) {
             PRINTMSG("Consuming {}", bulkHandles[consumed++].Wait().Get());
+        } else if (consumed < produced && bulkHandles[consumed].Status() == Agate::TaskStatus::Error) {
+            PRINTWARN("Task {} failed", consumed);
+            consumed++;
         }
     };
 
