@@ -5,7 +5,6 @@
 #include <chrono>
 #include <memory>
 #include <filesystem>
-#include <future>
 #include <stdexcept>
 #include <string>
 
@@ -47,7 +46,7 @@ public:
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
         model = nullptr;
-        pendingModel = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
+        modelHandle = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
     }
 
     void Detach() override
@@ -58,12 +57,13 @@ public:
     {
 
         // Poll for model completion until model is retrieved
-        if (pendingModel.valid()) {
-            const auto status = pendingModel.wait_for(std::chrono::seconds(0));
-            if (status == std::future_status::ready) {
-                model = pendingModel.get();
-                model->LoadTextures();
-            }
+        if (modelHandle.Status() == Agate::TaskStatus::Done) {
+            model = std::make_unique<Agate::ModelEditor>(std::move(modelHandle.Wait().Get()));
+            model->LoadTextures();
+        } else if (modelHandle.Status() == Agate::TaskStatus::Error) {
+
+            // This will run every frame upon failure
+            PRINTCRIT("Failed to load model");
         }
 
         shader->Bind();
@@ -86,17 +86,17 @@ public:
     }
     virtual ~TemplayerEx()
     {
-        if (pendingModel.valid()) {
-            PRINTMSG("[TemplateLayer]: Waiting for pending model");
-            pendingModel.wait();
-            model = pendingModel.get();
+        // Tasks not finished
+        if ((modelHandle.Status() & Agate::TaskStatus::Terminal) == static_cast<Agate::TaskStatus>(0)) {
+            PRINTMSG("[TemplateLayer]: Waiting for pending tasks to finish before destruction...");
+            modelHandle.Wait();
         }
     }
 
     std::unique_ptr<Agate::Shader> shader;
     std::unique_ptr<Agate::Camera> camera;
     std::unique_ptr<Agate::ModelEditor> model;
-    std::future<std::unique_ptr<Agate::ModelEditor>> pendingModel;
+    Agate::TaskHandle<Agate::ModelEditor> modelHandle;
 };
 
 class TaskTestLayer : public Agate::Layer {
@@ -208,6 +208,9 @@ public:
 
         if (consumed < produced && bulkHandles[consumed].Status() == Agate::TaskStatus::Done) {
             PRINTMSG("Consuming {}", bulkHandles[consumed++].Wait().Get());
+        } else if (consumed < produced && bulkHandles[consumed].Status() == Agate::TaskStatus::Error) {
+            PRINTWARN("Task {} failed", consumed);
+            consumed++;
         }
     };
 
