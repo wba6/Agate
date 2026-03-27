@@ -24,6 +24,7 @@ namespace Agate {
     }
 
     IndexBuffer::~IndexBuffer() {
+        glDeleteBuffers(1, &m_ibo);
     }
 
     void IndexBuffer::setUpBuffer() {

@@ -135,6 +135,10 @@ namespace Agate {
 
     }
 
+    Texture::~Texture() {
+        glDeleteTextures(1, &m_textureID);
+    }
+
     /*
      * Bind the texture to a texture unit
      *

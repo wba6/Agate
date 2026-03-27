@@ -12,4 +12,8 @@ namespace Agate {
         Renderer::Submit(std::make_unique<BindTexture>(m_UUID, slot));
     }
 
+    TextureUser::~TextureUser() {
+        Renderer::Submit(std::make_unique<DeleteTexture>(m_UUID));
+    }
+
 }

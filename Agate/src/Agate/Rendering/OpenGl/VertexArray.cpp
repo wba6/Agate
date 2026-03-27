@@ -40,6 +40,8 @@ namespace Agate {
         indexBuffer.UnBind();
     }
 
-    VertexArray::~VertexArray() {}
+    VertexArray::~VertexArray() {
+        GLCall(glDeleteVertexArrays(1, &m_vao));
+    }
 
 }// namespace Agate

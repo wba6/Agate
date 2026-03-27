@@ -85,6 +85,11 @@ namespace Agate {
 
             static void OnSetViewport(SetViewport e);
 
+            static void OnDeleteVAO(DeleteVertexArray e);
+            static void OnDeleteIBO(DeleteIndexBuffer e);
+            static void OnDeleteShader(DeleteShader e);
+            static void OnDeleteTexture(DeleteTexture e);
+
         private:
             Renderer() = delete;
             static std::queue<std::unique_ptr<RenderCommand>> s_CommandQueue; // write buffer

@@ -51,6 +51,10 @@ namespace Agate {
             notifier.NotifyCommand<UpdateShaderUniform1i>(BindStaticFn(Renderer::OnUpdateShaderUniform1i));
             notifier.NotifyCommand<UpdateShaderUniform1f>(BindStaticFn(Renderer::OnUpdateShaderUniform1f));
             notifier.NotifyCommand<SetViewport>(BindStaticFn(Renderer::OnSetViewport));
+            notifier.NotifyCommand<DeleteVertexArray>(BindStaticFn(Renderer::OnDeleteVAO));
+            notifier.NotifyCommand<DeleteIndexBuffer>(BindStaticFn(Renderer::OnDeleteIBO));
+            notifier.NotifyCommand<DeleteShader>(BindStaticFn(Renderer::OnDeleteShader));
+            notifier.NotifyCommand<DeleteTexture>(BindStaticFn(Renderer::OnDeleteTexture));
 
 
             if (e) {
@@ -209,6 +213,22 @@ namespace Agate {
 
     void Renderer::OnSetViewport(SetViewport e) {
         glViewport(e.m_X, e.m_Y, e.m_Width, e.m_Height);
+    }
+
+    void Renderer::OnDeleteVAO(DeleteVertexArray e) {
+        s_VaoMap.erase(e.m_UUID);
+    }
+
+    void Renderer::OnDeleteIBO(DeleteIndexBuffer e) {
+        s_IndexBufferMap.erase(e.m_UUID);
+    }
+
+    void Renderer::OnDeleteShader(DeleteShader e) {
+        s_ShaderMap.erase(e.m_UUID);
+    }
+
+    void Renderer::OnDeleteTexture(DeleteTexture e) {
+        s_TextureMap.erase(e.m_UUID);
     }
 
 }

@@ -18,6 +18,8 @@ namespace Agate {
         */
         Texture(const char *file, const std::string &directory);
 
+        virtual ~Texture();
+
         /*
         * Bind the texture to a texture unit
         *

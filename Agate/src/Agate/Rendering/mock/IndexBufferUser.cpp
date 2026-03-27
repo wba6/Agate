@@ -21,6 +21,7 @@ namespace Agate {
     }
 
     IndexBufferUser::~IndexBufferUser() {
+        Renderer::Submit(std::make_unique<DeleteIndexBuffer>(m_UUID));
     }
 
 }

@@ -16,4 +16,8 @@ namespace Agate {
         Renderer::Submit(std::make_unique<UnBindVertexArray>());
     }
 
+    VertexArrayUser::~VertexArrayUser() {
+        Renderer::Submit(std::make_unique<DeleteVertexArray>(m_UUID));
+    }
+
 }

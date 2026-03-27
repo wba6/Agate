@@ -91,6 +91,7 @@ namespace Agate {
     Shader::~Shader() {
         glDeleteShader(m_vertexShaderID);
         glDeleteShader(m_fragmentShaderID);
+        glDeleteProgram(m_shaderProgramID);
     }
 
     int Shader::getUniformLoc(const char *uniform) const {

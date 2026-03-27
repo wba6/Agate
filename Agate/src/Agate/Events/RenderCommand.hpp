@@ -39,7 +39,11 @@ namespace Agate {
         UpdateShaderUniformMat4,
         UpdateShaderUniform1i,
         UpdateShaderUniform1f,
-        SetViewport
+        SetViewport,
+        DeleteVertexArray,
+        DeleteIndexBuffer,
+        DeleteShader,
+        DeleteTexture
     };
 
     /**
@@ -467,6 +471,42 @@ namespace Agate {
         virtual ~SetViewport() = default;
     public:
         uint32_t m_X, m_Y, m_Width, m_Height;
+    };
+
+    class DeleteVertexArray : public RenderCommand {
+    public:
+        DeleteVertexArray(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::DeleteVertexArray; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::DeleteVertexArray; }
+        UUID m_UUID;
+    };
+
+    class DeleteIndexBuffer : public RenderCommand {
+    public:
+        DeleteIndexBuffer(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::DeleteIndexBuffer; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::DeleteIndexBuffer; }
+        UUID m_UUID;
+    };
+
+    class DeleteShader : public RenderCommand {
+    public:
+        DeleteShader(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::DeleteShader; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::DeleteShader; }
+        UUID m_UUID;
+    };
+
+    class DeleteTexture : public RenderCommand {
+    public:
+        DeleteTexture(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::DeleteTexture; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::DeleteTexture; }
+        UUID m_UUID;
     };
 
 

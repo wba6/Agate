@@ -36,4 +36,8 @@ namespace Agate {
         Renderer::Submit(std::make_unique<UpdateShaderUniform1f>(m_UUID, uniform, x));
     }
 
+    ShaderUser::~ShaderUser() {
+        Renderer::Submit(std::make_unique<DeleteShader>(m_UUID));
+    }
+
 }

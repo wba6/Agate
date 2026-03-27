@@ -6,30 +6,65 @@
 
 namespace Agate {
 
+    /**
+     * @brief A mock representation of an OpenGL Index Buffer for use on the main thread.
+     *
+     * IndexBufferUser stores the index data and associated metadata (UUIDs)
+     * to allow the application to interact with index buffers without
+     * directly making OpenGL calls.
+     */
     class IndexBufferUser {
     public:
+        /**
+         * @brief Constructs an IndexBufferUser.
+         *
+         * @param vector The index data.
+         * @param VAOUUID The UUID of the Vertex Array this index buffer is attached to.
+         */
         explicit IndexBufferUser(std::vector<unsigned int> &vector, UUID VAOUUID);
 
+        /**
+         * @brief Destroys the IndexBufferUser.
+         */
         ~IndexBufferUser();
 
+        /**
+         * @brief Gets the index data.
+         * @return A reference to the vector of indices.
+         */
         std::vector<unsigned int>& getIndinces() { return m_indinces;};
-        UUID getUUID() { return m_UUID;}
-        UUID getAttachedVAOUUID() { return m_VAOUUID;};
-
-
-        void Bind() const;
-
-        void UnBind() const;
-
-        unsigned int GetNumOfIndices() const;
 
         /**
-         * SetUpBuffer is ment to set up the index buffer within a vertex array
-         * Before calling insure index buffer is bound
-         * After calling insure that you unbind the vertex array before unbinding index buffer
-         * this function does not unbind the index buffer
+         * @brief Gets the UUID of this Index Buffer.
+         * @return The UUID of the index buffer.
          */
-        //void setUpBuffer();
+        UUID getUUID() { return m_UUID;}
+
+        /**
+         * @brief Gets the UUID of the attached Vertex Array.
+         * @return The UUID of the attached Vertex Array.
+         */
+        UUID getAttachedVAOUUID() { return m_VAOUUID;};
+
+        /**
+         * @brief Binds the index buffer.
+         *
+         * Enqueues a command to bind the underlying OpenGL index buffer.
+         */
+        void Bind() const;
+
+        /**
+         * @brief Unbinds the index buffer.
+         *
+         * Enqueues a command to unbind the underlying OpenGL index buffer.
+         */
+        void UnBind() const;
+
+        /**
+         * @brief Gets the number of indices in the buffer.
+         * @return The number of indices.
+         */
+        unsigned int GetNumOfIndices() const;
 
     private:
         std::vector<unsigned int> m_indinces;
