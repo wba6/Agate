@@ -68,7 +68,7 @@ namespace Agate {
         /**
          * @brief Virtual destructor for VertexArrayUser.
          */
-        virtual ~VertexArrayUser() = default;
+        virtual ~VertexArrayUser();
 
     private:
         UUID m_UUID;

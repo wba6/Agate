@@ -5,6 +5,12 @@
 #ifndef AGATE_WINDOW_H
 #define AGATE_WINDOW_H
 
+#include "Agate/Events/Event.h"
+#include <mutex>
+#include <atomic>
+#include <string>
+#include <functional>
+
 namespace Agate {
     class Context;
 
@@ -16,6 +22,9 @@ namespace Agate {
         Window(std::string WindowName, int size_x, int size_y, EventCallbackFn callback, bool vsync);
 
         ~Window();
+
+        Window(const Window&) = delete;
+        Window& operator=(const Window&) = delete;
 
         void SwapBuffers(); 
 
@@ -61,14 +70,19 @@ namespace Agate {
 
         struct WindowProperies {
             std::string name;
-            int width, height;
+            std::atomic<int> width;
+            std::atomic<int> height;
             EventCallbackFn callback;
-            bool VSyncState;
+            std::atomic<bool> VSyncState;
             Context *context;
+
+            WindowProperies(std::string n, int w, int h, EventCallbackFn cb, bool v)
+                : name(std::move(n)), width(w), height(h), callback(std::move(cb)), VSyncState(v), context(nullptr) {}
         };
         void *m_Window;
 
         WindowProperies m_windowProps;
+        std::recursive_mutex m_SyncMutex;
     };
 }// namespace Agate
 
