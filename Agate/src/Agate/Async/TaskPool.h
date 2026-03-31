@@ -93,10 +93,21 @@ TaskHandle<ResultType>& TaskHandle<ResultType>::Then(FuncType&& callback) {
 
     std::scoped_lock lock(sharedState->mutex);
     bool statusDone = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Done) == static_cast<std::uint32_t>(TaskStatus::Done);
-    if (sharedState->result.has_value() && statusDone) {
-        callback(*(sharedState->result));
 
-        return *this;
+    // Task already done
+    if constexpr (std::is_void_v<ResultType>) {
+        // void specialization
+        if (statusDone) {
+            callback();
+
+            return *this;
+        }
+    } else {
+        if (sharedState->result.has_value() && statusDone) {
+            callback(*(sharedState->result));
+
+            return *this;
+        }
     }
     auto callbackPtr = std::make_unique<QualifiedCallback<ResultType, FuncType>>(std::forward<FuncType>(callback));
     sharedState->callback = std::move(callbackPtr);
@@ -122,22 +133,33 @@ ResultType TaskHandle<ResultType>::Get() {
 
     // Result not ready
     std::scoped_lock lock(sharedState->mutex);
-    if (!sharedState->result.has_value() || Status() != TaskStatus::Done) {
-        PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
-        throw std::runtime_error("Invalid Task Extraction Attempt");
+    if constexpr (std::is_void_v<ResultType>) {
+        if (Status() != TaskStatus::Done) {
+            PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
+            throw std::runtime_error("Invalid std::optional access attempt");
+        }
+    } else {
+        if (!sharedState->result.has_value() || Status() != TaskStatus::Done) {
+            PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
+            throw std::runtime_error("Invalid Task Extraction Attempt");
     }
 
     // Result already extracted
     if ((sharedState->status.load() & TaskStatus::Extracted) == TaskStatus::Extracted) {
         PRINTCRIT("Attempted to call `TaskHandle::Get` on an invalidated result due to prior extraction");
         throw std::runtime_error("Invalid Task Extraction Attempt");
+        }
     }
 
-    ResultType result = std::move(*(sharedState->result));
-    sharedState->result.reset();
-    sharedState->status.store(sharedState->status.load() | TaskStatus::Extracted);
+    if constexpr (std::is_void_v<ResultType>) {
+        return;
+    } else {
+        ResultType result = std::move(*(sharedState->result));
+        sharedState->result.reset();
+        sharedState->status.store(sharedState->status.load() | TaskStatus::Extracted);
 
-    return result;
+        return result;
+    }
 }
 
 template<typename ResultType>
@@ -257,17 +279,32 @@ public:
             try {
 
                 state->status.store(TaskStatus::Working);
-                ResultType result = task();
 
-                // Safely store result
-                {
-                    std::scoped_lock lock(state->mutex);
-                    state->result = std::move(result);
-                    state->status.store(TaskStatus::Done);
-                    if (state->callback) {
-                        state->callback->Run(*(state->result));
+                if constexpr (std::is_void_v<ResultType>) {
+                    task();
+
+                    // Safely store result
+                    {
+                        std::scoped_lock lock(state->mutex);
+                        state->status.store(TaskStatus::Done);
+                        if (state->callback) {
+                            state->callback->Run();
+                        }
+                    }
+                } else {
+                    ResultType result = task();
+
+                    // Safely store result
+                    {
+                        std::scoped_lock lock(state->mutex);
+                        state->result = std::move(result);
+                        state->status.store(TaskStatus::Done);
+                        if (state->callback) {
+                            state->callback->Run(*(state->result));
+                        }
                     }
                 }
+
                 state->condition.notify_all();
 
             } catch (const std::exception& exception) {
