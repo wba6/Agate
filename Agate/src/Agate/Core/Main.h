@@ -7,21 +7,8 @@
 #ifndef AGATE_MAIN_H
 #define AGATE_MAIN_H
 
-#include "Agate/Async/TaskPool.h"
-
 //-----------------------------------------Main Entry -----------------------------------
-extern Agate::EntryPoint *Agate::CreateEntryPoint();
-
-int main() {
-    Agate::Logger::initLogger();
-    Agate::TaskPool::Initialize();
-
-    Agate::EntryPoint *application = Agate::CreateEntryPoint();
-    application->Run();
-
-    delete application;
-    return 0;
-}
+int main();
 //--------------------------------------------------------------------------------------
 
 #endif // AGATE_MAIN_H
