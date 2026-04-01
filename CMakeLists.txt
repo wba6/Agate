@@ -29,3 +29,10 @@ add_custom_target(run
     WORKING_DIRECTORY ${buildDirExecutable}
     COMMENT "Running the Application executable"
 )
+
+add_custom_target(run_editor
+    COMMAND $<TARGET_FILE:Editor>
+    DEPENDS Editor
+    WORKING_DIRECTORY ${buildDirExecutable}
+    COMMENT "Running the Editor executable"
+)
