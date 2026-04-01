@@ -44,36 +44,45 @@ public:
      * @param e Event to handle
      */
     void OnEvent(Agate::Event &e) override;
+
+    /**
+     * @brief Updates the dimensions of the UI panels based on the current window size
+     * 
+     * @param width Current width of the application window
+     * @param height Current height of the application window
+     */
+    void inline UpdatePanelDimensions(int width, int height);
 private:
     float m_topPanelHeight = s_topPanelMinHeight;
     float m_leftPanelWidth = s_sidePanelMinWidth;
     float m_rightPanelWidth = s_sidePanelMinWidth;
     float m_bottomPanelHeight = s_bottomPanelMinHeight;
+    float m_MiddlePanelHeights = 0.0f;
 
     /**
      * @brief Renders the top UI panel
      */
-    void RenderTopPanel();
+    void inline RenderTopPanel();
 
     /**
      * @brief Renders the left UI panel
      */
-    void RenderLeftPanel();
+    void inline RenderLeftPanel();
 
     /**
      * @brief Renders the center UI panel
      */
-    void RenderCenterPanel();
+    void inline RenderCenterPanel();
 
     /**
      * @brief Renders the right UI panel
      */
-    void RenderRightPanel();
+    void inline RenderRightPanel();
 
     /**
      * @brief Renders the bottom UI panel
      */
-    void RenderBottomPanel();
+    void inline RenderBottomPanel();
 };
 
 #endif // AGATE_EDITOR_GUI_LAYER_HPP

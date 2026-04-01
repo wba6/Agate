@@ -24,6 +24,10 @@ void GuiLayer::OnEvent(Agate::Event &e) {
 
 }
 
+void GuiLayer::UpdatePanelDimensions(int width, int height) {
+
+}
+
 void GuiLayer::RenderTopPanel() {
 
 }
