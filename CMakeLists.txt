@@ -20,6 +20,7 @@ set(LIBRARY_OUTPUT_PATH  ${buildDirLib} CACHE PATH "Build directory" FORCE)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/Agate)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Application)
+add_subdirectory(${PROJECT_SOURCE_DIR}/Editor)
 
 # Add a custom target to run the Application executable
 add_custom_target(run
