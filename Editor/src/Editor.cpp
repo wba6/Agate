@@ -3,9 +3,14 @@
  */
 
 #include "Agate.h"
+#include "GuiLayer.hpp"
 
 class Editor : public Agate::EntryPoint {};
 
 Agate::EntryPoint* Agate::CreateEntryPoint() {
-    return new Editor();
+
+    Editor* editor = new Editor();
+    editor->EmplaceLayer(std::make_shared<GuiLayer>());
+
+    return editor;
 }
