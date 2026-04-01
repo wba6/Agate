@@ -57,7 +57,8 @@ private:
     float m_leftPanelWidth = s_sidePanelMinWidth;
     float m_rightPanelWidth = s_sidePanelMinWidth;
     float m_bottomPanelHeight = s_bottomPanelMinHeight;
-    float m_MiddlePanelHeights = 0.0f;
+    float m_middlePanelHeights = 0.0f;
+    float m_middlePaneWidth = 0.0f;
 
     /**
      * @brief Renders the top UI panel
