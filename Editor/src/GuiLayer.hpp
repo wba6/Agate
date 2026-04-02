@@ -17,7 +17,7 @@ class GuiLayer : public Agate::Layer {
 private:
     static constexpr float s_topPanelMinHeight = 20.0f;
     static constexpr float s_topPanelMaxHeight = 50.0f;
-    static constexpr float s_sidePanelMinWidth = 80.0f;
+    static constexpr float s_sidePanelMinWidth = 120.0f;
     static constexpr float s_bottomPanelMinHeight = 30.0f;
 public:
 
@@ -53,12 +53,17 @@ public:
      */
     void inline UpdatePanelDimensions(int width, int height);
 private:
+
+    // UI Element Dimensions
     float m_topPanelHeight = s_topPanelMinHeight;
     float m_leftPanelWidth = s_sidePanelMinWidth;
     float m_rightPanelWidth = s_sidePanelMinWidth;
     float m_bottomPanelHeight = s_bottomPanelMinHeight;
     float m_middlePanelHeights = 0.0f;
     float m_middlePaneWidth = 0.0f;
+
+    // UI Data State
+    int m_SelectedObjectType = 0;
 
     /**
      * @brief Renders the top UI panel

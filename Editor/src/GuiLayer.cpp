@@ -91,7 +91,19 @@ void GuiLayer::RenderTopPanel() {
 }
 
 void GuiLayer::RenderLeftPanel() {
+    ImGui::BeginChild("LeftPanel", ImVec2(m_leftPanelWidth, m_middlePanelHeights), true);
 
+    // Placeholder elements
+    ImGui::Text("Left Side Menu");
+    ImGui::Separator();
+    ImGui::Button("Object One", ImVec2(-1, 0));
+    ImGui::Button("Object Two", ImVec2(-1, 0));
+    ImGui::Button("Object Three", ImVec2(-1, 0));
+    ImGui::Separator();
+    ImGui::Text("Object Type");
+    ImGui::Combo("##", &m_SelectedObjectType, "Type One\0Type Two\0Type Three\0");
+
+    ImGui::EndChild();
 }
 
 void GuiLayer::RenderCenterPanel() {
