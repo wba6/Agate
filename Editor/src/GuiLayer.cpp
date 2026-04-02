@@ -143,5 +143,14 @@ void GuiLayer::RenderRightPanel() {
 }
 
 void GuiLayer::RenderBottomPanel() {
+    ImGui::BeginChild("BottomPanel", ImVec2(0, m_bottomPanelHeight), true);
 
+    // Placeholder elements
+    ImGui::Button("Output");
+    ImGui::SameLine();
+    ImGui::Button("Console");
+    ImGui::SameLine();
+    ImGui::Button("Errors");
+
+    ImGui::EndChild();
 }
