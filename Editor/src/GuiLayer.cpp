@@ -4,6 +4,13 @@
 
 #include "GuiLayer.hpp"
 
+constexpr inline ImGuiWindowFlags removeWindowDecorationFlags() {
+    return ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | 
+           ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | 
+           ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | 
+           ImGuiWindowFlags_NoBackground;
+}
+
 void GuiLayer::Attach() {
     PRINTMSG("Attaching GUI layer");
 }
@@ -13,11 +20,23 @@ void GuiLayer::Detach() {
 }
 
 void GuiLayer::OnRender() {
+
+    // Main window - No padding and no decoration
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::SetNextWindowViewport(viewport->ID);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("MainWindow", nullptr, removeWindowDecorationFlags());
+    ImGui::PopStyleVar();
+
     RenderTopPanel();
     RenderLeftPanel();
     RenderCenterPanel();
     RenderRightPanel();
     RenderBottomPanel();
+
+    ImGui::End();
 }
 
 void GuiLayer::OnEvent(Agate::Event &e) {
@@ -58,7 +77,17 @@ void GuiLayer::UpdatePanelDimensions(int width, int height) {
 }
 
 void GuiLayer::RenderTopPanel() {
+    ImGui::BeginChild("TopPanel", ImVec2(0, m_topPanelHeight), true);
 
+    // Placeholder elements
+    ImGui::Text("Agate Editor");
+    ImGui::Button("File");
+    ImGui::SameLine();
+    ImGui::Button("Edit");
+    ImGui::SameLine();
+    ImGui::Button("Help");
+
+    ImGui::EndChild();
 }
 
 void GuiLayer::RenderLeftPanel() {
