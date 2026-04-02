@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.16)
+project(Editor VERSION 1.0)
+
+file(GLOB editorSrc
+        "src/*.h"
+        "src/*.cpp"
+        )
+
+include_directories("../Agate/src")
+
+add_compile_definitions(Agate_STATIC)
+
+add_executable(Editor ${editorSrc})
+
+target_link_libraries(Editor PRIVATE Agate-lib)
