@@ -55,12 +55,12 @@ public:
 private:
 
     // UI Element Dimensions
-    float m_topPanelHeight = s_topPanelMinHeight;
+    float m_topPanelHeight = s_topPanelMaxHeight;
     float m_leftPanelWidth = s_sidePanelMinWidth;
     float m_rightPanelWidth = s_sidePanelMinWidth;
     float m_bottomPanelHeight = s_bottomPanelMinHeight;
     float m_middlePanelHeights = 0.0f;
-    float m_middlePaneWidth = 0.0f;
+    float m_middlePanelWidth = 0.0f;
 
     // UI Data State
     int m_SelectedObjectType = 0;

@@ -32,6 +32,7 @@ void GuiLayer::OnRender() {
 
     RenderTopPanel();
     RenderLeftPanel();
+    ImGui::SameLine();
     RenderCenterPanel();
     RenderRightPanel();
     RenderBottomPanel();
@@ -51,7 +52,7 @@ void GuiLayer::OnEvent(Agate::Event &e) {
             m_middlePanelHeights, m_leftPanelWidth,
             m_middlePanelHeights, m_rightPanelWidth,
             m_bottomPanelHeight, width,
-            m_middlePanelHeights, m_middlePaneWidth
+            m_middlePanelHeights, m_middlePanelWidth
         );
         return true;
     });
@@ -73,14 +74,13 @@ void GuiLayer::UpdatePanelDimensions(int width, int height) {
     remainingWidth -= m_leftPanelWidth;
     m_rightPanelWidth = std::clamp(m_rightPanelWidth, s_sidePanelMinWidth, remainingWidth - s_sidePanelMinWidth);
     remainingWidth -= m_rightPanelWidth;
-    m_middlePaneWidth = remainingWidth;
+    m_middlePanelWidth = remainingWidth;
 }
 
 void GuiLayer::RenderTopPanel() {
     ImGui::BeginChild("TopPanel", ImVec2(0, m_topPanelHeight), true);
 
     // Placeholder elements
-    ImGui::Text("Agate Editor");
     ImGui::Button("File");
     ImGui::SameLine();
     ImGui::Button("Edit");
@@ -107,7 +107,12 @@ void GuiLayer::RenderLeftPanel() {
 }
 
 void GuiLayer::RenderCenterPanel() {
+    ImGui::BeginChild("CenterPanel", ImVec2(m_middlePanelWidth, m_middlePanelHeights), true);
 
+    // Placeholder elements
+    ImGui::Text("Scene Viewport");
+
+    ImGui::EndChild();
 }
 
 void GuiLayer::RenderRightPanel() {
