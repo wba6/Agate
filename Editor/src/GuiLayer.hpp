@@ -16,9 +16,9 @@
 class GuiLayer : public Agate::Layer {
 private:
     static constexpr float s_topPanelMinHeight = 20.0f;
-    static constexpr float s_topPanelMaxHeight = 50.0f;
+    static constexpr float s_topPanelMaxHeight = 40.0f;
     static constexpr float s_sidePanelMinWidth = 150.0f;
-    static constexpr float s_bottomPanelMinHeight = 30.0f;
+    static constexpr float s_bottomPanelMinHeight = 40.0f;
 public:
 
     /**
@@ -47,11 +47,8 @@ public:
 
     /**
      * @brief Updates the dimensions of the UI panels based on the current window size
-     * 
-     * @param width Current width of the application window
-     * @param height Current height of the application window
      */
-    void inline UpdatePanelDimensions(int width, int height);
+    void inline UpdatePanelDimensions();
 private:
 
     // UI Element Dimensions
