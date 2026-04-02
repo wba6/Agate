@@ -34,6 +34,7 @@ void GuiLayer::OnRender() {
     RenderLeftPanel();
     ImGui::SameLine();
     RenderCenterPanel();
+    ImGui::SameLine();
     RenderRightPanel();
     RenderBottomPanel();
 
@@ -72,7 +73,7 @@ void GuiLayer::UpdatePanelDimensions(int width, int height) {
     float remainingWidth = static_cast<float>(width);
     m_leftPanelWidth = std::clamp(m_leftPanelWidth, s_sidePanelMinWidth, remainingWidth - s_sidePanelMinWidth);
     remainingWidth -= m_leftPanelWidth;
-    m_rightPanelWidth = std::clamp(m_rightPanelWidth, s_sidePanelMinWidth, remainingWidth - s_sidePanelMinWidth);
+    m_rightPanelWidth = std::clamp(m_rightPanelWidth, s_sidePanelMinWidth, std::max(remainingWidth - s_sidePanelMinWidth, s_sidePanelMinWidth));
     remainingWidth -= m_rightPanelWidth;
     m_middlePanelWidth = remainingWidth;
 }
@@ -101,7 +102,7 @@ void GuiLayer::RenderLeftPanel() {
     ImGui::Button("Object Three", ImVec2(-1, 0));
     ImGui::Separator();
     ImGui::Text("Object Type");
-    ImGui::Combo("##", &m_SelectedObjectType, "Type One\0Type Two\0Type Three\0");
+    ImGui::Combo("##", &m_selectedObjectType, "Type One\0Type Two\0Type Three\0");
 
     ImGui::EndChild();
 }
@@ -116,7 +117,29 @@ void GuiLayer::RenderCenterPanel() {
 }
 
 void GuiLayer::RenderRightPanel() {
+    ImGui::BeginChild("RightPanel", ImVec2(m_rightPanelWidth, m_middlePanelHeights), true);
 
+    // Placeholder elements
+    ImGui::Text("Right Side Menu");
+    ImGui::Separator();
+    ImGui::Text("Position");
+    ImGui::InputFloat("X", &m_selectedObjectPosition[0], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("Y", &m_selectedObjectPosition[1], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("Z", &m_selectedObjectPosition[2], 0.0f, 0.0f, "%.2f");
+    ImGui::Text("Rotation");
+    ImGui::SliderAngle("##", &m_selectedObjectRotationRadians);
+    ImGui::Text("Scale");
+    ImGui::InputFloat("X", &m_selectedObjectScale[0], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("Y", &m_selectedObjectScale[1], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("Z", &m_selectedObjectScale[2], 0.0f, 0.0f, "%.2f");
+    ImGui::Separator();
+    ImGui::Text("Albedo");
+    ImGui::SliderInt("R", &m_selectedObjectColorRGBA[0], 0, 255);
+    ImGui::SliderInt("B", &m_selectedObjectColorRGBA[1], 0, 255);
+    ImGui::SliderInt("G", &m_selectedObjectColorRGBA[2], 0, 255);
+    ImGui::SliderInt("A", &m_selectedObjectColorRGBA[3], 0, 255);
+
+    ImGui::EndChild();
 }
 
 void GuiLayer::RenderBottomPanel() {
