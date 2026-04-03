@@ -76,12 +76,7 @@ void Agate::EntryPoint::Run() {
         frameSemaphore.acquire();
 
         // Check if the render thread threw an exception
-        try {
-            Renderer::CheckForExceptions();
-        } catch (...) {
-            m_running = false;
-            throw;
-        }
+        Renderer::CheckForExceptions();
         
         // Update operation
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {

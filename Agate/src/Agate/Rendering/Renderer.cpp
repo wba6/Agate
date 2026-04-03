@@ -82,7 +82,6 @@ namespace Agate {
      /**
      */
     void Renderer::OnCreateVAO(CreateVertexArray e) {
-        // We removed the old "not smart" comment because it's smart now!
         // Allocate the VertexArray on the heap and wrap it in a shared_ptr
         auto vao = std::make_shared<VertexArray>(
             e.m_VAU.getBufferData(), 
@@ -96,7 +95,6 @@ namespace Agate {
     /**
      */
     void Renderer::OnCreateIB(CreateIndexBuffer e) {
-        // Safely look up the VAO using .find() to prevent default-construction
         auto vaoIterator = s_VaoMap.find(e.m_VAUUID);
         if (vaoIterator == s_VaoMap.end()) {
             throw UUIDNotFoundException(e.m_VAUUID, "VertexArray");
@@ -105,7 +103,6 @@ namespace Agate {
         // Allocate the IndexBuffer as a shared_ptr
         auto ib = std::make_shared<IndexBuffer>(e.m_IBU.getIndinces());
 
-        // Add the shared pointer to the VAO safely
         vaoIterator->second->addIndexBuffer(*ib);
 
         // Store the exact same shared pointer in your Index Buffer map
