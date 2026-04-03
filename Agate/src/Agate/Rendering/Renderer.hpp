@@ -47,6 +47,8 @@ namespace Agate {
              */
             static void Flush();
 
+            static void CheckForExceptions();
+
             /**
              */
             static void OnCreateVAO(CreateVertexArray e);
@@ -99,6 +101,7 @@ namespace Agate {
             static std::unordered_map<UUID, std::shared_ptr<IndexBuffer>> s_IndexBufferMap;
             static std::unordered_map<UUID, std::shared_ptr<Texture>> s_TextureMap;
             static std::unordered_map<UUID, std::shared_ptr<Shader>> s_ShaderMap;
+            static std::exception_ptr s_RenderException;
     };
 }
 #endif // AGATE_RENDERER_HPP
