@@ -209,8 +209,23 @@ namespace Agate {
 
     class CreateVertexArray : public RenderCommand {
     public:
-        CreateVertexArray(VertexArrayUser VAU)
-        : m_VAU(std::move(VAU)){}
+        struct VertexArrayData {
+            UUID m_UUID;
+            BufferDataLayout m_bufferInformation;
+            std::shared_ptr<void> m_data;
+            size_t m_dataSize;
+
+            UUID getUUID() const { return m_UUID; }
+            BufferDataLayout getBufferData() const { return m_bufferInformation; }
+            std::shared_ptr<void> getData() const { return m_data; }
+            size_t getDataSize() const { return m_dataSize; }
+        };
+
+        CreateVertexArray(const VertexArrayUser& VAU)
+        : m_VAU{VAU.getUUID(), 
+                VAU.getBufferData(), 
+                VAU.getData(), 
+                VAU.getDataSize()}{}
 
         void Execute() override {PRINTMSG("Creating Vertex Array");};
 
@@ -230,13 +245,26 @@ namespace Agate {
 
         virtual ~CreateVertexArray() = default;
     public:
-        VertexArrayUser m_VAU;
+        VertexArrayData m_VAU;
     };
 
     class CreateIndexBuffer : public RenderCommand {
     public:
-        CreateIndexBuffer(IndexBufferUser IBU, UUID VAUUID)
-        : m_IBU(std::move(IBU)), m_VAUUID(std::move(VAUUID)){}
+        struct IndexBufferData {
+            std::vector<unsigned int> m_indinces;
+            UUID m_UUID;
+            UUID m_VAUUID;
+
+            const std::vector<unsigned int>& getIndinces() const { return m_indinces; }
+            UUID getUUID() const { return m_UUID; }
+            UUID getAttachedVAOUUID() const { return m_VAUUID; }
+        };
+
+        CreateIndexBuffer(const IndexBufferUser& IBU, UUID VAUUID)
+        : m_IBU{IBU.getIndinces(), 
+                IBU.getUUID(), 
+                IBU.getAttachedVAOUUID()}, 
+          m_VAUUID(std::move(VAUUID)){}
 
         void Execute() override {PRINTMSG("Createing Index Buffer"); };
 
@@ -256,14 +284,26 @@ namespace Agate {
 
         virtual ~CreateIndexBuffer() = default;
     public:
-        IndexBufferUser m_IBU;
+        IndexBufferData m_IBU;
         UUID m_VAUUID;
     };
 
     class CreateShader : public RenderCommand {
     public:
-        CreateShader(ShaderUser SU)
-        : m_SU(std::move(SU)){}
+        struct ShaderData {
+            std::string m_vertexShaderPath;
+            std::string m_fragmentShaderPath;
+            UUID m_UUID;
+
+            const std::string& getVertexShaderPath() const { return m_vertexShaderPath; }
+            const std::string& getFragmentShaderPath() const { return m_fragmentShaderPath; }
+            UUID getUUID() const { return m_UUID; }
+        };
+
+        CreateShader(const ShaderUser& SU)
+        : m_SU{SU.getVertexShaderPath(), 
+               SU.getFragmentShaderPath(), 
+               SU.getUUID()}{}
 
         void Execute() override {PRINTMSG("Creating Shader");};
 
@@ -283,13 +323,28 @@ namespace Agate {
 
         virtual ~CreateShader() = default;
     public:
-        ShaderUser m_SU;
+        ShaderData m_SU;
     };
 
     class CreateTexture : public RenderCommand {
     public:
-        CreateTexture(TextureUser TU)
-        : m_TU(std::move(TU)){}
+        struct TextureData {
+            std::string m_path;
+            std::string m_directory;
+            std::string m_type;
+            UUID m_UUID;
+
+            const std::string& getPath() const { return m_path; }
+            const std::string& getDirectory() const { return m_directory; }
+            const std::string& getType() const { return m_type; }
+            UUID getUUID() const { return m_UUID; }
+        };
+
+        CreateTexture(const TextureUser& TU)
+        : m_TU{TU.getPath(), 
+               TU.getDirectory(), 
+               TU.getType(), 
+               TU.getUUID()}{}
 
         void Execute() override {PRINTMSG("Creating Texture");};
 
@@ -309,7 +364,7 @@ namespace Agate {
 
         virtual ~CreateTexture() = default;
     public:
-        TextureUser m_TU;
+        TextureData m_TU;
     };
 
     class BindVertexArray : public RenderCommand {

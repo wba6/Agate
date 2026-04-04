@@ -25,6 +25,14 @@ namespace Agate {
          */
         ShaderUser(const char *vertexShaderPath, const char *fragmentShaderPath);
 
+        // Disable copying
+        ShaderUser(const ShaderUser&) = delete;
+        ShaderUser& operator=(const ShaderUser&) = delete;
+
+        // Enable move semantics
+        ShaderUser(ShaderUser&& other) noexcept;
+        ShaderUser& operator=(ShaderUser&& other) noexcept;
+
         /**
          * @brief Virtual destructor for ShaderUser.
          */

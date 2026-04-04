@@ -15,7 +15,7 @@ namespace Agate {
 
     class IndexBuffer {
     public:
-        explicit IndexBuffer(std::vector<unsigned int> &vector);
+        explicit IndexBuffer(const std::vector<unsigned int> &vector);
 
         ~IndexBuffer();
 

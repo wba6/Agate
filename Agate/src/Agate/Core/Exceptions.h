@@ -11,7 +11,7 @@ namespace Agate {
     public:
         UUIDNotFoundException(const UUID& uuid, const std::string& type)
             : m_UUID(uuid), m_Type(type) {
-            m_Message = "UUID not found: " + std::to_string((uint64_t)m_UUID) + " for type " + m_Type;
+            m_Message = "UUID not found: " + std::to_string(m_UUID.Get()) + " for type " + m_Type;
         }
 
         const char* what() const noexcept override {

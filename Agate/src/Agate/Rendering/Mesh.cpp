@@ -4,7 +4,7 @@
 
 namespace Agate {
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<TextureUser> textures) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<TextureUser>> textures) {
     this->m_vertices = std::move(vertices);
     this->m_indices = std::move(indices);
     this->m_textures = std::move(textures);
@@ -25,9 +25,9 @@ void Mesh::Draw(Agate::ShaderUser &shader) {
         // Instead, we just set the uniform on the shader mock, 
         // which will communicate with the render thread.
         
-        m_textures[i].bind(i); 
+        m_textures[i]->bind(i); 
 
-        std::string type = m_textures[i].getType(); 
+        std::string type = m_textures[i]->getType(); 
         std::string name;
         if (type == "texture_diffuse") {
             name = "material.texture_diffuse[" + std::to_string(diffuseCount) + "]";

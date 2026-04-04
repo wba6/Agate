@@ -6,7 +6,7 @@
 #include <glad/glad.h>
 
 namespace Agate {
-    IndexBuffer::IndexBuffer(std::vector<unsigned int> &vector)
+    IndexBuffer::IndexBuffer(const std::vector<unsigned int> &vector)
             : m_indinces(vector) {
         glGenBuffers(1, &m_ibo);
     }

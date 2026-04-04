@@ -94,7 +94,7 @@ private:
      * 
      * @return Textures required by this material
      */
-    std::vector<TextureUser> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
+    std::vector<std::shared_ptr<TextureUser>> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
 
     /**
      * @brief Builds flags for import post-processing options
@@ -102,6 +102,8 @@ private:
      * @return Bitmask representing the post-processing flags
      */
     unsigned int getFlags() const;
+
+    std::vector<std::shared_ptr<TextureUser>> m_texturesLoaded;
 };
 
 } // namespace Agate

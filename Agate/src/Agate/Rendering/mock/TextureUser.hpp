@@ -22,6 +22,14 @@ namespace Agate {
          */
         TextureUser(const char *file, const std::string &directory);
 
+        // Disable copying
+        TextureUser(const TextureUser&) = delete;
+        TextureUser& operator=(const TextureUser&) = delete;
+
+        // Enable move semantics
+        TextureUser(TextureUser&& other) noexcept;
+        TextureUser& operator=(TextureUser&& other) noexcept;
+
         /**
          * @brief Gets the path to the texture file.
          * @return The texture file path.

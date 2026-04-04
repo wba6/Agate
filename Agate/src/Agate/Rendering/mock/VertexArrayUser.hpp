@@ -27,29 +27,37 @@ namespace Agate {
          */
         VertexArrayUser(BufferDataLayout bufferInformation, std::shared_ptr<void> data, size_t data_size);
 
+        // Disable copying
+        VertexArrayUser(const VertexArrayUser&) = delete;
+        VertexArrayUser& operator=(const VertexArrayUser&) = delete;
+
+        // Enable move semantics
+        VertexArrayUser(VertexArrayUser&& other) noexcept;
+        VertexArrayUser& operator=(VertexArrayUser&& other) noexcept;
+
         /**
          * @brief Gets the vertex buffer data layout.
          * @return The buffer data layout.
          */
-        BufferDataLayout getBufferData() {return m_bufferInformation;};
+        BufferDataLayout getBufferData() const {return m_bufferInformation;};
 
         /**
          * @brief Gets the vertex buffer data.
          * @return A shared pointer to the data.
          */
-        std::shared_ptr<void>  getData() {return m_data;};
+        std::shared_ptr<void>  getData() const {return m_data;};
 
         /**
          * @brief Gets the size of the vertex buffer data.
          * @return The data size in bytes.
          */
-        size_t getDataSize() { return m_dataSize;}
+        size_t getDataSize() const { return m_dataSize;}
 
         /**
          * @brief Gets the UUID of this Vertex Array.
          * @return The UUID of the vertex array.
          */
-        UUID getUUID() { return m_UUID;}
+        UUID getUUID() const { return m_UUID;}
 
         /**
          * @brief Binds the vertex array.

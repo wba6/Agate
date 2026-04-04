@@ -35,7 +35,7 @@ public:
 
     std::vector<Vertex> m_vertices;
     std::vector<unsigned int> m_indices;
-    std::vector<TextureUser> m_textures;
+    std::vector<std::shared_ptr<TextureUser>> m_textures;
 
     /**
      * @brief Constructor from mesh data
@@ -44,7 +44,7 @@ public:
      * @param indices Relative indices of the mesh vertices to map to faces
      * @param textures Textures required by this mesh
      */
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<TextureUser> textures);
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<TextureUser>> textures);
 
     /**
      * @brief Draws this mesh

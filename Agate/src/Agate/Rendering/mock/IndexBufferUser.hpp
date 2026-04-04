@@ -23,6 +23,14 @@ namespace Agate {
          */
         explicit IndexBufferUser(std::vector<unsigned int> &vector, UUID VAOUUID);
 
+        // Disable copying
+        IndexBufferUser(const IndexBufferUser&) = delete;
+        IndexBufferUser& operator=(const IndexBufferUser&) = delete;
+
+        // Enable move semantics
+        IndexBufferUser(IndexBufferUser&& other) noexcept;
+        IndexBufferUser& operator=(IndexBufferUser&& other) noexcept;
+
         /**
          * @brief Destroys the IndexBufferUser.
          */
@@ -35,16 +43,22 @@ namespace Agate {
         std::vector<unsigned int>& getIndinces() { return m_indinces;};
 
         /**
+         * @brief Gets the index data.
+         * @return A const reference to the vector of indices.
+         */
+        const std::vector<unsigned int>& getIndinces() const { return m_indinces;};
+
+        /**
          * @brief Gets the UUID of this Index Buffer.
          * @return The UUID of the index buffer.
          */
-        UUID getUUID() { return m_UUID;}
+        UUID getUUID() const { return m_UUID;}
 
         /**
          * @brief Gets the UUID of the attached Vertex Array.
          * @return The UUID of the attached Vertex Array.
          */
-        UUID getAttachedVAOUUID() { return m_VAOUUID;};
+        UUID getAttachedVAOUUID() const { return m_VAOUUID;};
 
         /**
          * @brief Binds the index buffer.
