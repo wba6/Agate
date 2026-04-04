@@ -74,7 +74,7 @@ namespace Agate {
             }
         } catch (...) {
             s_RenderException = std::current_exception();
-            // Optional: clear the queue if we want to stop rendering on error
+            // clear the queue to stop rendering on error
             while (!s_ExecuteQueue.empty()) s_ExecuteQueue.pop();
         }
     }
