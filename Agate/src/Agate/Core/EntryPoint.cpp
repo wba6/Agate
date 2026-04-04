@@ -49,13 +49,13 @@ void Agate::EntryPoint::Run() {
         double lastTime = m_window->WindowOpenTime();
         while (m_running) {
             double frameTime = m_window->WindowOpenTime();
-            m_deltaTime = static_cast<float>(frameTime - lastTime);
+            m_deltaTime.store(static_cast<float>(frameTime - lastTime));
             lastTime = frameTime;
 
             // Calculate and store stats for the UI to read
-            if (m_deltaTime > 0) {
-                a_RenderThreadFPS = 1.0f / m_deltaTime;
-                a_RenderThreadMS = m_deltaTime * 1000.0f;
+            if (m_deltaTime.load() > 0) {
+                a_RenderThreadFPS = 1.0f / m_deltaTime.load();
+                a_RenderThreadMS = m_deltaTime.load() * 1000.0f;
             }
             Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
