@@ -3,8 +3,8 @@
 
 #include "Mesh.h"
 #include "ModelEditor.h"
-#include "OpenGl/Shader.h"
-#include "OpenGl/Texture.h"
+#include "mock/ShaderUser.hpp"
+#include "mock/TextureUser.hpp"
 #include <future>
 #include <memory>
 
@@ -15,7 +15,7 @@ namespace Agate {
     class ModelLoader {
     public:
         // model data
-        std::vector<Texture> m_texturesLoaded;    // stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+        std::vector<TextureUser> m_texturesLoaded;    // stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
         std::vector<Mesh> m_meshes;
         std::string m_directory;
         std::string m_path;

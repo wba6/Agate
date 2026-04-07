@@ -16,7 +16,7 @@ Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 
 Agate::EntryPoint::EntryPoint()
-        : deltaTime{0} {
+        : m_deltaTime{0} {
     s_instance = this;
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
@@ -27,9 +27,6 @@ Agate::EntryPoint::EntryPoint()
     //m_layerStack.AddOverlay(new Example_imguiLayer());
 
     CurrentContext::OpenGL = true;
-
-    std::unique_ptr<DrawMesh> mesh = std::make_unique<DrawMesh>(1);
-    Renderer::Submit(std::move(mesh));
 }
 
 Agate::EntryPoint::~EntryPoint() {
@@ -52,13 +49,13 @@ void Agate::EntryPoint::Run() {
         double lastTime = m_window->WindowOpenTime();
         while (m_running) {
             double frameTime = m_window->WindowOpenTime();
-            float frameDelta = static_cast<float>(frameTime - lastTime);
+            m_deltaTime.store(static_cast<float>(frameTime - lastTime));
             lastTime = frameTime;
 
             // Calculate and store stats for the UI to read
-            if (frameDelta > 0) {
-                a_RenderThreadFPS.store(1.0f / frameDelta);
-                a_RenderThreadMS.store(frameDelta * 1000.0f);
+            if (m_deltaTime.load() > 0) {
+                a_RenderThreadFPS = 1.0f / m_deltaTime.load();
+                a_RenderThreadMS = m_deltaTime.load() * 1000.0f;
             }
             Agate::CurrentContext::GetCurrentContex()->NewFrame();
 
@@ -77,6 +74,9 @@ void Agate::EntryPoint::Run() {
 
         // wait here if the Render Thread is too far behind
         frameSemaphore.acquire();
+
+        // Check if the render thread threw an exception
+        Renderer::CheckForExceptions();
         
         // Update operation
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
@@ -112,6 +112,7 @@ void Agate::EntryPoint::OnEvent(Event &e) {
     EventNotifier notifier(e);
 
     notifier.NotifyEvent<WindowCloseEvent>(BindFn(EntryPoint::OnWindowClose));
+    notifier.NotifyEvent<WindowResizedEvent>(BindFn(EntryPoint::OnWindowResized));
 
     for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
         m_layerStack.m_layers.at(i)->OnEvent(e);
@@ -124,6 +125,11 @@ void Agate::EntryPoint::OnEvent(Event &e) {
 bool Agate::EntryPoint::OnWindowClose(WindowCloseEvent &e) {
     m_running = false;
     return true;
+}
+
+bool Agate::EntryPoint::OnWindowResized(WindowResizedEvent &e) {
+    Renderer::Submit(std::make_unique<SetViewport>(0, 0, e.GetWidth(), e.GetHeight()));
+    return false;
 }
 
 void Agate::EntryPoint::EmplaceLayer(std::shared_ptr<Layer> layer) {
@@ -147,7 +153,7 @@ Agate::EntryPoint *&Agate::EntryPoint::GetInstance() {
 }
 
 float Agate::EntryPoint::GetDeltaTime() {
-    return deltaTime;
+    return m_deltaTime.load();
 }
 
 std::shared_ptr<Agate::Window> Agate::EntryPoint::GetWindow() {

@@ -176,10 +176,9 @@ public:
     {
     };
 
-    void OnUpdate() override
+    void OnUpdate()override
     {
     };
-
 
     void OnEvent(Agate::Event &e) override
     {

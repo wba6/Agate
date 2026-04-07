@@ -4,8 +4,13 @@
 
 #include <memory.h>
 #include <queue>
+#include <unordered_map>
 #include "Event.h"
 #include "RenderCommand.hpp"
+#include "Rendering/OpenGl/IndexBuffer.h"
+#include "Rendering/OpenGl/Texture.h"
+#include "Rendering/OpenGl/VertexArray.h"
+#include "Rendering/OpenGl/Shader.h"
 
 namespace Agate {
 
@@ -41,11 +46,62 @@ namespace Agate {
              * (typically issuing OpenGL calls), and empties the queue.
              */
             static void Flush();
+
+            static void CheckForExceptions();
+
+            /**
+             */
+            static void OnCreateVAO(CreateVertexArray e);
+
+            /**
+             */
+            static void OnCreateIB(CreateIndexBuffer e);
+
+            
+            /**
+             */
+            static void OnCreateShader(CreateShader e);
+
+            /**
+             */
+            static void OnCreateTexture(CreateTexture e);
+
+            static void OnBindVAO(BindVertexArray e);
+            static void OnUnBindVAO(UnBindVertexArray e);
+
+            static void OnBindIBO(BindIndexBuffer e);
+            static void OnUnBindIBO(UnBindIndexBuffer e);
+
+            static void OnBindShader(BindShader e);
+            static void OnUnBindShader(UnBindShader e);
+
+            static void OnBindTexture(BindTexture e);
+
+            static void OnDrawMesh(DrawMesh e);
+
+            static void OnUpdateShaderUniform4f(UpdateShaderUniform4f e);
+            static void OnUpdateShaderUniform3f(UpdateShaderUniform3f e);
+            static void OnUpdateShaderUniformMat4(UpdateShaderUniformMat4 e);
+            static void OnUpdateShaderUniform1i(UpdateShaderUniform1i e);
+            static void OnUpdateShaderUniform1f(UpdateShaderUniform1f e);
+
+            static void OnSetViewport(SetViewport e);
+
+            static void OnDeleteVAO(DeleteVertexArray e);
+            static void OnDeleteIBO(DeleteIndexBuffer e);
+            static void OnDeleteShader(DeleteShader e);
+            static void OnDeleteTexture(DeleteTexture e);
+
         private:
             Renderer() = delete;
             static std::queue<std::unique_ptr<RenderCommand>> s_CommandQueue; // write buffer
             static std::queue<std::unique_ptr<RenderCommand>> s_ExecuteQueue; // read buffer
             static std::mutex s_CommandMutex;
+            static std::unordered_map<UUID, std::shared_ptr<VertexArray>> s_VaoMap;
+            static std::unordered_map<UUID, std::shared_ptr<IndexBuffer>> s_IndexBufferMap;
+            static std::unordered_map<UUID, std::shared_ptr<Texture>> s_TextureMap;
+            static std::unordered_map<UUID, std::shared_ptr<Shader>> s_ShaderMap;
+            static std::exception_ptr s_RenderException;
     };
 }
 #endif // AGATE_RENDERER_HPP

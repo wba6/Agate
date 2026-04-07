@@ -32,7 +32,7 @@ namespace Agate {
         }
     }
 
-    void VertexArray::addIndexBuffer(IndexBuffer indexBuffer) {
+    void VertexArray::addIndexBuffer(IndexBuffer &indexBuffer) {
         Bind();
         indexBuffer.setUpBuffer();
         // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
@@ -40,6 +40,8 @@ namespace Agate {
         indexBuffer.UnBind();
     }
 
-    VertexArray::~VertexArray() {}
+    VertexArray::~VertexArray() {
+        GLCall(glDeleteVertexArrays(1, &m_vao));
+    }
 
 }// namespace Agate

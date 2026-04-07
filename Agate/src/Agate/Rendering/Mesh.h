@@ -8,9 +8,10 @@
 #ifndef AGATE_MESH_H
 #define AGATE_MESH_H
 
-#include "OpenGl/Shader.h"
-#include "OpenGl/Texture.h"
-#include "OpenGl/VertexArray.h"
+#include "mock/ShaderUser.hpp"
+#include "mock/TextureUser.hpp"
+#include "mock/VertexArrayUser.hpp"
+#include "mock/IndexBufferUser.hpp"
 #include <glm/glm.hpp>
 #include <memory>
 #include <vector>
@@ -34,7 +35,7 @@ public:
 
     std::vector<Vertex> m_vertices;
     std::vector<unsigned int> m_indices;
-    std::vector<Texture> m_textures;
+    std::vector<std::shared_ptr<TextureUser>> m_textures;
 
     /**
      * @brief Constructor from mesh data
@@ -43,14 +44,14 @@ public:
      * @param indices Relative indices of the mesh vertices to map to faces
      * @param textures Textures required by this mesh
      */
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<TextureUser>> textures);
 
     /**
      * @brief Draws this mesh
      * 
      * @param shader Shader to bind and use for shading the mesh
      */
-    void Draw(Shader &shader);
+    void Draw(ShaderUser &shader);
 
     virtual ~Mesh();
 
@@ -58,7 +59,7 @@ public:
 
 private:
     //  render data
-    std::shared_ptr<VertexArray> m_VA;
+    std::shared_ptr<VertexArrayUser> m_VA;
 
 
 };
