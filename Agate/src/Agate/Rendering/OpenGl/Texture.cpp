@@ -135,13 +135,10 @@ namespace Agate {
 
     }
 
-<<<<<<< Updated upstream
-=======
     Texture::~Texture() {
         GLCall(glDeleteTextures(1, &m_textureID));
     }
 
->>>>>>> Stashed changes
     /*
      * Bind the texture to a texture unit
      *
