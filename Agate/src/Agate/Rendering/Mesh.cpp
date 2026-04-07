@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "OpenGl/VertexArray.h"
+#include "OpenGl/OpenGLCheck.h"
 #include "glad/glad.h"
 
 namespace Agate {
@@ -22,7 +23,7 @@ void Mesh::Draw(Agate::Shader &shader) {
     shader.Bind();
     // Activate and bind each texture, assign to the shader
     for (unsigned int i = 0; i < m_textures.size(); i++) {
-        glActiveTexture(GL_TEXTURE0 + i); // Activate texture unit
+        GLCall(glActiveTexture(GL_TEXTURE0 + i)); // Activate texture unit
         m_textures[i].bind(i); // Bind texture to unit i
 
         std::string type = m_textures[i].getType();
@@ -63,11 +64,11 @@ void Mesh::Draw(Agate::Shader &shader) {
     shader.SetUniform1f("pointLight.Quadratic", 0.032f);                           // Attenuation: Quadratic factor
 
     //don't think this line is needed
-    glActiveTexture(GL_TEXTURE0);
+    GLCall(glActiveTexture(GL_TEXTURE0));
 
     // draw mesh
     m_VA->Bind();
-    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
+    GLCall(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0));
     m_VA->UnBind();
 }
 

@@ -89,8 +89,8 @@ namespace Agate {
     }
 
     Shader::~Shader() {
-        glDeleteShader(m_vertexShaderID);
-        glDeleteShader(m_fragmentShaderID);
+        GLCall(glDeleteShader(m_vertexShaderID));
+        GLCall(glDeleteShader(m_fragmentShaderID));
     }
 
     int Shader::getUniformLoc(const char *uniform) const {
@@ -98,7 +98,8 @@ namespace Agate {
         if (m_UniformLocationCache.find(uniform) != m_UniformLocationCache.end())
             return m_UniformLocationCache[uniform];
 
-        int loc = glGetUniformLocation(m_shaderProgramID, uniform);
+        int loc;
+        GLCall(loc = glGetUniformLocation(m_shaderProgramID, uniform));
         if (loc == -1) {
             PRINTWARN("Shader::getUniformLoc Uniform not found: {}", uniform);
         }
@@ -109,22 +110,22 @@ namespace Agate {
     }
 
     void Shader::SetUniform4f(const char *uniform, float x, float y, float z, float w) {
-        glUniform4f(getUniformLoc(uniform), x, y, z, w);
+        GLCall(glUniform4f(getUniformLoc(uniform), x, y, z, w));
     }
 
     void Shader::SetUniform1i(const char *uniform, int value) {
-        glUniform1i(getUniformLoc(uniform), value);
+        GLCall(glUniform1i(getUniformLoc(uniform), value));
     }
 
     void Shader::SetUniformMat4(const char *uniform, glm::mat4 trans) {
-        glUniformMatrix4fv(getUniformLoc(uniform), 1, GL_FALSE, glm::value_ptr(trans));
+        GLCall(glUniformMatrix4fv(getUniformLoc(uniform), 1, GL_FALSE, glm::value_ptr(trans)));
     }
 
     void Shader::SetUniform3f(const char *uniform, float x, float y, float z) {
-        glUniform3f(getUniformLoc(uniform), x, y, z);
+        GLCall(glUniform3f(getUniformLoc(uniform), x, y, z));
     }
 
     void Shader::SetUniform1f(const char *uniform, float x) {
-        glUniform1f(getUniformLoc(uniform), x);
+        GLCall(glUniform1f(getUniformLoc(uniform), x));
     }
 }// namespace Agate
