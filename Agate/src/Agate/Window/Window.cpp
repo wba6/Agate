@@ -172,7 +172,7 @@ namespace Agate {
     void Window::SetMinimumSize(int minWidth, int minHeight) {
 
         if (minWidth <= 0 || minHeight <= 0) {
-            throw std::invalid_argument("1 or more dimensions below 0");
+            throw std::invalid_argument("1 or more dimensions 0 or less");
         }
 
         int width = std::max(m_windowProps.width, minWidth);
