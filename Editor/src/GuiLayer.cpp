@@ -12,7 +12,7 @@ constexpr inline ImGuiWindowFlags removeWindowDecorationFlags() {
 }
 
 GuiLayer::GuiLayer(std::shared_ptr<Agate::Window> window) {
-    window->SetMinimumSize(400, 100);
+    window->SetMinimumSize(s_minimumWindowWidth, s_minimumWindowHeight);
 }
 
 void GuiLayer::Attach() {
@@ -38,11 +38,16 @@ void GuiLayer::OnRender() {
 
     UpdatePanelDimensions();
     RenderTopPanel();
-    RenderLeftPanel();
-    ImGui::SameLine(0.0f, 0.0f);
-    RenderCenterPanel();
-    ImGui::SameLine(0.0f, 0.0f);
-    RenderRightPanel();
+
+    if (m_middlePanelHeights > 0.0f) {
+        RenderLeftPanel();
+        if (m_middlePanelWidth > 0.0f) {
+            ImGui::SameLine(0.0f, 0.0f);
+            RenderCenterPanel();
+        }
+        ImGui::SameLine(0.0f, 0.0f);
+        RenderRightPanel();
+    }
     RenderBottomPanel();
 
     ImGui::End();
@@ -57,17 +62,17 @@ void GuiLayer::UpdatePanelDimensions() {
     // Element heights
     auto [width, height] = ImGui::GetContentRegionAvail();
     float remainingHeight = height;
-    m_topPanelHeight = std::clamp(remainingHeight, s_topPanelMinHeight, s_topPanelMaxHeight);
+    m_topPanelHeight = s_topPanelHeight;
     remainingHeight -= m_topPanelHeight;
-    m_bottomPanelHeight = std::clamp(m_bottomPanelHeight, s_bottomPanelMinHeight, remainingHeight);
+    m_bottomPanelHeight = std::max(s_bottomPanelMinHeight, std::min(remainingHeight, m_bottomPanelHeight));
     remainingHeight -= m_bottomPanelHeight;
     m_middlePanelHeights = remainingHeight;
 
     // Element widths
     float remainingWidth = width;
-    m_leftPanelWidth = std::clamp(m_leftPanelWidth, s_sidePanelMinWidth, remainingWidth - s_sidePanelMinWidth);
+    m_leftPanelWidth = std::max(s_sidePanelMinWidth, std::min(remainingWidth - s_sidePanelMinWidth, m_leftPanelWidth));
     remainingWidth -= m_leftPanelWidth;
-    m_rightPanelWidth = std::clamp(m_rightPanelWidth, s_sidePanelMinWidth, std::max(remainingWidth - s_sidePanelMinWidth, s_sidePanelMinWidth));
+    m_rightPanelWidth = std::max(s_sidePanelMinWidth, std::min(remainingWidth, m_rightPanelWidth));
     remainingWidth -= m_rightPanelWidth;
     m_middlePanelWidth = remainingWidth;
 }

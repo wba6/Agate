@@ -175,14 +175,20 @@ namespace Agate {
             throw std::invalid_argument("1 or more dimensions 0 or less");
         }
 
-        int width = std::max(m_windowProps.width, minWidth);
-        int height = std::max(m_windowProps.height, minHeight);
-        if (width != m_windowProps.width || height != m_windowProps.height) {
-            glfwSetWindowSize((GLFWwindow*) m_Window, width, height);
+        int contentWidth;
+        int contentHeight;
+        glfwGetWindowSize(
+            static_cast<GLFWwindow*>(m_Window),
+            &contentWidth,
+            &contentHeight
+        );
+
+        if (minWidth > contentWidth || minHeight > contentHeight) {
+            glfwSetWindowSize(static_cast<GLFWwindow*>(m_Window), minWidth, minHeight);
         }
 
         glfwSetWindowSizeLimits(
-            (GLFWwindow*) m_Window,
+            static_cast<GLFWwindow*>(m_Window),
             minWidth,
             minHeight,
             GLFW_DONT_CARE,
