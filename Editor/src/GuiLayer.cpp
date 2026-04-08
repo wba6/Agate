@@ -104,7 +104,7 @@ void GuiLayer::RenderLeftPanel() {
     ImGui::Button("Object Three", ImVec2(-1, 0));
     ImGui::Separator();
     ImGui::Text("Object Type");
-    ImGui::Combo("##", &m_selectedObjectType, "Type One\0Type Two\0Type Three\0");
+    ImGui::Combo("##ObjectType", &m_selectedObjectType, "Type One\0Type Two\0Type Three\0");
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
     ImGui::EndChild();
@@ -135,20 +135,20 @@ void GuiLayer::RenderRightPanel() {
     ImGui::Text("Right Side Menu");
     ImGui::Separator();
     ImGui::Text("Position");
-    ImGui::InputFloat("X", &m_selectedObjectPosition[0], 0.0f, 0.0f, "%.2f");
-    ImGui::InputFloat("Y", &m_selectedObjectPosition[1], 0.0f, 0.0f, "%.2f");
-    ImGui::InputFloat("Z", &m_selectedObjectPosition[2], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("X##Position", &m_selectedObjectPosition[0], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("Y##Position", &m_selectedObjectPosition[1], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("Z##Position", &m_selectedObjectPosition[2], 0.0f, 0.0f, "%.2f");
     ImGui::Text("Rotation");
-    ImGui::SliderAngle("##", &m_selectedObjectRotationRadians);
+    ImGui::SliderAngle("##RotationAngle", &m_selectedObjectRotationRadians);
     ImGui::Text("Scale");
-    ImGui::InputFloat("X", &m_selectedObjectScale[0], 0.0f, 0.0f, "%.2f");
-    ImGui::InputFloat("Y", &m_selectedObjectScale[1], 0.0f, 0.0f, "%.2f");
-    ImGui::InputFloat("Z", &m_selectedObjectScale[2], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("X##Scale", &m_selectedObjectScale[0], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("Y##Scale", &m_selectedObjectScale[1], 0.0f, 0.0f, "%.2f");
+    ImGui::InputFloat("Z##Scale", &m_selectedObjectScale[2], 0.0f, 0.0f, "%.2f");
     ImGui::Separator();
     ImGui::Text("Albedo");
     ImGui::SliderInt("R", &m_selectedObjectColorRGBA[0], 0, 255);
-    ImGui::SliderInt("B", &m_selectedObjectColorRGBA[1], 0, 255);
-    ImGui::SliderInt("G", &m_selectedObjectColorRGBA[2], 0, 255);
+    ImGui::SliderInt("G", &m_selectedObjectColorRGBA[1], 0, 255);
+    ImGui::SliderInt("B", &m_selectedObjectColorRGBA[2], 0, 255);
     ImGui::SliderInt("A", &m_selectedObjectColorRGBA[3], 0, 255);
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
