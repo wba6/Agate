@@ -6,6 +6,7 @@
 #include "RenderContext/Context.h"
 #include "Window.h"
 #include <GLFW/glfw3.h>
+#include <stdexcept>
 
 
 namespace Agate {
