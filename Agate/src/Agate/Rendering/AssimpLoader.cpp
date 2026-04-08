@@ -4,7 +4,6 @@
 #include "mock/TextureUser.hpp"
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-#include <future>
 #include <string>
 
 namespace {

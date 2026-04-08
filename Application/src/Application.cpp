@@ -5,7 +5,8 @@
 #include <chrono>
 #include <memory>
 #include <filesystem>
-#include <future> #include <stdexcept>
+#include <future> 
+#include <stdexcept>
 #include <string>
 
 class app : public Agate::EntryPoint {
@@ -51,7 +52,7 @@ public:
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
         model = nullptr;
-        pendingModel = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
+        modelHandle = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
     }
 
     void Detach() override
@@ -64,12 +65,13 @@ public:
         return;
 
         // Poll for model completion until model is retrieved
-        if (pendingModel.valid()) {
-            const auto status = pendingModel.wait_for(std::chrono::seconds(0));
-            if (status == std::future_status::ready) {
-                model = pendingModel.get();
-                model->LoadTextures();
-            }
+        if (modelHandle.Status() == Agate::TaskStatus::Done) {
+            model = std::make_unique<Agate::ModelEditor>(std::move(modelHandle.Wait().Get()));
+            model->LoadTextures();
+        } else if (modelHandle.Status() == Agate::TaskStatus::Error) {
+
+            // This will run every frame upon failure
+            PRINTCRIT("Failed to load model");
         }
 
         shader->Bind();
@@ -97,17 +99,17 @@ public:
     }
     virtual ~TemplayerEx()
     {
-        if (pendingModel.valid()) {
-            PRINTMSG("[TemplateLayer]: Waiting for pending model");
-            pendingModel.wait();
-            model = pendingModel.get();
+        // Tasks not finished
+        if ((modelHandle.Status() & Agate::TaskStatus::Terminal) == static_cast<Agate::TaskStatus>(0)) {
+            PRINTMSG("[TemplateLayer]: Waiting for pending tasks to finish before destruction...");
+            modelHandle.Wait();
         }
     }
 
     std::unique_ptr<Agate::Shader> shader;
     std::unique_ptr<Agate::Camera> camera;
     std::unique_ptr<Agate::ModelEditor> model;
-    std::future<std::unique_ptr<Agate::ModelEditor>> pendingModel;
+    Agate::TaskHandle<Agate::ModelEditor> modelHandle;
 };
 
 class TaskTestLayer : public Agate::Layer {
@@ -120,6 +122,7 @@ private:
     Agate::TaskHandle<std::string> secretMessageHandle;
     Agate::TaskHandle<std::shared_ptr<std::string>> secondSecretMessageHandle;
     Agate::TaskHandle<int> iWillFail;
+    Agate::TaskHandle<void> delayedMessageHandle;
 public:
 
     void Attach() override
@@ -153,6 +156,12 @@ public:
             throw std::runtime_error("I failed");
             return 0;
         });
+        delayedMessageHandle = Agate::TaskPool::Enqueue([]() -> void {
+            std::this_thread::sleep_for(std::chrono::seconds(10));
+            PRINTMSG("This message was delayed by 10 seconds");
+        }).Then([]() -> void {
+            PRINTMSG("This message was printed in a callback after the delayed message");
+        });
     }
 
     void Detach() override
@@ -170,6 +179,8 @@ public:
         } else {
             PRINTMSG("iWillFail did not fail");
         }
+
+        delayedMessageHandle.Wait();
     }
 
     void OnRender()override
@@ -178,6 +189,46 @@ public:
 
     void OnUpdate()override
     {
+    };
+
+    void OnEvent(Agate::Event &e) override
+    {
+    }
+};
+
+class TaskPerFrameLayer : public Agate::Layer {
+private:
+    std::array<Agate::TaskHandle<int>, 1000> bulkHandles;
+    std::size_t produced = 0;
+    std::size_t consumed = 0;
+public:
+
+    void Attach() override
+    {
+
+    }
+
+    void Detach() override
+    {
+
+    }
+
+    void OnRender()override
+    {
+        if (produced < bulkHandles.size()) {
+            bulkHandles[produced++] = Agate::TaskPool::Enqueue([counter = produced]() -> int {
+                std::this_thread::sleep_for(std::chrono::milliseconds(250));
+                return counter;
+            });
+            PRINTMSG("Producing {}", produced - 1);
+        }
+
+        if (consumed < produced && bulkHandles[consumed].Status() == Agate::TaskStatus::Done) {
+            PRINTMSG("Consuming {}", bulkHandles[consumed++].Wait().Get());
+        } else if (consumed < produced && bulkHandles[consumed].Status() == Agate::TaskStatus::Error) {
+            PRINTWARN("Task {} failed", consumed);
+            consumed++;
+        }
     };
 
     void OnEvent(Agate::Event &e) override
@@ -195,6 +246,7 @@ Agate::EntryPoint* Agate::CreateEntryPoint()
     Application->EmplaceLayer(example_layer);
     Application->EmplaceLayer(std::make_shared<TemplayerEx>());
     Application->EmplaceLayer(taskTestLayer);
+    Application->EmplaceLayer(std::make_shared<TaskPerFrameLayer>());
 
     Application->RemoveLayer(example_layer);
     Application->RemoveLayer(taskTestLayer);

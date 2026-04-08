@@ -12,8 +12,9 @@
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <variant>
 #include <type_traits>
-
+#include <utility>
 
 namespace Agate {
 
@@ -21,14 +22,17 @@ namespace Agate {
  * @brief Descriptor for the current status of a task
  */
 enum class TaskStatus : std::uint32_t {
-    Ready               = 0,                        /*!< Task is in a queue and awaiting a worker to run it */
-    Working             = 1 << 0,                   /*!< Task is being run by a worker thread */
-    Done                = 1 << 1,                   /*!< Task has finished running and its result is ready for extraction */
-    CancelRequested     = 1 << 2,                   /*!< Task has received a cancellation request */
-    Cancelled           = 1 << 3,                   /*!< Task has stopped running due to being cancelled */
-    Error               = 1 << 4,                   /*!< Task has stopped running due to encountering an error state */
-    InCallback          = 1 << 5,                   /*!< Task has finished, but is executing a callback */
-    Terminal            = Error | Cancelled | Done  /*!< Task is in a terminal state - The task pool has discarded it */
+    NullState           = 0,
+    Ready               = 1 << 0,                   /*!< Task is in a queue and awaiting a worker to run it */
+    Working             = 1 << 1,                   /*!< Task is being run by a worker thread */
+    Done                = 1 << 2,                   /*!< Task has finished running and its result is ready for extraction */
+    Extracted           = 1 << 3,                   /*!< Task's result has been extracted */
+    CancelRequested     = 1 << 4,                   /*!< Task has received a cancellation request */
+    Cancelled           = 1 << 5,                   /*!< Task has stopped running due to being cancelled */
+    Error               = 1 << 6,                   /*!< Task has stopped running due to encountering an error state */
+    InCallback          = 1 << 7,                   /*!< Task has finished, but is executing a callback */
+    Terminal            = Error | Cancelled |       /*!< Task is in a terminal state - The task pool has discarded it */
+                          Done
 };
 
 constexpr inline TaskStatus operator|(TaskStatus left, TaskStatus right) {
@@ -76,7 +80,7 @@ public:
  * @tparam FuncType Type of the callback invocable
  */
 template<typename ResultType, typename FuncType>
-    requires std::invocable<FuncType, ResultType>
+    requires std::invocable<FuncType, ResultType> || (std::is_void_v<ResultType> && std::invocable<FuncType>)
 class QualifiedCallback : public TaskCallback<ResultType> {
 private:
     FuncType callback;
@@ -98,6 +102,46 @@ public:
     }
 };
 
+/*
+    Void specializations for callback types
+ */
+
+template<>
+class TaskCallback<void> {
+public:
+    /**
+     * @brief Virtual destructor for subclasses
+     */
+    virtual ~TaskCallback() = default;
+
+    /**
+     * @brief Invokes the callback with the result of the task
+     */
+    virtual void Run() = 0;
+};
+
+template<typename FuncType>
+    requires std::invocable<FuncType>
+class QualifiedCallback<void, FuncType> : public TaskCallback<void> {
+        FuncType callback;
+public:
+
+    /**
+     * @brief Forwarding constructor
+     * 
+     * @param callback Invocable to pass task result to when the callback is run
+     */
+    QualifiedCallback(FuncType&& callback)
+        : callback(std::forward<FuncType>(callback)) {}
+    
+    /**
+     * @brief Invokes the callback with the result of the task
+     */
+    virtual void Run() override {
+        callback();
+    }
+};
+
 /**
  * @brief Shared state wrapper for qualified tasks
  * 
@@ -111,12 +155,25 @@ public:
 template<typename ResultType>
 struct QualifiedTaskState {
 
-    std::optional<ResultType> result;
+    using ResultMemberType = std::conditional_t<
+        std::is_void_v<ResultType>,
+        std::monostate,
+        std::optional<ResultType>
+    >;
+
+    ResultMemberType result;
     std::unique_ptr<TaskCallback<ResultType>> callback;
 
     std::mutex mutex;
     std::condition_variable condition;
     std::atomic<TaskStatus> status = TaskStatus::Ready;
+
+    void Cancel() {
+        std::scoped_lock lock(mutex);
+        if (static_cast<std::uint32_t>(status.load() & TaskStatus::Terminal) != static_cast<std::uint32_t>(0)) {
+            status.store(TaskStatus::CancelRequested);
+        }
+    }
 };
 
 } // namespace Agate
