@@ -6,6 +6,7 @@
 #include "RenderContext/Context.h"
 #include "Window.h"
 #include <GLFW/glfw3.h>
+#include <stdexcept>
 
 
 namespace Agate {
@@ -143,5 +144,67 @@ namespace Agate {
         glfwMakeContextCurrent(NULL);
     }
 
+    void Window::SetSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {
+
+        if (minWidth > maxWidth || minHeight > maxHeight) {
+            throw std::invalid_argument("Invalid size limits");
+        }
+
+        if (minWidth <= 0 || minHeight <= 0 || maxWidth <= 0 || maxHeight <= 0) {
+            throw std::invalid_argument("1 or more dimensions below 0");
+        }
+
+        int width = std::clamp(m_windowProps.width, minWidth, maxWidth);
+        int height = std::clamp(m_windowProps.height, minHeight, maxHeight);
+        if (width != m_windowProps.width || height != m_windowProps.height) {
+            glfwSetWindowSize((GLFWwindow*) m_Window, width, height);
+        }
+
+        glfwSetWindowSizeLimits(
+            (GLFWwindow*) m_Window,
+            minWidth,
+            minHeight,
+            maxWidth,
+            maxHeight
+        );
+    }
+
+    void Window::SetMinimumSize(int minWidth, int minHeight) {
+
+        if (minWidth <= 0 || minHeight <= 0) {
+            throw std::invalid_argument("1 or more dimensions 0 or less");
+        }
+
+        int contentWidth;
+        int contentHeight;
+        glfwGetWindowSize(
+            static_cast<GLFWwindow*>(m_Window),
+            &contentWidth,
+            &contentHeight
+        );
+
+        if (minWidth > contentWidth || minHeight > contentHeight) {
+            glfwSetWindowSize(static_cast<GLFWwindow*>(m_Window), minWidth, minHeight);
+        }
+
+        glfwSetWindowSizeLimits(
+            static_cast<GLFWwindow*>(m_Window),
+            minWidth,
+            minHeight,
+            GLFW_DONT_CARE,
+            GLFW_DONT_CARE
+        );
+    }
+
+    void Window::RemoveSizeLimits() {
+
+        glfwSetWindowSizeLimits(
+            (GLFWwindow*) m_Window,
+            GLFW_DONT_CARE,
+            GLFW_DONT_CARE,
+            GLFW_DONT_CARE,
+            GLFW_DONT_CARE
+        );
+    }
 
 }// namespace Agate

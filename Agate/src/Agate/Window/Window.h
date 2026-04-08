@@ -52,6 +52,31 @@ namespace Agate {
          */
         void AttachContext();
 
+        /**
+         * @brief Sets size limits for the window
+         * 
+         * @param minWidth Minimum width of the window
+         * @param minHeight Minimum height of the window
+         * @param maxWidth Maximum width of the window
+         * @param maxHeight Maximum height of the window
+         * 
+         * @note This method will immediately clamp the window to these limits
+         */
+        void SetSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight);
+
+        /**
+         * @brief Sets the minimum size for the window
+         * 
+         * @param minWidth Minimum width of the window
+         * @param minHeight Minimum height of the window
+         */
+        void SetMinimumSize(int minWidth, int minHeight);
+
+        /**
+         * @brief Removes size limits imposed on the window, if applicable
+         */
+        void RemoveSizeLimits();
+
     private:
         void InitWindow();
 

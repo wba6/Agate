@@ -56,6 +56,13 @@ namespace Agate {
             return EventTypes::WindowResized;
         }
 
+        /**
+         * @brief Accessor for the new window dimensions
+         */
+        inline std::pair<int, int> GetWindowSize() const {
+            return {m_xSize, m_ySize};
+        }
+
     private:
         int m_xSize, m_ySize;
     };
