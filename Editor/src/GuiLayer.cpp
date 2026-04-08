@@ -11,6 +11,10 @@ constexpr inline ImGuiWindowFlags removeWindowDecorationFlags() {
            ImGuiWindowFlags_NoBackground;
 }
 
+GuiLayer::GuiLayer(std::shared_ptr<Agate::Window> window) {
+    window->SetMinimumSize(400, 100);
+}
+
 void GuiLayer::Attach() {
     PRINTMSG("Attaching GUI layer");
 }

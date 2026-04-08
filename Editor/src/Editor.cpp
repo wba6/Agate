@@ -10,7 +10,7 @@ class Editor : public Agate::EntryPoint {};
 Agate::EntryPoint* Agate::CreateEntryPoint() {
 
     Editor* editor = new Editor();
-    editor->EmplaceOverlay(std::make_shared<GuiLayer>());
+    editor->EmplaceOverlay(std::make_shared<GuiLayer>(editor->GetWindow()));
 
     return editor;
 }

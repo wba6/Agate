@@ -6,6 +6,7 @@
 #define AGATE_EDITOR_GUI_LAYER_HPP
 
 #include "Agate.h"
+#include <memory>
 
 /**
  * @brief Layer that renders the editor's GUI elements and controls
@@ -20,6 +21,12 @@ private:
     static constexpr float s_sidePanelMinWidth = 150.0f;
     static constexpr float s_bottomPanelMinHeight = 40.0f;
 public:
+
+    /**
+     * @brief Constructor - Sets minimum window size
+     *        to prevent resizing
+     */
+    GuiLayer(std::shared_ptr<Agate::Window> window);
 
     /**
      * @brief Called immediately after being added to the 
