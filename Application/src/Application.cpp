@@ -213,6 +213,11 @@ public:
 
     }
 
+    void OnUpdate() override
+    {
+
+    }
+
     void OnRender()override
     {
         if (produced < bulkHandles.size()) {
