@@ -5,7 +5,9 @@
 #ifndef AGATE_IMGUI_INTERFACE_H
 #define AGATE_IMGUI_INTERFACE_H
 
+struct ImDrawData;
 namespace Agate {
+
     class imgui_interface {
 
     public:
@@ -15,7 +17,9 @@ namespace Agate {
 
         static void BeginFrame();
 
-        static void EndFrame();
+        static ImDrawData* EndFrame();
+
+        static void DrawFrame(ImDrawData* drawData);
 
     private:
         imgui_interface() {};

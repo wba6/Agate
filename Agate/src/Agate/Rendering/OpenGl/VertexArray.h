@@ -19,7 +19,7 @@ namespace Agate {
          * Adds index buffer to the vertex array
          * @param indexBuffer
          */
-        void addIndexBuffer(IndexBuffer indexBuffer);
+        void addIndexBuffer(IndexBuffer &indexBuffer);
 
         void Bind();
 
