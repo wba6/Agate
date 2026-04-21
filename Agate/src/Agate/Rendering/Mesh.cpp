@@ -90,8 +90,7 @@ void Mesh::setupMesh() {
     m_VA = std::make_shared<VertexArrayUser>(layout, safe_data_ptr, dataSize);
     
     // Create IndexBufferUser which will submit CreateIndexBuffer command
-    // We don't need to keep it around if the VAO creation on render thread handles it
-    IndexBufferUser IB(m_indices, m_VA->getUUID());
+    m_IB = std::make_shared<IndexBufferUser>(m_indices, m_VA->getUUID());
 }
 
 Mesh::~Mesh() = default;

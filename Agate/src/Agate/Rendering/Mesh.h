@@ -60,6 +60,7 @@ public:
 private:
     //  render data
     std::shared_ptr<VertexArrayUser> m_VA;
+    std::shared_ptr<IndexBufferUser> m_IB;
 
 
 };

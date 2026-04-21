@@ -30,6 +30,6 @@ namespace Agate {
     void IndexBuffer::setUpBuffer() {
         Bind();
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(float), &m_indinces[0], STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(unsigned int), &m_indinces[0], STATIC_DRAW);
     }
 }// namespace Agate
