@@ -106,6 +106,10 @@ void Agate::EntryPoint::Run() {
 
         m_window->PollEvents();
     };
+
+    renderThread.join();
+    m_window->AttachContext();
+    Renderer::Shutdown();
 }
 
 void Agate::EntryPoint::OnEvent(Event &e) {

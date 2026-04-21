@@ -30,6 +30,16 @@ namespace Agate {
         }
     }
 
+    void Renderer::Shutdown() {
+        std::lock_guard<std::mutex> lock(s_CommandMutex);
+        while (!s_CommandQueue.empty()) s_CommandQueue.pop();
+        while (!s_ExecuteQueue.empty()) s_ExecuteQueue.pop();
+        s_VaoMap.clear();
+        s_IndexBufferMap.clear();
+        s_TextureMap.clear();
+        s_ShaderMap.clear();
+    }
+
     void Renderer::Flush() {
         {
             // Lock the mutex only while swapping

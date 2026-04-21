@@ -46,7 +46,6 @@ public:
 
     void Attach() override
     {
-        return;
         shader = std::make_unique<Agate::Shader>("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
         camera = std::make_unique<Agate::Camera>(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
@@ -61,8 +60,6 @@ public:
 
     void OnRender() override
     {
-
-        return;
 
         // Poll for model completion until model is retrieved
         if (modelHandle.Status() == Agate::TaskStatus::Done) {

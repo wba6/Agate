@@ -47,6 +47,13 @@ namespace Agate {
              */
             static void Flush();
 
+            /**
+             * @brief Shutdown the renderer and clear all resources.
+             * 
+             * This should be called while the OpenGL context is still valid.
+             */
+            static void Shutdown();
+
             static void CheckForExceptions();
 
             /**

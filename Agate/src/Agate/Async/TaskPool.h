@@ -91,6 +91,10 @@ template<typename ResultType>
 template<typename FuncType>
 TaskHandle<ResultType>& TaskHandle<ResultType>::Then(FuncType&& callback) {
 
+    if (!sharedState) {
+        return *this;
+    }
+
     std::scoped_lock lock(sharedState->mutex);
     bool statusDone = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Done) == static_cast<std::uint32_t>(TaskStatus::Done);
 
@@ -119,6 +123,10 @@ TaskHandle<ResultType>& TaskHandle<ResultType>::Then(FuncType&& callback) {
 template<typename ResultType>
 TaskHandle<ResultType>& TaskHandle<ResultType>::Wait() {
 
+    if (!sharedState) {
+        return *this;
+    }
+
     std::unique_lock lock(sharedState->mutex);
     sharedState->condition.wait(lock, [this]() -> bool {
         bool statusTerminal = static_cast<std::uint32_t>(sharedState->status.load() & TaskStatus::Terminal) != static_cast<std::uint32_t>(0);
@@ -131,6 +139,11 @@ TaskHandle<ResultType>& TaskHandle<ResultType>::Wait() {
 template<typename ResultType>
 ResultType TaskHandle<ResultType>::Get() {
 
+    if (!sharedState) {
+        PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result (null state)");
+        throw std::runtime_error("Invalid Task Extraction Attempt");
+    }
+
     // Result not ready
     std::scoped_lock lock(sharedState->mutex);
     if constexpr (std::is_void_v<ResultType>) {
@@ -142,12 +155,12 @@ ResultType TaskHandle<ResultType>::Get() {
         if (!sharedState->result.has_value() || Status() != TaskStatus::Done) {
             PRINTCRIT("Attempted to call `TaskHandle::Get` with an invalid result");
             throw std::runtime_error("Invalid Task Extraction Attempt");
-    }
+        }
 
-    // Result already extracted
-    if ((sharedState->status.load() & TaskStatus::Extracted) == TaskStatus::Extracted) {
-        PRINTCRIT("Attempted to call `TaskHandle::Get` on an invalidated result due to prior extraction");
-        throw std::runtime_error("Invalid Task Extraction Attempt");
+        // Result already extracted
+        if ((sharedState->status.load() & TaskStatus::Extracted) == TaskStatus::Extracted) {
+            PRINTCRIT("Attempted to call `TaskHandle::Get` on an invalidated result due to prior extraction");
+            throw std::runtime_error("Invalid Task Extraction Attempt");
         }
     }
 
@@ -164,11 +177,16 @@ ResultType TaskHandle<ResultType>::Get() {
 
 template<typename ResultType>
 void TaskHandle<ResultType>::Cancel() {
-    sharedState->Cancel();
+    if (sharedState) {
+        sharedState->Cancel();
+    }
 }
 
 template<typename ResultType>
 inline TaskStatus TaskHandle<ResultType>::Status() const {
+    if (!sharedState) {
+        return TaskStatus::NullState;
+    }
     return sharedState->status.load();
 }
 
