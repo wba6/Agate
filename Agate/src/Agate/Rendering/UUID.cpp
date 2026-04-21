@@ -2,10 +2,6 @@
 #include <random>
 
 namespace Agate {
-    static std::random_device s_RandomDevice;
-    static std::mt19937_64 s_Engine(s_RandomDevice());
-    static std::uniform_int_distribution<uint64_t> s_UniformDistribution;
-
     // Initializes to 0 (Null UUID)
     UUID::UUID()
         : m_UUID(0)
@@ -15,6 +11,10 @@ namespace Agate {
     // Generate a new random ID
     UUID UUID::Generate()
     {
+        static thread_local std::random_device s_RandomDevice;
+        static thread_local std::mt19937_64 s_Engine(s_RandomDevice());
+        static thread_local std::uniform_int_distribution<uint64_t> s_UniformDistribution;
+
         uint64_t id = s_UniformDistribution(s_Engine);
         // Ensure we don't accidentally generate a null UUID (highly unlikely but possible)
         while (id == 0) {
