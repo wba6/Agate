@@ -16,11 +16,10 @@ Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 
 Agate::EntryPoint::EntryPoint()
-        : m_deltaTime{0} {
+        : m_running{true}, m_deltaTime{0} {
     s_instance = this;
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
-    m_running = true;
     imgui_interface::Init(m_window->GetInstanceWindow());
 
     //m_layerStack.AddOverlay(new GameObjectsUI);

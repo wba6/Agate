@@ -11,6 +11,7 @@
 #include "Agate/Window/Window.h"
 #include "Core.h"
 #include "LayerStack.h"
+#include <atomic>
 
 namespace Agate {
 
@@ -111,7 +112,7 @@ namespace Agate {
     private:
         std::shared_ptr<Window> m_window;
         LayerStack m_layerStack;
-        bool m_running;
+        std::atomic<bool> m_running;
         std::atomic<float> m_deltaTime;
 
     private:
