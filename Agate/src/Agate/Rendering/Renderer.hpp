@@ -5,6 +5,8 @@
 #include <memory.h>
 #include <queue>
 #include <unordered_map>
+#include <mutex>
+#include <exception>
 #include "Event.h"
 #include "RenderCommand.hpp"
 #include "Rendering/OpenGl/IndexBuffer.h"
@@ -109,6 +111,7 @@ namespace Agate {
             static std::unordered_map<UUID, std::shared_ptr<Texture>> s_TextureMap;
             static std::unordered_map<UUID, std::shared_ptr<Shader>> s_ShaderMap;
             static std::exception_ptr s_RenderException;
+            static std::mutex s_ExceptionMutex;
     };
 }
 #endif // AGATE_RENDERER_HPP

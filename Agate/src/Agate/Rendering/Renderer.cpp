@@ -16,6 +16,7 @@ namespace Agate {
     std::unordered_map<UUID, std::shared_ptr<Texture>> Renderer::s_TextureMap;
     std::unordered_map<UUID, std::shared_ptr<Shader>> Renderer::s_ShaderMap;
     std::exception_ptr Renderer::s_RenderException = nullptr;
+    std::mutex Renderer::s_ExceptionMutex;
 
     void Renderer::Submit(std::unique_ptr<RenderCommand> e) {
         std::lock_guard<std::mutex> lock(s_CommandMutex);
@@ -23,6 +24,7 @@ namespace Agate {
     }
 
     void Renderer::CheckForExceptions() {
+        std::lock_guard<std::mutex> lock(s_ExceptionMutex);
         if (s_RenderException) {
             std::exception_ptr ex = s_RenderException;
             s_RenderException = nullptr;
@@ -83,6 +85,7 @@ namespace Agate {
                 }
             }
         } catch (...) {
+            std::lock_guard<std::mutex> lock(s_ExceptionMutex);
             s_RenderException = std::current_exception();
             // clear the queue to stop rendering on error
             while (!s_ExecuteQueue.empty()) s_ExecuteQueue.pop();
