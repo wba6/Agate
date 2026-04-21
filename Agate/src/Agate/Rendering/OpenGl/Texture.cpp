@@ -55,15 +55,15 @@ namespace Agate {
 
         // Generate mipmaps
         if (kTexture->numLevels == 1)
-            glGenerateMipmap(GL_TEXTURE_2D);
+            GLCall(glGenerateMipmap(GL_TEXTURE_2D));
 
-        glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
         // Unbind texture and destroy ktxTexture
-        glBindTexture(target, 0);
+        GLCall(glBindTexture(target, 0));
         ktxTexture_Destroy(kTexture);
         PRINTMSG("Successfully loaded KTX texture: {}", filename);
         return true;
@@ -98,26 +98,18 @@ namespace Agate {
         target = GL_TEXTURE_2D;
 
         // Retrieve texture dimensions
-        glBindTexture(target, textureID);
-        glGetTexLevelParameteriv(target, 0, GL_TEXTURE_WIDTH, &width);
-        glGetTexLevelParameteriv(target, 0, GL_TEXTURE_HEIGHT, &height);
+        GLCall(glBindTexture(target, textureID));
+        GLCall(glGetTexLevelParameteriv(target, 0, GL_TEXTURE_WIDTH, &width));
+        GLCall(glGetTexLevelParameteriv(target, 0, GL_TEXTURE_HEIGHT, &height));
 
         // Set texture parameters
-        glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        // Check for errors
-        GLenum error = glGetError();
-        if (error != GL_NO_ERROR) {
-            PRINTERROR("OpenGL error after setting texture parameters for {}, {}", filename, error);
-            glBindTexture(target, 0);
-            return false;
-        }
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
         // Unbind the texture
-        glBindTexture(target, 0);
+        GLCall(glBindTexture(target, 0));
 
         return true;
     }
@@ -130,9 +122,13 @@ namespace Agate {
      *
      * @return A Texture object
      */
-    Texture::Texture(const char *file, std::string &directory)
+    Texture::Texture(const char *file, const std::string &directory)
             : m_width(0), m_height(0), m_path(file), m_type("texture"), m_target(GL_TEXTURE_2D), m_textureID(0), m_directory(directory) {
 
+    }
+
+    Texture::~Texture() {
+        GLCall(glDeleteTextures(1, &m_textureID));
     }
 
     /*
@@ -143,8 +139,8 @@ namespace Agate {
      * @return void
      */
     void Texture::bind(unsigned int slot) const {
-        glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(m_target, m_textureID);
+        GLCall(glActiveTexture(GL_TEXTURE0 + slot));
+        GLCall(glBindTexture(m_target, m_textureID));
     }
 
     /*
@@ -153,7 +149,7 @@ namespace Agate {
      * @return void
      */
     void Texture::unBind() const {
-        glBindTexture(m_target, 0);
+        GLCall(glBindTexture(m_target, 0));
     }
 
     /*

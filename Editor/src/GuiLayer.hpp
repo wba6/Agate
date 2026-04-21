@@ -54,6 +54,11 @@ public:
     void OnEvent(Agate::Event &e) override;
 
     /**
+     * @brief Called once every game loop 
+     */
+    void OnUpdate() override;
+
+    /**
      * @brief Updates the dimensions of the UI panels based on the current window size
      */
     void inline UpdatePanelDimensions();

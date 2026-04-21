@@ -8,28 +8,24 @@
 #include "Events/RenderCommand.hpp"
 #include "ImGui-layer/Example_imguiLayer.h"
 #include "imgui.h"
-#include <algorithm>
-#include <iostream>
+#include <thread>
+#include <semaphore>
 #include <memory>
 
 Agate::EntryPoint *Agate::EntryPoint::s_instance = nullptr;
 
 
 Agate::EntryPoint::EntryPoint()
-        : deltaTime{0} {
+        : m_running{true}, m_deltaTime{0} {
     s_instance = this;
 
     m_window = std::make_shared<Window>("Agate", 1200, 720, BindFn(EntryPoint::OnEvent), true);
-    m_running = true;
-
     imgui_interface::Init(m_window->GetInstanceWindow());
+
     //m_layerStack.AddOverlay(new GameObjectsUI);
     //m_layerStack.AddOverlay(new Example_imguiLayer());
 
     CurrentContext::OpenGL = true;
-
-    std::unique_ptr<DrawMesh> mesh = std::make_unique<DrawMesh>(1);
-    Renderer::Submit(std::move(mesh));
 }
 
 Agate::EntryPoint::~EntryPoint() {
@@ -37,38 +33,89 @@ Agate::EntryPoint::~EntryPoint() {
 }
 
 void Agate::EntryPoint::Run() {
-    int frameCount = 0;
+
+    std::atomic<float> a_RenderThreadFPS{0.0f};
+    std::atomic<float> a_RenderThreadMS{0.0f};
+
+    // Limit the Main Thread to be at most 2 frames ahead of the Render Thread
+    std::counting_semaphore<2> frameSemaphore(2);
+
+    m_window->DetachContext();
+    // Start Render Thread
+    std::jthread renderThread([&]() {
+        // Get context
+        m_window->AttachContext();        
+        double lastTime = m_window->WindowOpenTime();
+        while (m_running) {
+            double frameTime = m_window->WindowOpenTime();
+            m_deltaTime.store(static_cast<float>(frameTime - lastTime));
+            lastTime = frameTime;
+
+            // Calculate and store stats for the UI to read
+            if (m_deltaTime.load() > 0) {
+                a_RenderThreadFPS = 1.0f / m_deltaTime.load();
+                a_RenderThreadMS = m_deltaTime.load() * 1000.0f;
+            }
+            Agate::CurrentContext::GetCurrentContex()->NewFrame();
+
+            // Execute all commands submitted by the main thread
+            Renderer::Flush(); 
+            
+            // Swap buffers
+            m_window->SwapBuffers(); 
+
+            // SIGNAL the Main Thread that we finished a frame
+            frameSemaphore.release();
+        }
+    });
+
     while (m_running) {
-        frameCount++;
-        double FrameTime = m_window->WindowOpenTime();
-        Agate::CurrentContext::GetCurrentContex()->NewFrame();
+
+        // wait here if the Render Thread is too far behind
+        frameSemaphore.acquire();
+
+        // Check if the render thread threw an exception
+        Renderer::CheckForExceptions();
+        
+        // Update operation
+        for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
+            m_layerStack.m_layers.at(i)->OnUpdate();
+        }
 
         imgui_interface::BeginFrame();
+        // Render operation
         for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
             m_layerStack.m_layers.at(i)->OnRender();
         }
 
-        ImGui::Begin("Frame");
-        ImGui::Text("%s", ("Per Frame: " + std::to_string(deltaTime * 1000) + " ms").c_str());
-        ImGui::Text("%s", ("Total Frames: " + std::to_string(frameCount)).c_str());
-
+        ImGui::Begin("Performance");
+       
+        // Show Main Thread speed (Logic/UI)
+        ImGui::Text("Main Thread (UI): %.1f FPS", ImGui::GetIO().Framerate);
+        ImGui::Separator();
+        // We load from the atomic variables updated by the other thread
+        ImGui::Text("Render Thread: %.1f FPS", a_RenderThreadFPS.load());
+        ImGui::Text("Render Time: %.3f ms", a_RenderThreadMS.load());
         ImGui::End();
 
-        imgui_interface::EndFrame();
+        ImDrawData* data = imgui_interface::EndFrame();
 
-        m_window->OnUpdate();
-        Renderer::Flush();
+        Renderer::Submit(std::make_unique<DrawUI>(data));
 
-        if (std::fmod(frameCount, 25.0) == 0 || frameCount == 1) {
-            deltaTime = m_window->WindowOpenTime() - FrameTime;
-        }
+
+        m_window->PollEvents();
     };
+
+    renderThread.join();
+    m_window->AttachContext();
+    Renderer::Shutdown();
 }
 
 void Agate::EntryPoint::OnEvent(Event &e) {
     EventNotifier notifier(e);
 
     notifier.NotifyEvent<WindowCloseEvent>(BindFn(EntryPoint::OnWindowClose));
+    notifier.NotifyEvent<WindowResizedEvent>(BindFn(EntryPoint::OnWindowResized));
 
     for (size_t i{0}; i < m_layerStack.m_layers.size(); i++) {
         m_layerStack.m_layers.at(i)->OnEvent(e);
@@ -81,6 +128,12 @@ void Agate::EntryPoint::OnEvent(Event &e) {
 bool Agate::EntryPoint::OnWindowClose(WindowCloseEvent &e) {
     m_running = false;
     return true;
+}
+
+bool Agate::EntryPoint::OnWindowResized(WindowResizedEvent &e) {
+    const auto [width, height] = e.GetWindowSize();
+    Renderer::Submit(std::make_unique<SetViewport>(0, 0, width, height));
+    return false;
 }
 
 void Agate::EntryPoint::EmplaceLayer(std::shared_ptr<Layer> layer) {
@@ -104,7 +157,7 @@ Agate::EntryPoint *&Agate::EntryPoint::GetInstance() {
 }
 
 float Agate::EntryPoint::GetDeltaTime() {
-    return deltaTime;
+    return m_deltaTime.load();
 }
 
 std::shared_ptr<Agate::Window> Agate::EntryPoint::GetWindow() {

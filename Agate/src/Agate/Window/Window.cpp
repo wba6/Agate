@@ -13,7 +13,7 @@ namespace Agate {
 
 
     Window::Window(std::string WindowName, int size_x, int size_y, EventCallbackFn callback, bool vsync)
-            : m_windowProps{WindowName, size_x, size_y, callback, vsync} {
+            : m_windowProps(std::move(WindowName), size_x, size_y, std::move(callback), vsync) {
         InitWindow();
     }
 
@@ -27,7 +27,7 @@ namespace Agate {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // Required on Mac
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);            // Required on Mac
 
-        m_Window = glfwCreateWindow(m_windowProps.width, m_windowProps.height, m_windowProps.name.c_str(), nullptr,
+        m_Window = glfwCreateWindow(m_windowProps.width.load(), m_windowProps.height.load(), m_windowProps.name.c_str(), nullptr,
                                     nullptr);
         glfwMakeContextCurrent((GLFWwindow *) m_Window);
 
@@ -78,9 +78,9 @@ namespace Agate {
             WindowProperies &data = *(WindowProperies *) glfwGetWindowUserPointer(window);
 
             WindowResizedEvent event(width, height);
+            data.width.store(width);
+            data.height.store(height);
             data.callback(event);
-
-            data.context->SetWindowSize(width, height);
         });
     }
 
@@ -88,31 +88,37 @@ namespace Agate {
         PRINTCRIT("GLFW ERROR---CODE: {} : {}", error_code, description);
     }
 
-    void Window::OnUpdate() {
-        glfwPollEvents();
+    void Window::SwapBuffers() {
+        std::lock_guard<std::recursive_mutex> lock(m_SyncMutex);
         glfwSwapBuffers((GLFWwindow *) m_Window);
     }
 
+    void Window::PollEvents() {
+        std::lock_guard<std::recursive_mutex> lock(m_SyncMutex);
+        glfwPollEvents();
+    }
+
     int Window::GetWidth() {
-        return m_windowProps.width;
+        return m_windowProps.width.load();
     }
 
     int Window::GetHieght() {
-        return m_windowProps.width;
+        return m_windowProps.height.load();
     }
 
     void Window::SetVSync(bool enable) {
+        std::lock_guard<std::recursive_mutex> lock(m_SyncMutex);
         if (enable) {
             glfwSwapInterval(1);
-            m_windowProps.VSyncState = true;
+            m_windowProps.VSyncState.store(true);
         } else {
             glfwSwapInterval(0);
-            m_windowProps.VSyncState = false;
+            m_windowProps.VSyncState.store(false);
         }
     }
 
     bool Window::GetVSyncState() {
-        return m_windowProps.VSyncState;
+        return m_windowProps.VSyncState.load();
     }
 
     void *Window::GetInstanceWindow() {
@@ -129,6 +135,7 @@ namespace Agate {
     }
 
     void Window::GrabCursor(bool cursor) {
+        std::lock_guard<std::recursive_mutex> lock(m_SyncMutex);
         if (cursor) {
             glfwSetInputMode((GLFWwindow *) m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         } else {
@@ -137,10 +144,12 @@ namespace Agate {
     }
 
     void Window::AttachContext() {
+        std::lock_guard<std::recursive_mutex> lock(m_SyncMutex);
         glfwMakeContextCurrent((GLFWwindow *)m_Window);
     }
 
     void Window::DetachContext() {
+        std::lock_guard<std::recursive_mutex> lock(m_SyncMutex);
         glfwMakeContextCurrent(NULL);
     }
 
@@ -154,8 +163,8 @@ namespace Agate {
             throw std::invalid_argument("1 or more dimensions below 0");
         }
 
-        int width = std::clamp(m_windowProps.width, minWidth, maxWidth);
-        int height = std::clamp(m_windowProps.height, minHeight, maxHeight);
+        int width = std::clamp(m_windowProps.width.load(), minWidth, maxWidth);
+        int height = std::clamp(m_windowProps.height.load(), minHeight, maxHeight);
         if (width != m_windowProps.width || height != m_windowProps.height) {
             glfwSetWindowSize((GLFWwindow*) m_Window, width, height);
         }

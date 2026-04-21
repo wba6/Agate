@@ -43,17 +43,17 @@ namespace Agate {
         const char *vShaderCode = vertexCode.c_str();
         const char *fShaderCode = fragmentCode.c_str();
 
-        m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+        GLCall(m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER));
         GLCall(glShaderSource(m_vertexShaderID, 1, &vShaderCode, NULL));
         GLCall(glCompileShader(m_vertexShaderID));
         shaderCompileStatus(m_vertexShaderID);
 
-        m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+        GLCall(m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER));
         GLCall(glShaderSource(m_fragmentShaderID, 1, &fShaderCode, NULL));
         GLCall(glCompileShader(m_fragmentShaderID));
         shaderCompileStatus(m_fragmentShaderID);
 
-        m_shaderProgramID = glCreateProgram();
+        GLCall(m_shaderProgramID = glCreateProgram());
 
         GLCall(glAttachShader(m_shaderProgramID, m_vertexShaderID));
         GLCall(glAttachShader(m_shaderProgramID, m_fragmentShaderID));
@@ -63,7 +63,7 @@ namespace Agate {
         char infoLog[512];
         GLCall(glGetProgramiv(m_shaderProgramID, GL_LINK_STATUS, &success));
         if (!success) {
-            glGetProgramInfoLog(m_shaderProgramID, 512, NULL, infoLog);
+            GLCall(glGetProgramInfoLog(m_shaderProgramID, 512, NULL, infoLog));
             PRINTCRIT("ERROR::SHADER::PROGRAM::LINKING_FAILED\n");
             PRINTWARN("", infoLog);
         }
@@ -72,10 +72,10 @@ namespace Agate {
     void Shader::shaderCompileStatus(unsigned int id) {
         int success;
         char infoLog[512];
-        glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+        GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &success));
 
         if (!success) {
-            glGetShaderInfoLog(id, 512, NULL, infoLog);
+            GLCall(glGetShaderInfoLog(id, 512, NULL, infoLog));
             PRINTCRIT("SHADER COMPILATION_FAILED with error: {}\n", infoLog);
         }
     }
@@ -91,6 +91,7 @@ namespace Agate {
     Shader::~Shader() {
         glDeleteShader(m_vertexShaderID);
         glDeleteShader(m_fragmentShaderID);
+        glDeleteProgram(m_shaderProgramID);
     }
 
     int Shader::getUniformLoc(const char *uniform) const {

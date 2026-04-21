@@ -57,6 +57,10 @@ void GuiLayer::OnEvent(Agate::Event &e) {
 
 }
 
+void GuiLayer::OnUpdate() {
+
+}
+
 void GuiLayer::UpdatePanelDimensions() {
     
     // Element heights

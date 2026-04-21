@@ -3,39 +3,36 @@
 #include "LayerStack.h"
 
 Agate::LayerStack::~LayerStack() {
-    for (size_t i{0}; i < m_layers.size(); i++) {
-        m_layers.at(i)->Detach();
-        m_layers.erase(m_layers.begin() + i);
+    for (auto& layer : m_layers) {
+        layer->Detach();
     }
+    m_layers.clear();
 }
 
 void Agate::LayerStack::AddLayer(std::shared_ptr<Layer> layer) {
     layer->Attach();
-    m_layers.emplace(m_layers.begin() + m_amountOfLayers, std::move(layer));
+    m_layers.emplace(m_layers.begin() + m_amountOfLayers, layer);
     m_amountOfLayers++;
 }
 
 void Agate::LayerStack::RemoveLayer(std::shared_ptr<Layer> layer) {
-    for (size_t i{0}; i < m_layers.size(); i++) {
-        if (layer == m_layers.at(i)) {
-            layer->Detach();
-            m_layers.erase(m_layers.begin() + i);
-            break;
-        }
+    auto it = std::find(m_layers.begin(), m_layers.begin() + m_amountOfLayers, layer);
+    if (it != m_layers.begin() + m_amountOfLayers) {
+        layer->Detach();
+        m_layers.erase(it);
+        m_amountOfLayers--;
     }
 }
 
 void Agate::LayerStack::AddOverlay(std::shared_ptr<Layer> overlay) {
     overlay->Attach();
-    m_layers.push_back(std::move(overlay));
+    m_layers.push_back(overlay);
 }
 
 void Agate::LayerStack::RemoveOverlay(std::shared_ptr<Layer> overlay) {
-    for (size_t i{m_layers.size()}; i >= 0; i--) {
-        if (overlay == m_layers.at(i)) {
-            overlay->Detach();
-            m_layers.erase(m_layers.begin() + (m_layers.size() - i));
-            break;
-        }
+    auto it = std::find(m_layers.begin() + m_amountOfLayers, m_layers.end(), overlay);
+    if (it != m_layers.end()) {
+        overlay->Detach();
+        m_layers.erase(it);
     }
 }
