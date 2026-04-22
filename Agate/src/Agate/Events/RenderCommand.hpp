@@ -24,6 +24,7 @@ namespace Agate {
     enum class API CommandTypes {
         DrawMesh,
         DrawUI,
+        Clear,
         CreateVertexArray,
         CreateIndexBuffer,
         CreateFrameBuffer,
@@ -212,6 +213,30 @@ namespace Agate {
     private:
         ImDrawData m_data{};
     }; 
+
+    /**
+     * @brief Render command for clearing the current framebuffer
+     */
+    class Clear : public RenderCommand {
+    public:
+        Clear(float r, float g, float b, float a)
+            : m_R(r), m_G(g), m_B(b), m_A(a) {}
+
+        void Execute() override {}
+
+        virtual CommandTypes GetCommandType() override {
+            return CommandTypes::Clear;
+        };
+
+        static CommandTypes s_GetCommandType() {
+            return CommandTypes::Clear;
+        }
+
+        virtual ~Clear() = default;
+
+    public:
+        float m_R, m_G, m_B, m_A;
+    };
 
     class CreateVertexArray : public RenderCommand {
     public:

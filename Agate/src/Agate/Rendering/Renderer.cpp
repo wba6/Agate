@@ -4,12 +4,14 @@
 #include "Rendering/OpenGl/VertexArray.h"
 #include "Rendering/OpenGl/Shader.h"
 #include "Rendering/OpenGl/Texture.h"
+#include "Rendering/OpenGl/FrameBuffer.hpp"
 #include "Agate/Core/Exceptions.h"
 
 namespace Agate {
     std::queue<std::unique_ptr<RenderCommand>> Renderer::s_CommandQueue;
     std::queue<std::unique_ptr<RenderCommand>> Renderer::s_ExecuteQueue;
     std::mutex Renderer::s_CommandMutex;
+    std::mutex Renderer::s_ResourceMutex;
     // Resource Maps
     std::unordered_map<UUID, std::shared_ptr<VertexArray>> Renderer::s_VaoMap;
     std::unordered_map<UUID, std::shared_ptr<IndexBuffer>> Renderer::s_IndexBufferMap;
@@ -35,12 +37,14 @@ namespace Agate {
 
     void Renderer::Shutdown() {
         std::lock_guard<std::mutex> lock(s_CommandMutex);
+        std::lock_guard<std::mutex> lock2(s_ResourceMutex);
         while (!s_CommandQueue.empty()) s_CommandQueue.pop();
         while (!s_ExecuteQueue.empty()) s_ExecuteQueue.pop();
         s_VaoMap.clear();
         s_IndexBufferMap.clear();
         s_TextureMap.clear();
         s_ShaderMap.clear();
+        s_FrameBufferMap.clear();
     }
 
     void Renderer::Flush() {
@@ -61,24 +65,30 @@ namespace Agate {
                 notifier.NotifyCommand<CreateIndexBuffer>(BindStaticFn(Renderer::OnCreateIB));
                 notifier.NotifyCommand<CreateShader>(BindStaticFn(Renderer::OnCreateShader));
                 notifier.NotifyCommand<CreateTexture>(BindStaticFn(Renderer::OnCreateTexture));
+                notifier.NotifyCommand<CreateFrameBuffer>(BindStaticFn(Renderer::OnCreateFBO));
                 notifier.NotifyCommand<BindVertexArray>(BindStaticFn(Renderer::OnBindVAO));
                 notifier.NotifyCommand<UnBindVertexArray>(BindStaticFn(Renderer::OnUnBindVAO));
                 notifier.NotifyCommand<BindIndexBuffer>(BindStaticFn(Renderer::OnBindIBO));
                 notifier.NotifyCommand<UnBindIndexBuffer>(BindStaticFn(Renderer::OnUnBindIBO));
+                notifier.NotifyCommand<BindFrameBuffer>(BindStaticFn(Renderer::OnBindFBO));
+                notifier.NotifyCommand<UnBindFrameBuffer>(BindStaticFn(Renderer::OnUnBindFBO));
                 notifier.NotifyCommand<BindShader>(BindStaticFn(Renderer::OnBindShader));
                 notifier.NotifyCommand<UnBindShader>(BindStaticFn(Renderer::OnUnBindShader));
                 notifier.NotifyCommand<BindTexture>(BindStaticFn(Renderer::OnBindTexture));
                 notifier.NotifyCommand<DrawMesh>(BindStaticFn(Renderer::OnDrawMesh));
+                notifier.NotifyCommand<Clear>(BindStaticFn(Renderer::OnClear));
                 notifier.NotifyCommand<UpdateShaderUniform4f>(BindStaticFn(Renderer::OnUpdateShaderUniform4f));
                 notifier.NotifyCommand<UpdateShaderUniform3f>(BindStaticFn(Renderer::OnUpdateShaderUniform3f));
                 notifier.NotifyCommand<UpdateShaderUniformMat4>(BindStaticFn(Renderer::OnUpdateShaderUniformMat4));
                 notifier.NotifyCommand<UpdateShaderUniform1i>(BindStaticFn(Renderer::OnUpdateShaderUniform1i));
                 notifier.NotifyCommand<UpdateShaderUniform1f>(BindStaticFn(Renderer::OnUpdateShaderUniform1f));
+                notifier.NotifyCommand<ResizeFrameBuffer>(BindStaticFn(Renderer::OnResizeFBO));
                 notifier.NotifyCommand<SetViewport>(BindStaticFn(Renderer::OnSetViewport));
                 notifier.NotifyCommand<DeleteVertexArray>(BindStaticFn(Renderer::OnDeleteVAO));
                 notifier.NotifyCommand<DeleteIndexBuffer>(BindStaticFn(Renderer::OnDeleteIBO));
                 notifier.NotifyCommand<DeleteShader>(BindStaticFn(Renderer::OnDeleteShader));
                 notifier.NotifyCommand<DeleteTexture>(BindStaticFn(Renderer::OnDeleteTexture));
+                notifier.NotifyCommand<DeleteFrameBuffer>(BindStaticFn(Renderer::OnDeleteFBO));
 
 
                 if (e) {
@@ -103,12 +113,14 @@ namespace Agate {
             e.m_VAU.getDataSize()
         );
         
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_VaoMap[e.m_VAU.getUUID()] = vao;
     }
 
     /**
      */
     void Renderer::OnCreateIB(CreateIndexBuffer e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto vaoIterator = s_VaoMap.find(e.m_VAUUID);
         if (vaoIterator == s_VaoMap.end()) {
             throw UUIDNotFoundException(e.m_VAUUID, "VertexArray");
@@ -130,6 +142,7 @@ namespace Agate {
             e.m_SU.getVertexShaderPath().c_str(), 
             e.m_SU.getFragmentShaderPath().c_str()
         );
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_ShaderMap[e.m_SU.getUUID()] = shader;
     }
 
@@ -141,6 +154,7 @@ namespace Agate {
             e.m_TU.getDirectory()
         );
         texture->initialize();
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_TextureMap[e.m_TU.getUUID()] = texture;
     }
 
@@ -149,10 +163,12 @@ namespace Agate {
             e.m_FBU.getWidth(),
             e.m_FBU.getHeight()
         );
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_FrameBufferMap[e.m_FBU.getUUID()] = fbo;
     }
 
     void Renderer::OnBindFBO(BindFrameBuffer e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto it = s_FrameBufferMap.find(e.m_UUID);
         if (it == s_FrameBufferMap.end()) {
             throw UUIDNotFoundException(e.m_UUID, "FrameBuffer");
@@ -165,6 +181,7 @@ namespace Agate {
     }
 
     void Renderer::OnBindVAO(BindVertexArray e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto it = s_VaoMap.find(e.m_UUID);
         if (it == s_VaoMap.end()) {
             throw UUIDNotFoundException(e.m_UUID, "VertexArray");
@@ -178,6 +195,7 @@ namespace Agate {
     }
 
     void Renderer::OnBindIBO(BindIndexBuffer e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto it = s_IndexBufferMap.find(e.m_UUID);
         if (it == s_IndexBufferMap.end()) {
             throw UUIDNotFoundException(e.m_UUID, "IndexBuffer");
@@ -190,6 +208,7 @@ namespace Agate {
     }
 
     void Renderer::OnBindShader(BindShader e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto it = s_ShaderMap.find(e.m_UUID);
         if (it == s_ShaderMap.end()) {
             throw UUIDNotFoundException(e.m_UUID, "Shader");
@@ -202,6 +221,7 @@ namespace Agate {
     }
 
     void Renderer::OnBindTexture(BindTexture e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto it = s_TextureMap.find(e.m_UUID);
         if (it == s_TextureMap.end()) {
             throw UUIDNotFoundException(e.m_UUID, "Texture");
@@ -210,6 +230,7 @@ namespace Agate {
     }
 
     void Renderer::OnDrawMesh(DrawMesh e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto vaoIt = s_VaoMap.find(e.m_VaoUUID);
         if (vaoIt == s_VaoMap.end()) {
             throw UUIDNotFoundException(e.m_VaoUUID, "VertexArray");
@@ -225,7 +246,13 @@ namespace Agate {
         vaoIt->second->UnBind();
     }
 
+    void Renderer::OnClear(Clear e) {
+        glClearColor(e.m_R, e.m_G, e.m_B, e.m_A);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
     void Renderer::OnUpdateShaderUniform4f(UpdateShaderUniform4f e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt == s_ShaderMap.end()) {
             throw UUIDNotFoundException(e.m_ShaderUUID, "Shader");
@@ -235,6 +262,7 @@ namespace Agate {
     }
 
     void Renderer::OnUpdateShaderUniform3f(UpdateShaderUniform3f e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt == s_ShaderMap.end()) {
             throw UUIDNotFoundException(e.m_ShaderUUID, "Shader");
@@ -244,6 +272,7 @@ namespace Agate {
     }
 
     void Renderer::OnUpdateShaderUniformMat4(UpdateShaderUniformMat4 e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt == s_ShaderMap.end()) {
             throw UUIDNotFoundException(e.m_ShaderUUID, "Shader");
@@ -253,6 +282,7 @@ namespace Agate {
     }
 
     void Renderer::OnUpdateShaderUniform1i(UpdateShaderUniform1i e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt == s_ShaderMap.end()) {
             throw UUIDNotFoundException(e.m_ShaderUUID, "Shader");
@@ -262,6 +292,7 @@ namespace Agate {
     }
 
     void Renderer::OnUpdateShaderUniform1f(UpdateShaderUniform1f e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto shaderIt = s_ShaderMap.find(e.m_ShaderUUID);
         if (shaderIt == s_ShaderMap.end()) {
             throw UUIDNotFoundException(e.m_ShaderUUID, "Shader");
@@ -271,6 +302,7 @@ namespace Agate {
     }
 
     void Renderer::OnResizeFBO(ResizeFrameBuffer e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         auto it = s_FrameBufferMap.find(e.m_UUID);
         if (it == s_FrameBufferMap.end()) {
             throw UUIDNotFoundException(e.m_UUID, "FrameBuffer");
@@ -283,23 +315,37 @@ namespace Agate {
     }
 
     void Renderer::OnDeleteVAO(DeleteVertexArray e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_VaoMap.erase(e.m_UUID);
     }
 
     void Renderer::OnDeleteIBO(DeleteIndexBuffer e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_IndexBufferMap.erase(e.m_UUID);
     }
 
     void Renderer::OnDeleteFBO(DeleteFrameBuffer e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_FrameBufferMap.erase(e.m_UUID);
     }
 
     void Renderer::OnDeleteShader(DeleteShader e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_ShaderMap.erase(e.m_UUID);
     }
 
     void Renderer::OnDeleteTexture(DeleteTexture e) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
         s_TextureMap.erase(e.m_UUID);
+    }
+
+    unsigned int Renderer::GetFrameBufferTexture(UUID uuid) {
+        std::lock_guard<std::mutex> lock(s_ResourceMutex);
+        auto it = s_FrameBufferMap.find(uuid);
+        if (it != s_FrameBufferMap.end()) {
+            return it->second->GetTextureID();
+        }
+        return 0;
     }
 
 }

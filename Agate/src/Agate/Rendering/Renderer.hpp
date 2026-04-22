@@ -9,13 +9,14 @@
 #include <exception>
 #include "Event.h"
 #include "RenderCommand.hpp"
-#include "Rendering/OpenGl/IndexBuffer.h"
-#include "Rendering/OpenGl/Texture.h"
-#include "Rendering/OpenGl/VertexArray.h"
-#include "Rendering/OpenGl/FrameBuffer.hpp"
-#include "Rendering/OpenGl/Shader.h"
 
 namespace Agate {
+
+    class IndexBuffer;
+    class Texture;
+    class VertexArray;
+    class FrameBuffer;
+    class Shader;
 
     /**
      * @brief Centralized render command dispatcher.
@@ -96,6 +97,8 @@ namespace Agate {
 
             static void OnDrawMesh(DrawMesh e);
 
+            static void OnClear(Clear e);
+
             static void OnUpdateShaderUniform4f(UpdateShaderUniform4f e);
             static void OnUpdateShaderUniform3f(UpdateShaderUniform3f e);
             static void OnUpdateShaderUniformMat4(UpdateShaderUniformMat4 e);
@@ -112,11 +115,20 @@ namespace Agate {
             static void OnDeleteTexture(DeleteTexture e);
             static void OnDeleteFBO(DeleteFrameBuffer e);
 
+            /**
+             * @brief Retrieves the OpenGL texture ID associated with a framebuffer UUID.
+             * 
+             * @param uuid The UUID of the framebuffer.
+             * @return The OpenGL texture ID, or 0 if not found.
+             */
+            static unsigned int GetFrameBufferTexture(UUID uuid);
+
         private:
             Renderer() = delete;
             static std::queue<std::unique_ptr<RenderCommand>> s_CommandQueue; // write buffer
             static std::queue<std::unique_ptr<RenderCommand>> s_ExecuteQueue; // read buffer
             static std::mutex s_CommandMutex;
+            static std::mutex s_ResourceMutex;
             static std::unordered_map<UUID, std::shared_ptr<VertexArray>> s_VaoMap;
             static std::unordered_map<UUID, std::shared_ptr<IndexBuffer>> s_IndexBufferMap;
             static std::unordered_map<UUID, std::shared_ptr<Texture>> s_TextureMap;

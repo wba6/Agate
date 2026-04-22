@@ -3,6 +3,8 @@
  */
 
 #include "GuiLayer.hpp"
+#include "Agate/Rendering/Renderer.hpp"
+#include "Agate/Events/RenderCommand.hpp"
 
 constexpr inline ImGuiWindowFlags removeWindowDecorationFlags() {
     return ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | 
@@ -83,6 +85,7 @@ void GuiLayer::UpdatePanelDimensions() {
 
     // Resize frame buffer
     m_sceneFrameBuffer->Resize(static_cast<unsigned int>(m_middlePanelWidth), static_cast<unsigned int>(m_middlePanelHeights));
+    m_scene->SetViewportSize(m_middlePanelWidth, m_middlePanelHeights);
 }
 
 void GuiLayer::RenderTopPanel() {
@@ -127,17 +130,22 @@ void GuiLayer::RenderLeftPanel() {
 void GuiLayer::RenderCenterPanel() {
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
-    ImGui::BeginChild("CenterPanel", ImVec2(m_middlePanelWidth, m_middlePanelHeights), true);
+    ImGui::BeginChild("CenterPanel", ImVec2(m_middlePanelWidth, m_middlePanelHeights), true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     ImGui::PopStyleVar();
 
 
     m_sceneFrameBuffer->Bind();
+    Agate::Renderer::Submit(std::make_unique<Agate::Clear>(0.65f, 0.7f, 0.8f, 1.0f));
+    Agate::Renderer::Submit(std::make_unique<Agate::SetViewport>(0, 0, static_cast<uint32_t>(m_middlePanelWidth), static_cast<uint32_t>(m_middlePanelHeights)));
     m_scene->Render();
     m_sceneFrameBuffer->UnBind();
 
-    // TODO : Need to resolve texture ID
-    // ImGui::Image((void*)(uintptr_t)m_sceneFrameBuffer->GetTextureId(), ImVec2(m_middlePanelWidth, m_middlePanelHeights), ImVec2(0, 1), ImVec2(1, 0));
-    ImGui::Text("Scene Viewport");
+    unsigned int textureId = Agate::Renderer::GetFrameBufferTexture(m_sceneFrameBuffer->getUUID());
+    if (textureId) {
+        ImGui::Image((void*)(uintptr_t)textureId, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
+    } else {
+        ImGui::Text("Scene Viewport (Initializing...)");
+    }
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
     ImGui::EndChild();

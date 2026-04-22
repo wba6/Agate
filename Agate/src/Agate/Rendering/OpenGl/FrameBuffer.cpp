@@ -35,8 +35,19 @@ void FrameBuffer::UnBind() {
 }
 
 void FrameBuffer::Resize(unsigned int width, unsigned int height) {
+    if (m_width == width && m_height == height) return;
+
     m_width = width;
     m_height = height;
+
+    DeleteTextureAttachment();
+    DeleteRenderBufferAttachment();
+    GenerateTextureAttachment();
+    GenerateRenderBufferAttachment();
+
+    if (!Complete()) {
+        PRINTCRIT("Failed to resize FrameBuffer");
+    }
 }
 
 void FrameBuffer::GenerateTextureAttachment() {

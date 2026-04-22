@@ -13,11 +13,11 @@ Agate::ModelLoader::~ModelLoader() = default;
 Agate::ModelLoader::ModelLoader(std::string const &path)
     : m_directory(extractDirectory(path)), m_path(path) {}
 
-Agate::TaskHandle<Agate::ModelEditor> Agate::ModelLoader::LoadModel(const std::string &path) {
+Agate::TaskHandle<Agate::ModelEditor> Agate::ModelLoader::LoadModel(const std::string &path, bool flipUVs) {
 
-    return Agate::TaskPool::Enqueue([path]() -> Agate::ModelEditor {
+    return Agate::TaskPool::Enqueue([path, flipUVs]() -> Agate::ModelEditor {
         
-        std::unique_ptr<Agate::ModelLoader> loader = std::make_unique<Agate::AssimpLoader>(path);
+        std::unique_ptr<Agate::ModelLoader> loader = std::make_unique<Agate::AssimpLoader>(path, flipUVs);
         if (!loader->loadModel()) {
             throw std::runtime_error(fmt::format("Failed to load model from {}", path));
         }

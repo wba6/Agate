@@ -25,7 +25,13 @@ namespace Agate {
         KeyPressed();
         m_deltaTime = EntryPoint::GetInstance()->GetDeltaTime();
         m_view = glm::lookAt(m_cameraPos, m_cameraPos + s_cameraFront, m_cameraUp);
-        m_projection = glm::perspective(glm::radians(s_fov), 800.0f / 600.0f, 0.1f, 1000.0f);
+
+        float aspect = 1.0f;
+        if (m_viewportHeight > 0) {
+            aspect = m_viewportWidth / m_viewportHeight;
+        }
+
+        m_projection = glm::perspective(glm::radians(s_fov), aspect, 0.1f, 1000.0f);
         m_Shader.SetUniformMat4("view", m_view);
         m_Shader.SetUniformMat4("projection", m_projection);
     }
@@ -112,5 +118,10 @@ namespace Agate {
 
     void Camera::setCameraSpeed(float cameraSpeed) {
         m_cameraSpeed = cameraSpeed;
+    }
+
+    void Camera::SetViewportSize(float width, float height) {
+        m_viewportWidth = width;
+        m_viewportHeight = height;
     }
 }// namespace Agate

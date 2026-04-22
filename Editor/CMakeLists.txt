@@ -6,7 +6,12 @@ file(GLOB editorSrc
         "src/*.cpp"
         )
 
-include_directories("../Agate/src")
+include_directories("../Agate/src"
+                    "../Agate/src/Agate"
+                    "../Agate/src/Agate/Events"
+                    "../Agate/src/Agate/Rendering"
+                    "../Agate/vender/imgui"
+                    "../Agate/vender/glm")
 
 add_compile_definitions(Agate_STATIC)
 

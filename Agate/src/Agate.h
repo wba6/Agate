@@ -32,13 +32,5 @@
 #include "Agate/Rendering/ModelLoader.h"
 #include "Agate/Rendering/Camera.h"
 
-namespace Agate {
-    using Shader = ShaderUser;
-    using VertexArray = VertexArrayUser;
-    using IndexBuffer = IndexBufferUser;
-    using Texture = TextureUser;
-    using FrameBuffer = FrameBufferUser;
-}
-
 //-----------Async-------------
 #include "Agate/Async/TaskPool.h"

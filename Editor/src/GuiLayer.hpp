@@ -82,7 +82,7 @@ private:
 
     // Scene Data
     std::unique_ptr<Scene> m_scene = std::make_unique<Scene>();
-    std::unique_ptr<Agate::FrameBuffer> m_sceneFrameBuffer = std::make_unique<Agate::FrameBuffer>(1, 1);
+    std::unique_ptr<Agate::FrameBufferUser> m_sceneFrameBuffer = std::make_unique<Agate::FrameBufferUser>(1, 1);
 
     /**
      * @brief Renders the top UI panel

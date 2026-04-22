@@ -31,8 +31,9 @@ namespace Agate {
          *        an engine-ready format
          * 
          * @param path Path to the model file
+         * @param flipUVs If true, flip UV coordinates during post-processing
          */
-        static TaskHandle<ModelEditor> LoadModel(std::string const &path);
+        static TaskHandle<ModelEditor> LoadModel(std::string const &path, bool flipUVs = false);
 
 protected:
 

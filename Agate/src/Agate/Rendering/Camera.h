@@ -27,6 +27,8 @@ namespace Agate {
 
         void setCameraSpeed(float cameraSpeed);
 
+        void SetViewportSize(float width, float height);
+
     private:
         bool KeyPressed();
 
@@ -47,6 +49,8 @@ namespace Agate {
         glm::vec3 m_cameraUp;
         glm::mat4 m_view;
         float m_deltaTime;
+        float m_viewportWidth = 800.0f;
+        float m_viewportHeight = 600.0f;
     };
 
 }// namespace Agate

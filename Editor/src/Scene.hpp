@@ -22,14 +22,14 @@ public:
      */
     void Prepare() {
         // Use default shaders from the Agate engine
-        m_shader = std::make_unique<Agate::Shader>("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
+        m_shader = std::make_unique<Agate::ShaderUser>("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
         m_camera = std::make_unique<Agate::Camera>(*m_shader);
         
         m_camera->setCameraPos({1.0f, 1.0f, 20.0f});
         m_camera->setCameraSpeed(10.0f);
 
         // Load a default model asynchronously
-        m_modelHandle = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/vokselia_spawn/vokselia_spawn.obj").generic_string());
+        m_modelHandle = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/backpack/backpack.obj").generic_string(), true);
     }
 
     /**
@@ -74,8 +74,20 @@ public:
         }
     }
 
+    /**
+     * @brief Updates the viewport size for the scene's camera
+     * 
+     * @param width New width of the viewport
+     * @param height New height of the viewport
+     */
+    void SetViewportSize(float width, float height) {
+        if (m_camera) {
+            m_camera->SetViewportSize(width, height);
+        }
+    }
+
 private:
-    std::unique_ptr<Agate::Shader> m_shader;
+    std::unique_ptr<Agate::ShaderUser> m_shader;
     std::unique_ptr<Agate::Camera> m_camera;
     std::unique_ptr<Agate::ModelEditor> m_model;
     Agate::TaskHandle<Agate::ModelEditor> m_modelHandle;

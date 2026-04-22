@@ -46,7 +46,7 @@ public:
 
     void Attach() override
     {
-        shader = std::make_unique<Agate::Shader>("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
+        shader = std::make_unique<Agate::ShaderUser>("Shaders/model_loading.vs.glsl", "Shaders/model_loading.fg.glsl");
         camera = std::make_unique<Agate::Camera>(*shader);
         camera->setCameraPos({1.0f,1.0f,20.0f});
         camera->setCameraSpeed(10.f);
@@ -103,7 +103,7 @@ public:
         }
     }
 
-    std::unique_ptr<Agate::Shader> shader;
+    std::unique_ptr<Agate::ShaderUser> shader;
     std::unique_ptr<Agate::Camera> camera;
     std::unique_ptr<Agate::ModelEditor> model;
     Agate::TaskHandle<Agate::ModelEditor> modelHandle;
