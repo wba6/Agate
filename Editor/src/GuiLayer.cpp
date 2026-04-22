@@ -172,11 +172,14 @@ void GuiLayer::RenderRightPanel() {
     ImGui::InputFloat("Y##Scale", &m_selectedObjectScale[1], 0.0f, 0.0f, "%.2f");
     ImGui::InputFloat("Z##Scale", &m_selectedObjectScale[2], 0.0f, 0.0f, "%.2f");
     ImGui::Separator();
-    ImGui::Text("Albedo");
-    ImGui::SliderInt("R", &m_selectedObjectColorRGBA[0], 0, 255);
-    ImGui::SliderInt("G", &m_selectedObjectColorRGBA[1], 0, 255);
-    ImGui::SliderInt("B", &m_selectedObjectColorRGBA[2], 0, 255);
-    ImGui::SliderInt("A", &m_selectedObjectColorRGBA[3], 0, 255);
+    if (ImGui::Button("Apply Transform", ImVec2(-1, 0))) {
+        ApplyTransform();
+    }
+    // ImGui::Text("Albedo");
+    // ImGui::SliderInt("R", &m_selectedObjectColorRGBA[0], 0, 255);
+    // ImGui::SliderInt("G", &m_selectedObjectColorRGBA[1], 0, 255);
+    // ImGui::SliderInt("B", &m_selectedObjectColorRGBA[2], 0, 255);
+    // ImGui::SliderInt("A", &m_selectedObjectColorRGBA[3], 0, 255);
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
     ImGui::EndChild();
@@ -199,4 +202,26 @@ void GuiLayer::RenderBottomPanel() {
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
     ImGui::EndChild();
     ImGui::PopStyleVar();
+}
+
+void GuiLayer::ApplyTransform() {
+
+    glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::translate(transform, glm::vec3(
+        m_selectedObjectPosition[0],
+        m_selectedObjectPosition[1],
+        m_selectedObjectPosition[2]
+    ));
+    transform = glm::rotate(
+        transform,
+        m_selectedObjectRotationRadians,
+        glm::vec3(0.0f, 1, 0)
+    );
+    transform = glm::scale(transform, glm::vec3(
+        m_selectedObjectScale[0],
+        m_selectedObjectScale[1],
+        m_selectedObjectScale[2]
+    ));
+
+    m_scene->SetModelTransform(transform);
 }

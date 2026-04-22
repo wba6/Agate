@@ -108,6 +108,11 @@ private:
      * @brief Renders the bottom UI panel
      */
     void inline RenderBottomPanel();
+
+    /**
+     * @brief Applies the the current transform settings to the model
+     */
+    void ApplyTransform();
 };
 
 #endif // AGATE_EDITOR_GUI_LAYER_HPP

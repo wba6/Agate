@@ -20,6 +20,11 @@ void Scene::Prepare() {
 
     // Load a default model asynchronously
     m_modelHandle = Agate::ModelLoader::LoadModel(std::filesystem::path("Shaders/backpack/backpack.obj").generic_string(), true);
+
+    // Default transform
+    m_transform = glm::mat4(1.0f);
+    m_transform = glm::translate(m_transform, glm::vec3(0.0f, 0.0f, 0.0f));
+    m_transform = glm::scale(m_transform, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void Scene::Render() {
@@ -36,14 +41,9 @@ void Scene::Render() {
     m_shader->Bind();
     m_camera->onUpdate();
 
-    glm::mat4 modelMatrix = glm::mat4(1.0f);
     // Center the model
     m_shader->SetUniform3f("pointLight.Position", m_camera->getCameraPos().x, m_camera->getCameraPos().y, m_camera->getCameraPos().z);
-    
-    // Default transform
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shader->SetUniformMat4("model", modelMatrix);
+    m_shader->SetUniformMat4("model", m_transform);
 
     if (m_model) {
         m_model->Draw(*m_shader);
@@ -60,4 +60,8 @@ void Scene::SetViewportSize(float width, float height) {
     if (m_camera) {
         m_camera->SetViewportSize(width, height);
     }
+}
+
+void Scene::SetModelTransform(glm::mat4 transform) {
+    m_transform = transform;
 }

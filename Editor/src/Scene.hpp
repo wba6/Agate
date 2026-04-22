@@ -38,11 +38,19 @@ public:
      */
     void SetViewportSize(float width, float height);
 
+    /**
+     * @brief Sets the transform for the model in this scene
+     * 
+     * @param transform 4x4 transformation matrix to apply to the model
+     */
+    void SetModelTransform(glm::mat4 transform);
+
 private:
     std::unique_ptr<Agate::ShaderUser> m_shader;
     std::unique_ptr<Agate::Camera> m_camera;
     std::unique_ptr<Agate::ModelEditor> m_model;
     Agate::TaskHandle<Agate::ModelEditor> m_modelHandle;
+    glm::mat4 m_transform;
 };
 
 #endif // AGATE_EDITOR_SCENE_HPP
