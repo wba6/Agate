@@ -10,6 +10,6 @@ include_directories("../Agate/src")
 
 add_compile_definitions(Agate_STATIC)
 
-add_executable(Editor ${editorSrc})
+add_executable(Agate-Editor ${editorSrc})
 
-target_link_libraries(Editor PRIVATE Agate-lib)
+target_link_libraries(Agate-Editor PRIVATE Agate-lib)

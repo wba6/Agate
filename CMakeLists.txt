@@ -31,15 +31,22 @@ add_custom_target(run
 )
 
 add_custom_target(run_editor
-    COMMAND $<TARGET_FILE:Editor>
-    DEPENDS Editor
+    COMMAND $<TARGET_FILE:Agate-Editor>
+    DEPENDS Agate-Editor
     WORKING_DIRECTORY ${buildDirExecutable}
     COMMENT "Running the Editor executable"
 )
 
+add_custom_target(editor
+    COMMAND $<TARGET_FILE:Agate-Editor>
+    DEPENDS Agate-Editor
+    WORKING_DIRECTORY ${buildDirExecutable}
+    COMMENT "Building and running the Editor"
+)
+
 add_custom_target(debug_editor
-    COMMAND gdb $<TARGET_FILE:Editor>
-    DEPENDS Editor
+    COMMAND gdb $<TARGET_FILE:Agate-Editor>
+    DEPENDS Agate-Editor
     WORKING_DIRECTORY ${buildDirExecutable}
     COMMENT "Debugging the Editor executable with GDB"
 )

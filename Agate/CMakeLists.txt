@@ -32,6 +32,7 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
         )
 
 set(KTX_FEATURE_STATIC_LIBRARY ON CACHE BOOL "Build libktx as a static library" FORCE)
+set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "Treat all warnings as errors" FORCE)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/glfw)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vender/imgui)

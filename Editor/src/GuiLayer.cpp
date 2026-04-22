@@ -55,7 +55,7 @@ void GuiLayer::OnRender() {
 }
 
 void GuiLayer::OnEvent(Agate::Event &e) {
-
+    m_scene->OnEvent(e);
 }
 
 void GuiLayer::OnUpdate() {
