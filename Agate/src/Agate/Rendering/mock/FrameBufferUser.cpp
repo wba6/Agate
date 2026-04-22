@@ -51,4 +51,12 @@ void FrameBufferUser::UnBind() const {
     Renderer::Submit(std::make_unique<UnBindFrameBuffer>());
 }
 
+void FrameBufferUser::Resize(unsigned int width, unsigned int height) {
+    if (m_UUID) {
+        Renderer::Submit(std::make_unique<ResizeFrameBuffer>(m_UUID, width, height));
+        m_width = width;
+        m_height = height;
+    }
+}
+
 } // namespace Agate

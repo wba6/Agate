@@ -6,6 +6,7 @@
 #define AGATE_EDITOR_GUI_LAYER_HPP
 
 #include "Agate.h"
+#include "Scene.hpp"
 #include <memory>
 
 /**
@@ -78,6 +79,10 @@ private:
     float m_selectedObjectRotationRadians = 0.0f;
     float m_selectedObjectScale[3] = { 1.0f, 1.0f, 1.0f };
     int m_selectedObjectColorRGBA[4] = { 255, 255, 255, 255 };
+
+    // Scene Data
+    std::unique_ptr<Scene> m_scene = std::make_unique<Scene>();
+    std::unique_ptr<Agate::FrameBuffer> m_sceneFrameBuffer = std::make_unique<Agate::FrameBuffer>(1, 1);
 
     /**
      * @brief Renders the top UI panel

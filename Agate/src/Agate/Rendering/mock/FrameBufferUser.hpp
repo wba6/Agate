@@ -62,6 +62,13 @@ public:
      */
     void UnBind() const;
 
+    /**
+     * @brief Resizes the framebuffer to the specified dimensions
+     * 
+     * Enqueues a command to resize the underlying OpenGL buffers and update the stored dimensions
+     */
+    void Resize(unsigned int width, unsigned int height);
+
 private:
     unsigned int m_width;
     unsigned int m_height;

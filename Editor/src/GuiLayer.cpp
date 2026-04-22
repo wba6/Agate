@@ -17,6 +17,7 @@ GuiLayer::GuiLayer(std::shared_ptr<Agate::Window> window) {
 
 void GuiLayer::Attach() {
     PRINTMSG("Attaching GUI layer");
+    m_scene->Prepare();
 }
 
 void GuiLayer::Detach() {
@@ -79,6 +80,9 @@ void GuiLayer::UpdatePanelDimensions() {
     m_rightPanelWidth = std::max(s_sidePanelMinWidth, std::min(remainingWidth, m_rightPanelWidth));
     remainingWidth -= m_rightPanelWidth;
     m_middlePanelWidth = remainingWidth;
+
+    // Resize frame buffer
+    m_sceneFrameBuffer->Resize(static_cast<unsigned int>(m_middlePanelWidth), static_cast<unsigned int>(m_middlePanelHeights));
 }
 
 void GuiLayer::RenderTopPanel() {
@@ -126,7 +130,13 @@ void GuiLayer::RenderCenterPanel() {
     ImGui::BeginChild("CenterPanel", ImVec2(m_middlePanelWidth, m_middlePanelHeights), true);
     ImGui::PopStyleVar();
 
-    // Placeholder elements
+
+    m_sceneFrameBuffer->Bind();
+    m_scene->Render();
+    m_sceneFrameBuffer->UnBind();
+
+    // TODO : Need to resolve texture ID
+    // ImGui::Image((void*)(uintptr_t)m_sceneFrameBuffer->GetTextureId(), ImVec2(m_middlePanelWidth, m_middlePanelHeights), ImVec2(0, 1), ImVec2(1, 0));
     ImGui::Text("Scene Viewport");
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));

@@ -36,3 +36,10 @@ add_custom_target(run_editor
     WORKING_DIRECTORY ${buildDirExecutable}
     COMMENT "Running the Editor executable"
 )
+
+add_custom_target(debug_editor
+    COMMAND gdb $<TARGET_FILE:Editor>
+    DEPENDS Editor
+    WORKING_DIRECTORY ${buildDirExecutable}
+    COMMENT "Debugging the Editor executable with GDB"
+)
