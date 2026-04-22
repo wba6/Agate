@@ -83,5 +83,6 @@ bool FrameBuffer::Complete() const {
     auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     return status == GL_FRAMEBUFFER_COMPLETE;
+}
 
 } // namespace Agate

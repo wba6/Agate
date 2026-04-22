@@ -15,6 +15,7 @@ namespace Agate {
     std::unordered_map<UUID, std::shared_ptr<IndexBuffer>> Renderer::s_IndexBufferMap;
     std::unordered_map<UUID, std::shared_ptr<Texture>> Renderer::s_TextureMap;
     std::unordered_map<UUID, std::shared_ptr<Shader>> Renderer::s_ShaderMap;
+    std::unordered_map<UUID, std::shared_ptr<FrameBuffer>> Renderer::s_FrameBufferMap;
     std::exception_ptr Renderer::s_RenderException = nullptr;
     std::mutex Renderer::s_ExceptionMutex;
 
@@ -143,6 +144,26 @@ namespace Agate {
         s_TextureMap[e.m_TU.getUUID()] = texture;
     }
 
+    void Renderer::OnCreateFBO(CreateFrameBuffer e) {
+        auto fbo = std::make_shared<FrameBuffer>(
+            e.m_FBU.getWidth(),
+            e.m_FBU.getHeight()
+        );
+        s_FrameBufferMap[e.m_FBU.getUUID()] = fbo;
+    }
+
+    void Renderer::OnBindFBO(BindFrameBuffer e) {
+        auto it = s_FrameBufferMap.find(e.m_UUID);
+        if (it == s_FrameBufferMap.end()) {
+            throw UUIDNotFoundException(e.m_UUID, "FrameBuffer");
+        }
+        it->second->Bind();
+    }
+
+    void Renderer::OnUnBindFBO(UnBindFrameBuffer e) {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
     void Renderer::OnBindVAO(BindVertexArray e) {
         auto it = s_VaoMap.find(e.m_UUID);
         if (it == s_VaoMap.end()) {
@@ -249,6 +270,14 @@ namespace Agate {
         shaderIt->second->SetUniform1f(e.m_Uniform.c_str(), e.m_X);
     }
 
+    void Renderer::OnResizeFBO(ResizeFrameBuffer e) {
+        auto it = s_FrameBufferMap.find(e.m_UUID);
+        if (it == s_FrameBufferMap.end()) {
+            throw UUIDNotFoundException(e.m_UUID, "FrameBuffer");
+        }
+        it->second->Resize(e.m_Width, e.m_Height);
+    }
+
     void Renderer::OnSetViewport(SetViewport e) {
         glViewport(e.m_X, e.m_Y, e.m_Width, e.m_Height);
     }
@@ -259,6 +288,10 @@ namespace Agate {
 
     void Renderer::OnDeleteIBO(DeleteIndexBuffer e) {
         s_IndexBufferMap.erase(e.m_UUID);
+    }
+
+    void Renderer::OnDeleteFBO(DeleteFrameBuffer e) {
+        s_FrameBufferMap.erase(e.m_UUID);
     }
 
     void Renderer::OnDeleteShader(DeleteShader e) {

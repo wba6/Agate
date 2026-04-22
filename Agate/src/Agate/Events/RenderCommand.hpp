@@ -13,6 +13,7 @@
 #include "Rendering/mock/VertexArrayUser.hpp"
 #include "Rendering/mock/ShaderUser.hpp"
 #include "Rendering/mock/TextureUser.hpp"
+#include "Rendering/mock/FrameBufferUser.hpp"
 #include  "imgui.h"
 
 namespace Agate {
@@ -25,12 +26,15 @@ namespace Agate {
         DrawUI,
         CreateVertexArray,
         CreateIndexBuffer,
+        CreateFrameBuffer,
         CreateShader,
         CreateTexture,
         BindVertexArray,
         UnBindVertexArray,
         BindIndexBuffer,
         UnBindIndexBuffer,
+        BindFrameBuffer,
+        UnBindFrameBuffer,
         BindShader,
         UnBindShader,
         BindTexture,
@@ -39,9 +43,11 @@ namespace Agate {
         UpdateShaderUniformMat4,
         UpdateShaderUniform1i,
         UpdateShaderUniform1f,
+        ResizeFrameBuffer,
         SetViewport,
         DeleteVertexArray,
         DeleteIndexBuffer,
+        DeleteFrameBuffer,
         DeleteShader,
         DeleteTexture
     };
@@ -288,6 +294,32 @@ namespace Agate {
         UUID m_VAUUID;
     };
 
+    class CreateFrameBuffer : public RenderCommand {
+    public:
+        struct FrameBufferData {
+            UUID m_UUID;
+            unsigned int m_width;
+            unsigned int m_height;
+
+            UUID getUUID() const { return m_UUID; }
+            unsigned int getWidth() const { return m_width; }
+            unsigned int getHeight() const { return m_height; }
+        };
+        CreateFrameBuffer(const FrameBufferUser& FBU)
+        : m_FBU{FBU.getUUID(), 
+               FBU.getWidth(), 
+               FBU.getHeight()}{};
+        void Execute() override {PRINTMSG("Creating Frame Buffer");};
+        virtual CommandTypes GetCommandType() override {
+            return CommandTypes::CreateFrameBuffer;
+        };
+        static CommandTypes s_GetCommandType() {
+            return CommandTypes::CreateFrameBuffer;
+        }
+        virtual ~CreateFrameBuffer() = default;
+        FrameBufferData m_FBU;
+    };
+
     class CreateShader : public RenderCommand {
     public:
         struct ShaderData {
@@ -399,6 +431,23 @@ namespace Agate {
         void Execute() override {}
         virtual CommandTypes GetCommandType() override { return CommandTypes::UnBindIndexBuffer; }
         static CommandTypes s_GetCommandType() { return CommandTypes::UnBindIndexBuffer; }
+    };
+
+    class BindFrameBuffer : public RenderCommand {
+    public:
+        BindFrameBuffer(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::BindFrameBuffer; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::BindFrameBuffer; }
+        UUID m_UUID;
+    };
+
+    class UnBindFrameBuffer : public RenderCommand {
+     public:
+         UnBindFrameBuffer() = default;
+         void Execute() override {}
+         virtual CommandTypes GetCommandType() override { return CommandTypes::UnBindFrameBuffer; }
+         static CommandTypes s_GetCommandType() { return CommandTypes::UnBindFrameBuffer; }
     };
 
     class BindShader : public RenderCommand {
@@ -513,6 +562,19 @@ namespace Agate {
         float m_X;
     };
 
+    class ResizeFrameBuffer : public RenderCommand {
+    public:
+        ResizeFrameBuffer(UUID framebufferUUID, unsigned int width, unsigned int height)
+        : m_UUID(framebufferUUID), m_Width(width), m_Height(height) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::ResizeFrameBuffer; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::ResizeFrameBuffer; }
+        virtual ~ResizeFrameBuffer() = default;
+        UUID m_UUID;
+        unsigned int m_Width;
+        unsigned int m_Height;
+    };
+
     class SetViewport : public RenderCommand {
     public:
         SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
@@ -543,6 +605,15 @@ namespace Agate {
         void Execute() override {}
         virtual CommandTypes GetCommandType() override { return CommandTypes::DeleteIndexBuffer; }
         static CommandTypes s_GetCommandType() { return CommandTypes::DeleteIndexBuffer; }
+        UUID m_UUID;
+    };
+
+    class DeleteFrameBuffer : public RenderCommand {
+    public:
+        DeleteFrameBuffer(UUID uuid) : m_UUID(uuid) {}
+        void Execute() override {}
+        virtual CommandTypes GetCommandType() override { return CommandTypes::DeleteFrameBuffer; }
+        static CommandTypes s_GetCommandType() { return CommandTypes::DeleteFrameBuffer; }
         UUID m_UUID;
     };
 

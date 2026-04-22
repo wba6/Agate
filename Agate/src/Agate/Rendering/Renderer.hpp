@@ -12,6 +12,7 @@
 #include "Rendering/OpenGl/IndexBuffer.h"
 #include "Rendering/OpenGl/Texture.h"
 #include "Rendering/OpenGl/VertexArray.h"
+#include "Rendering/OpenGl/FrameBuffer.hpp"
 #include "Rendering/OpenGl/Shader.h"
 
 namespace Agate {
@@ -75,11 +76,18 @@ namespace Agate {
              */
             static void OnCreateTexture(CreateTexture e);
 
+            /**
+             */
+            static void OnCreateFBO(CreateFrameBuffer e);
+
             static void OnBindVAO(BindVertexArray e);
             static void OnUnBindVAO(UnBindVertexArray e);
 
             static void OnBindIBO(BindIndexBuffer e);
             static void OnUnBindIBO(UnBindIndexBuffer e);
+
+            static void OnBindFBO(BindFrameBuffer e);
+            static void OnUnBindFBO(UnBindFrameBuffer e);
 
             static void OnBindShader(BindShader e);
             static void OnUnBindShader(UnBindShader e);
@@ -94,12 +102,15 @@ namespace Agate {
             static void OnUpdateShaderUniform1i(UpdateShaderUniform1i e);
             static void OnUpdateShaderUniform1f(UpdateShaderUniform1f e);
 
+            static void OnResizeFBO(ResizeFrameBuffer e);
+
             static void OnSetViewport(SetViewport e);
 
             static void OnDeleteVAO(DeleteVertexArray e);
             static void OnDeleteIBO(DeleteIndexBuffer e);
             static void OnDeleteShader(DeleteShader e);
             static void OnDeleteTexture(DeleteTexture e);
+            static void OnDeleteFBO(DeleteFrameBuffer e);
 
         private:
             Renderer() = delete;
@@ -110,6 +121,7 @@ namespace Agate {
             static std::unordered_map<UUID, std::shared_ptr<IndexBuffer>> s_IndexBufferMap;
             static std::unordered_map<UUID, std::shared_ptr<Texture>> s_TextureMap;
             static std::unordered_map<UUID, std::shared_ptr<Shader>> s_ShaderMap;
+            static std::unordered_map<UUID, std::shared_ptr<FrameBuffer>> s_FrameBufferMap;
             static std::exception_ptr s_RenderException;
             static std::mutex s_ExceptionMutex;
     };
