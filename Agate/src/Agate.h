@@ -28,6 +28,7 @@
 #include "Agate/Rendering/mock/VertexArrayUser.hpp"
 #include "Agate/Rendering/mock/ShaderUser.hpp"
 #include "Agate/Rendering/mock/TextureUser.hpp"
+#include "Agate/Rendering/mock/FrameBufferUser.hpp"
 #include "Agate/Rendering/ModelLoader.h"
 #include "Agate/Rendering/Camera.h"
 
@@ -36,6 +37,7 @@ namespace Agate {
     using VertexArray = VertexArrayUser;
     using IndexBuffer = IndexBufferUser;
     using Texture = TextureUser;
+    using FrameBuffer = FrameBufferUser;
 }
 
 //-----------Async-------------

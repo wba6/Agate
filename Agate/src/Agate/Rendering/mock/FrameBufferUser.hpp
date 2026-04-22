@@ -6,7 +6,7 @@
 #ifndef AGATE_FRAMEBUFFERUSER_HPP
 #define AGATE_FRAMEBUFFERUSER_HPP
 
-#include "Rendering/UUID.hpp"
+#include "Agate/Rendering/UUID.hpp"
 
 namespace Agate {
 

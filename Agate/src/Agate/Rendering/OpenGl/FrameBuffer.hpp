@@ -14,6 +14,7 @@ public:
     void Bind();
     void UnBind();
     void Resize(unsigned int width, unsigned int height);
+    unsigned int GetTextureID() const { return m_texture; }
 private:
     void GenerateTextureAttachment();
     void DeleteTextureAttachment();
