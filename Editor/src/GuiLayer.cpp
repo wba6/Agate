@@ -158,7 +158,7 @@ void GuiLayer::RenderRightPanel() {
     ImGui::BeginChild("RightPanel", ImVec2(m_rightPanelWidth, m_middlePanelHeights), true);
     ImGui::PopStyleVar();
 
-    // Placeholder elements
+    // Model Transform
     ImGui::Text("Right Side Menu");
     ImGui::Separator();
     ImGui::Text("Position");
@@ -175,11 +175,6 @@ void GuiLayer::RenderRightPanel() {
     if (ImGui::Button("Apply Transform", ImVec2(-1, 0))) {
         ApplyTransform();
     }
-    // ImGui::Text("Albedo");
-    // ImGui::SliderInt("R", &m_selectedObjectColorRGBA[0], 0, 255);
-    // ImGui::SliderInt("G", &m_selectedObjectColorRGBA[1], 0, 255);
-    // ImGui::SliderInt("B", &m_selectedObjectColorRGBA[2], 0, 255);
-    // ImGui::SliderInt("A", &m_selectedObjectColorRGBA[3], 0, 255);
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
     ImGui::EndChild();
