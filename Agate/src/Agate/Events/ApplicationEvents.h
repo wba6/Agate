@@ -56,6 +56,9 @@ namespace Agate {
             return EventTypes::WindowResized;
         }
 
+        inline int GetWidth() const { return m_xSize; }
+        inline int GetHeight() const { return m_ySize; }
+
     private:
         int m_xSize, m_ySize;
     };

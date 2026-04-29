@@ -17,5 +17,6 @@
 #endif
 
 #define BindFn(x) std::bind(&x, this, std::placeholders::_1)
+#define BindStaticFn(x) std::bind(&x, std::placeholders::_1)
 
 #endif // AGATE_CORE_H

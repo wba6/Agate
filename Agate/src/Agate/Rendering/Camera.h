@@ -7,7 +7,7 @@
 #include "Agate/Events/Event.h"
 #include "Agate/Events/KeyEvents.h"
 #include "Agate/Events/MouseEvent.h"
-#include "OpenGl/Shader.h"
+#include "mock/ShaderUser.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -15,7 +15,7 @@
 namespace Agate {
     class Camera {
     public:
-        explicit Camera(Shader &shaderObj);
+        explicit Camera(ShaderUser &shaderObj);
 
         void onEvent(Event &ev);
 
@@ -41,7 +41,7 @@ namespace Agate {
         float m_cameraSpeed;
         float m_lastFrame;
         bool s_Active;
-        Shader &m_Shader;
+        ShaderUser &m_Shader;
         glm::mat4 m_projection;
         glm::vec3 m_cameraPos;
         glm::vec3 m_cameraUp;

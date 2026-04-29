@@ -108,14 +108,6 @@ namespace Agate {
         GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
         GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
-        // Check for errors
-        GLenum error = glGetError();
-        if (error != GL_NO_ERROR) {
-            PRINTERROR("OpenGL error after setting texture parameters for {}, {}", filename, error);
-            GLCall(glBindTexture(target, 0));
-            return false;
-        }
-
         // Unbind the texture
         GLCall(glBindTexture(target, 0));
 
@@ -130,7 +122,7 @@ namespace Agate {
      *
      * @return A Texture object
      */
-    Texture::Texture(const char *file, std::string &directory)
+    Texture::Texture(const char *file, const std::string &directory)
             : m_width(0), m_height(0), m_path(file), m_type("texture"), m_target(GL_TEXTURE_2D), m_textureID(0), m_directory(directory) {
 
     }

@@ -5,6 +5,7 @@
 #include <chrono>
 #include <memory>
 #include <filesystem>
+#include <future> 
 #include <stdexcept>
 #include <string>
 
@@ -26,6 +27,10 @@ public:
     }
 
     void OnRender()override
+    {
+    };
+
+    void OnUpdate()override
     {
     };
 
@@ -80,6 +85,11 @@ public:
             model->Draw(*shader);
         }
     }
+
+    void OnUpdate() override
+    {
+    };
+
     void OnEvent(Agate::Event &e) override
     {
         camera->onEvent(e);
@@ -174,6 +184,10 @@ public:
     {
     };
 
+    void OnUpdate()override
+    {
+    };
+
     void OnEvent(Agate::Event &e) override
     {
     }
@@ -192,6 +206,11 @@ public:
     }
 
     void Detach() override
+    {
+
+    }
+
+    void OnUpdate() override
     {
 
     }

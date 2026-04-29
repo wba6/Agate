@@ -24,13 +24,19 @@
 #include <../vender/glm/glm/gtc/type_ptr.hpp>
 
 //-----------Rendering---------
-#include "Agate/Rendering/OpenGl/IndexBuffer.h"
-#include "Agate/Rendering/OpenGl/Render.h"
-#include "Agate/Rendering/OpenGl/VertexArray.h"
-#include "Agate/Rendering/OpenGl/VertexBuffer.h"
-#include "Agate/Rendering/OpenGl/Shader.h"
+#include "Agate/Rendering/mock/IndexBufferUser.hpp"
+#include "Agate/Rendering/mock/VertexArrayUser.hpp"
+#include "Agate/Rendering/mock/ShaderUser.hpp"
+#include "Agate/Rendering/mock/TextureUser.hpp"
 #include "Agate/Rendering/ModelLoader.h"
 #include "Agate/Rendering/Camera.h"
+
+namespace Agate {
+    using Shader = ShaderUser;
+    using VertexArray = VertexArrayUser;
+    using IndexBuffer = IndexBufferUser;
+    using Texture = TextureUser;
+}
 
 //-----------Async-------------
 #include "Agate/Async/TaskPool.h"

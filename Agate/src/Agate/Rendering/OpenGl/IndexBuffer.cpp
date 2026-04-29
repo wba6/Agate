@@ -7,7 +7,7 @@
 #include "OpenGLCheck.h"
 
 namespace Agate {
-    IndexBuffer::IndexBuffer(std::vector<unsigned int> &vector)
+    IndexBuffer::IndexBuffer(const std::vector<unsigned int> &vector)
             : m_indinces(vector) {
         GLCall(glGenBuffers(1, &m_ibo));
     }
@@ -25,11 +25,12 @@ namespace Agate {
     }
 
     IndexBuffer::~IndexBuffer() {
+        glDeleteBuffers(1, &m_ibo);
     }
 
     void IndexBuffer::setUpBuffer() {
         Bind();
 
-        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(float), &m_indinces[0], STATIC_DRAW));
+        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(unsigned int), &m_indinces[0], STATIC_DRAW));
     }
 }// namespace Agate

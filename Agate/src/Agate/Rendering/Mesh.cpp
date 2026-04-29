@@ -1,18 +1,17 @@
 #include "Mesh.h"
-#include "OpenGl/VertexArray.h"
-#include "OpenGl/OpenGLCheck.h"
-#include "glad/glad.h"
+#include "Rendering/Renderer.hpp"
+#include <string>
 
 namespace Agate {
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<TextureUser>> textures) {
     this->m_vertices = std::move(vertices);
     this->m_indices = std::move(indices);
     this->m_textures = std::move(textures);
 }
 
 //@todo we should not really render here
-void Mesh::Draw(Agate::Shader &shader) {
+void Mesh::Draw(Agate::ShaderUser &shader) {
 
     // Initialize texture counters
     int diffuseCount = 0;
@@ -20,13 +19,15 @@ void Mesh::Draw(Agate::Shader &shader) {
     int normalCount = 0;
     int heightCount = 0;
 
-    shader.Bind();
     // Activate and bind each texture, assign to the shader
     for (unsigned int i = 0; i < m_textures.size(); i++) {
-        GLCall(glActiveTexture(GL_TEXTURE0 + i)); // Activate texture unit
-        m_textures[i].bind(i); // Bind texture to unit i
+        // In a mock environment, we don't call glActiveTexture
+        // Instead, we just set the uniform on the shader mock, 
+        // which will communicate with the render thread.
+        
+        m_textures[i]->bind(i); 
 
-        std::string type = m_textures[i].getType();
+        std::string type = m_textures[i]->getType(); 
         std::string name;
         if (type == "texture_diffuse") {
             name = "material.texture_diffuse[" + std::to_string(diffuseCount) + "]";
@@ -50,26 +51,20 @@ void Mesh::Draw(Agate::Shader &shader) {
         }
     }
 
-    // Set the counts in the shader
+    // Example of using mock shader to set uniforms
     shader.SetUniform1i("material.num_diffuse", diffuseCount);
     shader.SetUniform1i("material.num_specular", specularCount);
     shader.SetUniform1i("material.num_normal", normalCount);
     shader.SetUniform1i("material.num_height", heightCount);
 
     // Set light properties
-    shader.SetUniform3f("pointLight.Color", 1.0f, 1.0f, 1.0f);           // Color: White light
-    shader.SetUniform1f("pointLight.Intensity", 5.0f);                              // Intensity: Standard brightness
-    shader.SetUniform1f("pointLight.Constant", 1.0f);                               // Attenuation: Constant factor
-    shader.SetUniform1f("pointLight.Linear", .09f);                                // Attenuation: Linear factor
-    shader.SetUniform1f("pointLight.Quadratic", 0.032f);                           // Attenuation: Quadratic factor
+    shader.SetUniform3f("pointLight.Color", 1.0f, 1.0f, 1.0f);
+    shader.SetUniform1f("pointLight.Intensity", 5.0f);
+    shader.SetUniform1f("pointLight.Constant", 1.0f);
+    shader.SetUniform1f("pointLight.Linear", .09f);
+    shader.SetUniform1f("pointLight.Quadratic", 0.032f);
 
-    //don't think this line is needed
-    GLCall(glActiveTexture(GL_TEXTURE0));
-
-    // draw mesh
-    m_VA->Bind();
-    GLCall(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0));
-    m_VA->UnBind();
+    Renderer::Submit(std::make_unique<DrawMesh>(m_VA->getUUID(), shader.getUUID(), static_cast<uint32_t>(m_indices.size())));
 }
 
 void Mesh::setupMesh() {
@@ -86,10 +81,16 @@ void Mesh::setupMesh() {
             {"BiTangent",             vertexType::Float3},
     };
 
-    IndexBuffer IB(m_indices);
+    // Copy data to a shared_ptr for thread safety
+    size_t dataSize = m_vertices.size() * sizeof(Vertex);
+    void* buffer = malloc(dataSize);
+    memcpy(buffer, m_vertices.data(), dataSize);
+    auto safe_data_ptr = std::shared_ptr<void>(buffer, free);
 
-    m_VA = std::make_shared<VertexArray>(layout, m_vertices.data(), m_vertices.size() * sizeof(Vertex));
-    m_VA->addIndexBuffer(IB);
+    m_VA = std::make_shared<VertexArrayUser>(layout, safe_data_ptr, dataSize);
+    
+    // Create IndexBufferUser which will submit CreateIndexBuffer command
+    m_IB = std::make_shared<IndexBufferUser>(m_indices, m_VA->getUUID());
 }
 
 Mesh::~Mesh() = default;

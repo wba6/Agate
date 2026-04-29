@@ -11,6 +11,7 @@
 #include "Agate/Window/Window.h"
 #include "Core.h"
 #include "LayerStack.h"
+#include <atomic>
 
 namespace Agate {
 
@@ -47,6 +48,15 @@ namespace Agate {
          * @return True
          */
         bool OnWindowClose(WindowCloseEvent &e);
+
+        /**
+         * @brief Special event handler for WindowResizedEvent
+         * 
+         * @param e Triggering event
+         * 
+         * @return False
+         */
+        bool OnWindowResized(WindowResizedEvent &e);
 
         /**
          * @brief Inserts a layer in front of the first overlay
@@ -102,8 +112,8 @@ namespace Agate {
     private:
         std::shared_ptr<Window> m_window;
         LayerStack m_layerStack;
-        bool m_running;
-        float deltaTime;
+        std::atomic<bool> m_running;
+        std::atomic<float> m_deltaTime;
 
     private:
         static EntryPoint *s_instance;

@@ -21,25 +21,32 @@ namespace Agate {
          * @brief Called immediately after being added to the 
          *        layer stack
          */
-        virtual void Attach() {}
+        virtual void Attach() = 0; 
 
         /**
          * @brief Called immediately before being removed from
          *        the layer stack
          */
-        virtual void Detach() {}
+        virtual void Detach() = 0; 
 
         /**
          * @brief Event handler for this layer
          * 
          * @param e Event to handle
          */
-        virtual void OnEvent(Event &e) {}
+        virtual void OnEvent(Event &e) = 0; 
 
         /**
          * @brief Called once every render frame
          */
-        virtual void OnRender() {};
+        virtual void OnRender() = 0;
+
+        /**
+         * @brief Called once every game loop 
+         */
+        virtual void OnUpdate() = 0;
+
+
 
     private:
         bool m_Enabled = true;
