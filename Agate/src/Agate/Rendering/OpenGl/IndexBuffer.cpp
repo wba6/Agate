@@ -4,19 +4,20 @@
 
 #include "IndexBuffer.h"
 #include <glad/glad.h>
+#include "OpenGLCheck.h"
 
 namespace Agate {
     IndexBuffer::IndexBuffer(const std::vector<unsigned int> &vector)
             : m_indinces(vector) {
-        glGenBuffers(1, &m_ibo);
+        GLCall(glGenBuffers(1, &m_ibo));
     }
 
     void IndexBuffer::Bind() {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));
     }
 
     void IndexBuffer::UnBind() {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     }
 
     unsigned int IndexBuffer::GetNumOfIndices() const {
@@ -30,6 +31,6 @@ namespace Agate {
     void IndexBuffer::setUpBuffer() {
         Bind();
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(unsigned int), &m_indinces[0], STATIC_DRAW);
+        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indinces.size() * sizeof(unsigned int), &m_indinces[0], STATIC_DRAW));
     }
 }// namespace Agate

@@ -7,6 +7,7 @@
 #include "Context.h"
 #include "CurrentContext.h"
 #include "Rendering/OpenGl/Render.h"
+#include "Rendering/OpenGl/OpenGLCheck.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
@@ -18,20 +19,20 @@ namespace Agate {
         } else {
             Agate::CurrentContext::SetContextPointer((Context *) this);
         }
-        glEnable(GL_DEPTH_TEST);
+        GLCall(glEnable(GL_DEPTH_TEST));
     }
 
     void OpenGL::EndContext() {
     }
 
     void OpenGL::NewFrame() {
-        glClearColor(0.2, 0.2, 0.2, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClear(GL_DEPTH_BUFFER_BIT);
+        GLCall(glClearColor(0.2, 0.2, 0.2, 1));
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        GLCall(glClear(GL_DEPTH_BUFFER_BIT));
         Render::framesRendered++;
     }
 
     void OpenGL::SetWindowSize(int width, int height) {
-        glViewport(0, 0, width, height);
+        GLCall(glViewport(0, 0, width, height));
     }
 }// namespace Agate
