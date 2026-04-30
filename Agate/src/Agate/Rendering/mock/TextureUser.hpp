@@ -42,7 +42,7 @@ namespace Agate {
          */
         const std::string& getDirectory() const { return m_directory; }
 
-        /**
+         /**
          * @brief Gets the type of the texture.
          * @return The texture type.
          */
@@ -53,6 +53,7 @@ namespace Agate {
          * @param type The new texture type.
          */
         void setType(const std::string& type) { m_type = type; }
+
 
         /**
          * @brief Gets the UUID of this Texture.
@@ -75,9 +76,9 @@ namespace Agate {
         ~TextureUser();
 
     private:
+        std::string m_type;
         std::string m_path;
         std::string m_directory;
-        std::string m_type;
         UUID m_UUID;
     };
 }

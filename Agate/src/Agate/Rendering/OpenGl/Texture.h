@@ -5,6 +5,7 @@
 #ifndef OPENGL_TEXTURE_H
 #define OPENGL_TEXTURE_H
 
+#include <cstddef>
 namespace Agate {
     class Texture {
     public:
@@ -17,6 +18,7 @@ namespace Agate {
         * @return A Texture object
         */
         Texture(const char *file, const std::string &directory);
+        Texture(const unsigned char *data, size_t dataLength);
 
         virtual ~Texture();
 
@@ -46,26 +48,14 @@ namespace Agate {
         void setType(std::string &typeName);
 
         /*
-        * Get the path of the texture
-        *
-        * @return The path of the texture
-        */
-        const std::string &getPath();
-
-        /*
         * Get the type of the texture
         *
         * @return The type of the texture
         */
         const std::string &getType();
-
-        /**
-         * @brief Makes OpenGL calls required to prepare
-         *        the rendering context to handle this
-         */
-        void initialize();
-
+        
     private:
+
         /*
         * Helper function to load standard images using SOIL2
         *
@@ -77,20 +67,14 @@ namespace Agate {
         *
         * @return True if the texture was loaded successfully, false otherwise
         */
-        bool load_standard_texture_with_soil2(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height);
+        unsigned int load_standard_texture_with_soil2(const std::string& filename);
 
-        /*
-        * Helper function to load KTX texture using libktx
-        *
-        * @param filename: The path to the KTX file
-        * @param textureID: The texture ID to bind the texture to
-        * @param target: The texture target
-        * @param width: The width of the texture
-        * @param height: The height of the texture
-        *
-        * @return True if the texture was loaded successfully, false otherwise
-        */
-        bool load_ktx_with_libktx(const std::string& filename, unsigned int& textureID, unsigned int& target, int& width, int& height);
+        void configureTexture();
+
+        unsigned int createTexture(); 
+        unsigned int createTexture(const unsigned char* data, size_t dataLength); 
+
+        unsigned int loadTextureFromMemory(const unsigned char* data, size_t dataLength); 
 
     private:
         unsigned int m_textureID, m_target;

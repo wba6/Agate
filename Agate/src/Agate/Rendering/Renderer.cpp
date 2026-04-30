@@ -136,10 +136,9 @@ namespace Agate {
      */
     void Renderer::OnCreateTexture(CreateTexture e){
         auto texture = std::make_shared<Texture>(
-            e.m_TU.getPath().c_str(),
-            e.m_TU.getDirectory()
+            reinterpret_cast<const unsigned char*>(e.m_TU.getData().c_str()), 
+            e.m_TU.getData().size()
         );
-        texture->initialize();
         s_TextureMap[e.m_TU.getUUID()] = texture;
     }
 

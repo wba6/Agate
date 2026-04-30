@@ -5,7 +5,6 @@
 #include <chrono>
 #include <memory>
 #include <filesystem>
-#include <future> 
 #include <stdexcept>
 #include <string>
 
@@ -108,7 +107,7 @@ public:
     std::unique_ptr<Agate::ModelEditor> model;
     Agate::TaskHandle<Agate::ModelEditor> modelHandle;
 };
-
+/*
 class TaskTestLayer : public Agate::Layer {
 private:
     std::atomic<int> taskCounter{ 0 };
@@ -237,21 +236,21 @@ public:
     {
     }
 };
-
+*/
 Agate::EntryPoint* Agate::CreateEntryPoint()
 {
     auto Application = new app();
 
     std::shared_ptr<layerEx> example_layer = std::make_shared<layerEx>();
-    std::shared_ptr<TaskTestLayer> taskTestLayer = std::make_shared<TaskTestLayer>();
+    //std::shared_ptr<TaskTestLayer> taskTestLayer = std::make_shared<TaskTestLayer>();
 
     Application->EmplaceLayer(example_layer);
     Application->EmplaceLayer(std::make_shared<TemplayerEx>());
-    Application->EmplaceLayer(taskTestLayer);
-    Application->EmplaceLayer(std::make_shared<TaskPerFrameLayer>());
+    //Application->EmplaceLayer(taskTestLayer);
+    //Application->EmplaceLayer(std::make_shared<TaskPerFrameLayer>());
 
     Application->RemoveLayer(example_layer);
-    Application->RemoveLayer(taskTestLayer);
+    //Application->RemoveLayer(taskTestLayer);
 
     return Application;
 }

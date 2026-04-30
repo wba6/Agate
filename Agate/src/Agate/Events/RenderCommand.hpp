@@ -329,22 +329,16 @@ namespace Agate {
     class CreateTexture : public RenderCommand {
     public:
         struct TextureData {
-            std::string m_path;
-            std::string m_directory;
-            std::string m_type;
+            std::string m_data;
             UUID m_UUID;
 
-            const std::string& getPath() const { return m_path; }
-            const std::string& getDirectory() const { return m_directory; }
-            const std::string& getType() const { return m_type; }
+            const std::string& getData() const { return m_data; }
             UUID getUUID() const { return m_UUID; }
         };
 
-        CreateTexture(const TextureUser& TU)
-        : m_TU{TU.getPath(), 
-               TU.getDirectory(), 
-               TU.getType(), 
-               TU.getUUID()}{}
+        CreateTexture(const std::string data, UUID ID)
+        : m_TU{std::move(data), 
+               ID}{}
 
         void Execute() override {PRINTMSG("Creating Texture");};
 
